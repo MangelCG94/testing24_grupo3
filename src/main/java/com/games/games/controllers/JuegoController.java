@@ -1,4 +1,4 @@
 package com.games.games.controllers;
 
-public class JuegosController {
+public class JuegoController {
 }
