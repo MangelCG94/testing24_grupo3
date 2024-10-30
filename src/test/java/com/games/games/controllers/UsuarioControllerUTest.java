@@ -103,7 +103,7 @@ class UsuarioControllerTest {
     @Test
     void formularioParaActualizarSiExiste() {
 
-        Usuario juan = new Usuario().builder().id(1L).nombreUsuario("Juan").build();
+        Usuario juan = Usuario.builder().id(1L).nombreUsuario("Juan").build();
         when(usuarioRepository.findById(1L)).thenReturn(Optional.of(juan));
 
         String view = usuarioController.formularioParaActualizar((1L), model);
