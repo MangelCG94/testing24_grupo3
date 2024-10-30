@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de usuarios</title>
+</head>
+<body>
+<h1>Listado de usuarios</h1>
+<a href="/usuarios/new">Crear nuevo usuario</a>
+<table id="usuarioList" th:if="${usuarios.size() > 0}">
+    <tr>
+        <th>ID</th>
+        <th>NOMBRE DE USUARIO</th>
+        <th>PASSWORD</th>
+        <th>NOMBRE</th>
+        <th>DIRECCIÓN</th>
+        <th>CP</th>
+        <th>DNI</th>
+        <th>FECHA DE CREACIÓN</th>
+        <th>ACCIONES</th>
+    </tr>
+    <tr th:each="usuario: ${usuarios}">
+        <td th:text="${usuario.id}"></td>
+        <td th:text="${usuario.nombreUsuario}"></td>
+        <td th:text="${usuario.password}"></td>
+        <td th:text="${usuario.nombre}"></td>
+        <td th:text="${usuario.direccion}"></td>
+        <td th:text="${usuario.CP}"></td>
+        <td th:text="${usuario.dni}"></td>
+        <td th:text="${usuario.fechaCreacion}"></td>
+        <td>
+
+            <a th:href="@{/usuarios/{id}(id=${usuario.id})}">Ver</a>
+            <a th:href="@{/usuarios/update/{id}(id=${usuario.id})}">Editar</a>
+            <a th:href="@{/usuarios/delete/{id}(id=${usuario.id})}">Borrar</a>
+        </td>
+    </tr>
+
+</table>
+<p th:if="${usuarios.size() == 0}">
+    No hay usuarios.
+</p>
+
+</body>
+</html>
