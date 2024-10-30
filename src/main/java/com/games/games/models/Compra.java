@@ -1,4 +1,4 @@
 package com.games.games.models;
 
-public class Juegos {
+public class Compra {
 }
