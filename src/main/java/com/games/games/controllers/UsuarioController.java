@@ -52,7 +52,6 @@ public class UsuarioController {
         return "usuario-form";
     }
 
-
     //http://localhost:8080/usuarios/edit/3
     @GetMapping("usuarios/update/{id}")
     public String formularioParaActualizar(@PathVariable Long id, Model model) {
