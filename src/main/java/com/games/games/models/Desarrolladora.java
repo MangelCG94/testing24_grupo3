@@ -11,12 +11,13 @@ import lombok.*;
 @ToString
 @Builder
 
-public class Fabricante {
+public class Desarrolladora {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombreCom;
     private String pais;
+    // imagenLogo se refiere al archivo PNG
     private String imagenLogo;
     private Integer anyoFundacion;
 }
