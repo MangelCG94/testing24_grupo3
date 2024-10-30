@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de usuario</title>
+</head>
+<body>
+<h1>Detalle de usuario</h1>
+
+<div th:if="${usuario}">
+    <div>
+        <label for="usuario-id">ID:</label>
+        <span id="usuario-id" th:text="${usuario.id}"></span>
+    </div>
+
+    <div>
+        <label for="usuario-nombreUsuario">Nombre de usuario:</label>
+        <span id="usuario-nombreUsuario" th:text="${usuario.nombreUsuario}"></span>
+    </div>
+
+    <div>
+        <label for="usuario-password">Password:</label>
+        <span id="usuario-password" th:text="${usuario.password}"></span>
+    </div>
+
+    <div>
+        <label for="usuario-nombre">Nombre:</label>
+        <span id="usuario-nombre" th:text="${usuario.nombre}"></span>
+    </div>
+
+    <div>
+        <label for="usuario-direccion">Dirección:</label>
+        <span id="usuario-direccion" th:text="${usuario.direccion}"></span>
+    </div>
+
+    <div>
+        <label for="usuario-CP">Código postal:</label>
+        <span id="usuario-CP" th:text="${usuario.CP}"></span>
+    </div>
+
+    <div>
+        <label for="usuario-dni">DNI:</label>
+        <span id="usuario-dni" th:text="${usuario.dni}"></span>
+    </div>
+
+    <div>
+        <label for="usuario-fechaCreacion">Fecha de creación:</label>
+        <span id="usuario-fechaCreacion" th:text="${usuario.fechaCreacion}"></span>
+    </div>
+</div>
+<div th:unless="${usuario}">
+    <p>No existe el usuario</p>
+</div>
+
+<h3>Acciones</h3>
+<a th:href="@{/usuarios}">Volver al listado</a>
+<a th:if="${usuario}" th:href="@{/usuarios/update/{id}(id=${usuario.id})}">Editar</a>
+<a th:if="${usuario}" th:href="@{/usuarios/delete/{id}(id=${usuario.id})}">Borrar</a>
+
+
+</body>
+</html>
