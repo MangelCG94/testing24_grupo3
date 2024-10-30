@@ -27,5 +27,4 @@ public class Usuario {
     private Integer CP;
     private String DNI;
     private Date fechaCreacion;
-
 }
