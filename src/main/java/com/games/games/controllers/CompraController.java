@@ -87,4 +87,15 @@ public class CompraController {
 
 
     }
+
+    @GetMapping("compras/delete/all")
+    public String borrarTodasLasCompras() {
+        try {
+            compraRepository.deleteAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+        return "redirect:/compras";
+    }
 }
