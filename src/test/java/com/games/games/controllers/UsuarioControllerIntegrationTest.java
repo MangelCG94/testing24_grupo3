@@ -61,7 +61,7 @@ public class UsuarioControllerIntegrationTest {
         System.out.println("Encuentra todos los usuarios: " + usuarioRepository.count());
         System.out.println("Encuentra usuario guardado: " + usuario.getId());
 
-        mockMvc.perform(get("/usuarios" + usuario.getId()))
+        mockMvc.perform(get("/usuarios/" + usuario.getId()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("usuario-list"))
                 .andExpect(model().attributeExists("usuarios"));
