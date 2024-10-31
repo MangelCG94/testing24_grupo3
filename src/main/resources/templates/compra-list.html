@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de compras</title>
+</head>
+<body>
+<h1>Listado de compras</h1>
+<a href="/compras/new">Crear nueva compra</a>
+<table id="compraList" th:if="${compras.size() > 0}">
+    <tr>
+        <th>ID COMPRA</th>
+        <th>FECHA DE COMPRA</th>
+        <th>ID USUARIO</th>
+        <th>ID JUEGO</th>
+        <th>ACCIONES</th>
+    </tr>
+    <tr th:each="compra: ${compras}">
+        <td th:text="${compra.id}"></td>
+        <td th:text="${compra.fechaCompra}"></td>
+        <td th:text="${compra.idUsuario}"></td>
+        <td th:text="${compra.idJuego}"></td>
+        <td>
+
+            <a th:href="@{/compras/{id}(id=${compra.id})}">Ver</a>
+            <a th:href="@{/compras/update/{id}(id=${compra.id})}">Editar</a>
+            <a th:href="@{/compras/delete/{id}(id=${compra.id})}">Borrar</a>
+        </td>
+    </tr>
+</table>
+<p th:if="${compras.size() == 0}">
+    No hay compras.
+</p>
+
+</body>
+</html>

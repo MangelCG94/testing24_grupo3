@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de compra</title>
+</head>
+<body>
+<h1 th:if="${compra.id}">Editar compra<span th:text="${compra.id}"></span></h1>
+<h1 th:unless="${compra.id}">Crear nueva compra</h1>
+
+<form method="POST" th:object="${compra}" th:action="@{/compras}">
+
+    <input type="hidden" id="id" th:field="*{id}" />
+
+    <div>
+        <label for="fechaCompra">Fecha de compra</label>
+        <input type="datetime-local" id="fechaCompra" th:field="*{fechaCompra}"/>
+    </div>
+    <div>
+        <label for="idUsuario">ID de usuario</label>
+        <input type="number" id="idUsuario" th:field="*{idUsuario}"/>
+    </div>
+    <div>
+        <label for="idJuego">ID de juego</label>
+        <input type="number" id="idJuego" th:field="*{idJuego}"/>
+    </div>
+    <button type="submit" th:if="${compra.id}">Guardar edición</button>
+    <button type="submit" th:unless="${compra.id}">Guardar creación</button>
+</form>
+</body>
+</html>

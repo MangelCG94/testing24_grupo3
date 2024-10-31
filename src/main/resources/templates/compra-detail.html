@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de compra</title>
+</head>
+<body>
+<h1>Detalle de compra</h1>
+
+<div th:if="${compra}">
+    <div>
+        <label for="compra-id">ID:</label>
+        <span id="compra-id" th:text="${compra.id}"></span>
+    </div>
+
+    <div>
+        <label for="compra-fechaCompra">Fecha de compra:</label>
+        <span id="compra-fechaCompra" th:text="${compra.fechaCompra}"></span>
+    </div>
+
+    <div>
+        <label for="compra-idUsuario">ID de usuario:</label>
+        <span id="compra-idUsuario" th:text="${compra.idUsuario}"></span>
+    </div>
+
+    <div>
+        <label for="compra-idJuego">ID de juego:</label>
+        <span id="compra-idJuego" th:text="${compra.idJuego}"></span>
+    </div>
+</div>
+<div th:unless="${compra}">
+    <p>No existe la compra</p>
+</div>
+
+<h3>Acciones</h3>
+<a th:href="@{/compras}">Volver al listado</a>
+<a th:if="${compra}" th:href="@{/compras/update/{id}(id=${compra.id})}">Editar</a>
+<a th:if="${compra}" th:href="@{/compras/delete/{id}(id=${compra.id})}">Borrar</a>
+
+</body>
+</html>
