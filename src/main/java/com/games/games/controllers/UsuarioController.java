@@ -84,7 +84,7 @@ public class UsuarioController {
         return "redirect:/usuarios";
     }
 
-    @GetMapping("usuarios/deleteAll")
+    @GetMapping("usuarios/delete/all")
     public String borrarTodo() {
         try {
             usuarioRepository.deleteAll();
