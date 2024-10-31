@@ -1,9 +1,6 @@
 package com.games.games.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -24,6 +21,10 @@ public class Compra {
     private Long id;
     @CreatedDate
     private Instant fechaCompra;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
     private Long idUsuario;
+    @ManyToOne
+    @JoinColumn(name = "id_juego")
     private Long idJuego;
 }
