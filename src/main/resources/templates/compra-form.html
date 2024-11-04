@@ -3,29 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Formulario de compra</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}">
 </head>
-<body>
-<h1 th:if="${compra.id}">Editar compra<span th:text="${compra.id}"></span></h1>
-<h1 th:unless="${compra.id}">Crear nueva compra</h1>
+<div class="container mt-4 mb-4">
+    <h1 th:text="${compra.id != null} ? 'Editar compra' : 'Crear compra'"></h1>
 
-<form method="POST" th:object="${compra}" th:action="@{/compras}">
+    <form method="POST" th:object="${compra}" th:action="@{/compras}">
+        <div class="mb-3" th:if="${compra.id != null}">
+            <label for="id" class="form-label">ID</label>
+            <input type="text" id="id" th:field="*{id}" class="form-control" readonly/>
+        </div>
+        <div class="mb-3">
+            <label for="fechaCompra" class="form-label">Fecha de compra</label>
+            <input type="datetime-local" id="fechaCompra" th:field="*{fechaCompra}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="idUsuario" class="form-label">ID de usuario</label>
+            <input type="number" id="idUsuario" th:field="*{idUsuario}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="idJuego" class="form-label">ID de juego</label>
+            <input type="number" id="idJuego" th:field="*{idJuego}" class="form-control"/>
+        </div>
+        <button type="submit" class="btn btn-primary me-2"><i class="fas fa-save"></i> Guardar </button>
+        <a th:href="@{/compras}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Cancelar</a>
+    </form>
+</div>
 
-    <input type="hidden" id="id" th:field="*{id}" />
-
-    <div>
-        <label for="fechaCompra">Fecha de compra</label>
-        <input type="datetime-local" id="fechaCompra" th:field="*{fechaCompra}"/>
-    </div>
-    <div>
-        <label for="idUsuario">ID de usuario</label>
-        <input type="number" id="idUsuario" th:field="*{idUsuario}"/>
-    </div>
-    <div>
-        <label for="idJuego">ID de juego</label>
-        <input type="number" id="idJuego" th:field="*{idJuego}"/>
-    </div>
-    <button type="submit" th:if="${compra.id}">Guardar edición</button>
-    <button type="submit" th:unless="${compra.id}">Guardar creación</button>
-</form>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/webjars/font-awesome/js/all.min.js}"></script>
 </body>
 </html>

@@ -4,39 +4,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Detalle de compra</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}">
 </head>
 <body>
-<h1>Detalle de compra</h1>
+<div class="container">
+    <h1>Detalle de compra</h1>
 
-<div th:if="${compra}">
-    <div>
-        <label for="compra-id">ID:</label>
-        <span id="compra-id" th:text="${compra.id}"></span>
+    <div th:if="${compra}">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${compra.id}"></h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">
+                    ID: <span id="compra-id" th:text="${compra.id}"></span>
+                </h6>
+                <p class="card-text">
+                    <strong>Fecha de compra:</strong>
+                    <span id="compra-fechaCompra" th:text="${compra.fechaCompra}"></span>
+                    <br>
+                    <strong>ID de usuario:</strong>
+                    <span id="compra-idUsuario" th:text="${compra.idUsuario}"></span>
+                    <br>
+                    <strong>ID de juego:</strong>
+                    <span id="compra-idJuego" th:text="${compra.idJuego}"></span>
+                </p>
+                <a th:href="@{/compras/update/{id}(id=${compra.id})}" class="btn btn-primary"><i class="fas fa-edit"></i> Editar</a>
+                <a th:href="@{/compras/delete/{id}(id=${compra.id})}" class="btn btn-danger"><i class="fas fa-trash"></i> Borrar</a>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <label for="compra-fechaCompra">Fecha de compra:</label>
-        <span id="compra-fechaCompra" th:text="${compra.fechaCompra}"></span>
+    <div th:unless="${compra}">
+        <p>No existe la compra</p>
     </div>
 
-    <div>
-        <label for="compra-idUsuario">ID de usuario:</label>
-        <span id="compra-idUsuario" th:text="${compra.idUsuario}"></span>
-    </div>
-
-    <div>
-        <label for="compra-idJuego">ID de juego:</label>
-        <span id="compra-idJuego" th:text="${compra.idJuego}"></span>
+    <div class="mt-3">
+        <a th:href="@{/compras}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Volver a la lista</a>
     </div>
 </div>
-<div th:unless="${compra}">
-    <p>No existe la compra</p>
-</div>
-
-<h3>Acciones</h3>
-<a th:href="@{/compras}">Volver al listado</a>
-<a th:if="${compra}" th:href="@{/compras/update/{id}(id=${compra.id})}">Editar</a>
-<a th:if="${compra}" th:href="@{/compras/delete/{id}(id=${compra.id})}">Borrar</a>
-
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/webjars/font-awesome/js/all.min.js}"></script>
 </body>
 </html>
