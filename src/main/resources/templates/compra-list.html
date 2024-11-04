@@ -31,6 +31,14 @@
             <td th:text="${compra.idUsuario}"></td>
             <td th:text="${compra.idJuego}"></td>
             <td>
+                <span th:if="${compra.idUsuario}" th:text="${compra.idUsuario}"></span>
+                <span th:unless="${compra.idUsuario}" class="text-danger">Sin usuario</span>
+            </td>
+            <td>
+                <span th:if="${compra.idJuego}" th:text="${compra.idJuego}"></span>
+                <span th:unless="${compra.idJuego}" class="text-danger">Sin juego</span>
+                </td>
+            <td>
                 <a th:href="@{/compras/{id}(id=${compra.id})}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i> Ver</a>
                 <a th:href="@{/compras/update/{id}(id=${compra.id})}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Editar</a>
                 <a th:href="@{/compras/delete/{id}(id=${compra.id})}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Borrar</a>
