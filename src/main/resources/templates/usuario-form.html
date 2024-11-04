@@ -3,46 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Formulario de usuario</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}">
 </head>
 <body>
-<h1 th:if="${usuario.id}">Editar usuario<span th:text="${usuario.id}"></span></h1>
-<h1 th:unless="${usuario.id}">Crear nuevo usuario</h1>
 
-<form method="POST" th:object="${usuario}" th:action="@{/usuarios}">
+<div class="container mt-4 mb-4">
+    <h1 th:text="${usuario.id != null} ? 'Editar usuario' : 'Crear usuario'"></h1>
 
-    <input type="hidden" id="id" th:field="*{id}" />
+    <form method="POST" th:object="${usuario}" th:action="@{/usuarios}">
+        <div class="mb-3" th:if="${usuario.id != null}">
+            <label for="id" class="form-label">ID</label>
+            <input type="text" id="id" th:field="*{id}" class="form-control" readonly/>
+        </div>
+        <div class="mb-3">
+            <label for="nombreUsuario" class="form-label">Nombre de usuario</label>
+            <input type="text" id="nombreUsuario" th:field="*{nombreUsuario}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="text" id="password" th:field="*{password}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" id="nombre" th:field="*{nombre}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="direccion" class="form-label">Dirección</label>
+            <input type="text" id="direccion" th:field="*{direccion}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="CP" class="form-label">Código postal</label>
+            <input type="number" id="CP" th:field="*{CP}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="dni" class="form-label">DNI</label>
+            <input type="text" id="dni" th:field="*{dni}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="fechaCreacion" class="form-label">Fecha de creación</label>
+            <input type="datetime-local" id="fechaCreacion" th:field="*{fechaCreacion}" class="form-control"/>
+        </div>
 
-    <div>
-        <label for="nombreUsuario">Nombre de usuario</label>
-        <input type="text" id="nombreUsuario" th:field="*{nombreUsuario}" />
-    </div>
-    <div>
-        <label for="password">Password</label>
-        <input type="text" id="password" th:field="*{password}">
-    </div>
-    <div>
-        <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" th:field="*{nombre}" />
-    </div>
-    <div>
-        <label for="direccion">Dirección</label>
-        <input type="text" id="direccion" th:field="*{direccion}">
-    </div>
-    <div>
-        <label for="CP">Código postal</label>
-        <input type="number" id="CP" th:field="*{CP}"/>
-    </div>
-    <div>
-        <label for="dni">DNI</label>
-        <input type="text" id="dni" th:field="*{dni}"/>
-    </div>
-    <div>
-        <label for="fechaCreacion">Fecha de creación</label>
-        <input type="datetime-local" id="fechaCreacion" th:field="*{fechaCreacion}"/>
-    </div>
+        <button type="submit" class="btn btn-primary me-2"><i class="fas fa-save"></i> Guardar edición</button>
+        <a th:href="@{/usuarios}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Cancelar</a>
+    </form>
+</div>
 
-    <button type="submit" th:if="${usuario.id}">Guardar edición</button>
-    <button type="submit" th:unless="${usuario.id}">Guardar creación</button>
-</form>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/webjars/font-awesome/js/all.min.js}"></script>
 </body>
 </html>
