@@ -19,13 +19,30 @@
             <input type="datetime-local" id="fechaCompra" th:field="*{fechaCompra}" class="form-control"/>
         </div>
         <div class="mb-3">
-            <label for="idUsuario" class="form-label">ID de usuario</label>
-            <input type="number" id="idUsuario" th:field="*{idUsuario}" class="form-control"/>
+            <label for="idUsuario" class="form-label">Selecciona un usuario</label>
+            <select id="idUsuario" th:field="*{idUsuario.id}" class="form-select">
+                <option th:selected="${compra.idUsuario == null}" value=""></option>
+                <option
+                        th:each="idUsuario: ${usuarios}"
+                        th:text="${idUsuario.nombreUsuario}"
+                        th:value="${idUsuario.id}"
+                        th:selected="${compra.idUsuario.id == idUsuario.id}">
+                </option>
+            </select>
         </div>
         <div class="mb-3">
-            <label for="idJuego" class="form-label">ID de juego</label>
-            <input type="number" id="idJuego" th:field="*{idJuego}" class="form-control"/>
+            <label for="idJuego" class="form-label">Selecciona un juego</label>
+            <select id="idJuego" th:field="*{idJuego.id}" class="form-select">
+                <option th:selected="${compra.idJuego == null}" value=""></option>
+                <option
+                        th:each="idJuego: ${juegos}"
+                        th:text="${idJuego.nombreJuego}"
+                        th:value="${idJuego.id}"
+                        th:selected="${compra.idJuego.id == idJuego.id}">
+                </option>
+            </select>
         </div>
+
         <button type="submit" class="btn btn-primary me-2"><i class="fas fa-save"></i> Guardar </button>
         <a th:href="@{/compras}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Cancelar</a>
     </form>

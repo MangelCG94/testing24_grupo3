@@ -2,6 +2,7 @@ package com.games.games.controllers;
 
 import com.games.games.models.Compra;
 import com.games.games.repositories.CompraRepository;
+import com.games.games.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class CompraController {
 
     private CompraRepository compraRepository;
+    private UsuarioRepository usuarioRepository;
+    private JuegoController juegoController;
 
     //http://localhost:8080/compras
     @GetMapping("compras")
@@ -48,6 +51,8 @@ public class CompraController {
     @GetMapping("compras/new")
     public String formularioParaCrearCompra(Model model) {
         model.addAttribute("compra", new Compra());
+        model.addAttribute("usuarios", usuarioRepository.findAll());
+        model.addAttribute("juegos", juegoController.findAll());
         return "compra-form";
     }
 
@@ -56,6 +61,8 @@ public class CompraController {
     public String formularioParaActualizarCompra(@PathVariable Long id, Model model) {
         compraRepository.findById(id).
                 ifPresent(compra -> model.addAttribute("compra", compra));
+        model.addAttribute("usuarios", usuarioRepository.findAll());
+        model.addAttribute("juegos", juegoController.findAll());
         return "compra-form";
     }
 

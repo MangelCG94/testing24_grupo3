@@ -22,11 +22,20 @@
                     <strong>Fecha de compra:</strong>
                     <span id="compra-fechaCompra" th:text="${compra.fechaCompra}"></span>
                     <br>
-                    <strong>ID de usuario:</strong>
-                    <span id="compra-idUsuario" th:text="${compra.idUsuario}"></span>
+                    <span th:if="${compra.idUsuario}">
+                        <a th:href="@{/usuarios/{id}(id=${compra.idUsuario.id})}" th:text="${compra.idUsuario.nombreUsuario}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i> Ver</a>
+                    </span>
+                    <span th:unless="${product.idUsuario}" class="text-danger">Sin usuario</span>
                     <br>
-                    <strong>ID de juego:</strong>
-                    <span id="compra-idJuego" th:text="${compra.idJuego}"></span>
+                    <span th:if="${compra.idUsuario}">
+                        <a th:href="@{/usuarios/{id}(id=${compra.idUsuario.id})}" th:text="${compra.idUsuario.nombreUsuario}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i> Ver</a>
+                    </span>
+                    <span th:unless="${product.idUsuario}" class="text-danger">Sin usuario</span>
+                    <br>
+                    <span th:if="${compra.idJuego}">
+                        <a th:href="@{/juegos/{id}(id=${compra.idJuego.id})}" th:text="${compra.idJuego.nombreJuego}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i> Ver</a>
+                    </span>
+                    <span th:unless="${product.idJuego}" class="text-danger">Sin juego</span>
                 </p>
                 <a th:href="@{/compras/update/{id}(id=${compra.id})}" class="btn btn-primary"><i class="fas fa-edit"></i> Editar</a>
                 <a th:href="@{/compras/delete/{id}(id=${compra.id})}" class="btn btn-danger"><i class="fas fa-trash"></i> Borrar</a>
