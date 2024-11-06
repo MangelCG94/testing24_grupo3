@@ -52,7 +52,7 @@ public class CompraController {
     public String formularioParaCrearCompra(Model model) {
         model.addAttribute("compra", new Compra());
         model.addAttribute("usuarios", usuarioRepository.findAll());
-        model.addAttribute("juegos", juegoController.findAll());
+        model.addAttribute("juegos", juegoRepository.findAll());
         return "compra-form";
     }
 
@@ -62,7 +62,7 @@ public class CompraController {
         compraRepository.findById(id).
                 ifPresent(compra -> model.addAttribute("compra", compra));
         model.addAttribute("usuarios", usuarioRepository.findAll());
-        model.addAttribute("juegos", juegoController.findAll());
+        model.addAttribute("juegos", juegoRepository.findAll());
         return "compra-form";
     }
 
