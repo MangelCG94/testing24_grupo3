@@ -5,17 +5,19 @@
     <title>Formulario de usuario</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}">
+    <link rel="shortcut icon" href="#" />
 </head>
 <body>
+
+<div th:replace="~{navbar :: nav1}"></div>
 
 <div class="container mt-4 mb-4">
     <h1 th:text="${usuario.id != null} ? 'Editar usuario' : 'Crear usuario'"></h1>
 
     <form method="POST" th:object="${usuario}" th:action="@{/usuarios}">
-        <div class="mb-3" th:if="${usuario.id != null}">
-            <label for="id" class="form-label">ID</label>
-            <input type="text" id="id" th:field="*{id}" class="form-control" readonly/>
-        </div>
+
+        <input type="hidden" id="id" th:field="*{id}"/>
+
         <div class="mb-3">
             <label for="nombreUsuario" class="form-label">Nombre de usuario</label>
             <input type="text" id="nombreUsuario" th:field="*{nombreUsuario}" class="form-control"/>
@@ -45,10 +47,18 @@
             <input type="datetime-local" id="fechaCreacion" th:field="*{fechaCreacion}" class="form-control"/>
         </div>
 
-        <button type="submit" class="btn btn-primary me-2"><i class="fas fa-save"></i> Guardar edición</button>
-        <a th:href="@{/usuarios}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Cancelar</a>
+        <button type="submit" class="btn btn-primary me-2">
+            <i class="fas fa-save"></i>
+            Guardar edición</button>
+        <a th:href="@{/usuarios}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            Cancelar
+        </a>
     </form>
 </div>
+
+<div th:replace="~{footer :: footer1}"></div>
+
 
 <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/webjars/font-awesome/js/all.min.js}"></script>

@@ -5,52 +5,60 @@
     <title>Lista de usuarios</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}">
+    <link rel="shortcut icon" href="#" />
 </head>
 <body>
-<div class="container mt-4"></div>
-    <h1 th:text="${titulo}"></h1>
 
-    <div class="mt-3 mb-3">
-        <a href="/usuarios/new" class="btn btn-primary"><i class="fas fa-plus"></i> Crear nuevo usuario</a>
+<div th:replace="~{navbar :: nav1}"></div>
+
+<div class="container mt-4">
+
+    <h1>Listado de usuarios</h1>
+    <div mb-3>
+
+        <a href="/usuarios/new" class="btn btn-primary">
+            <i class="fas fa-plus">
+
+            </i> Crear nuevo usuario</a>
+
+        <div th:if="${usuarios.size() > 0}" class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col" th:each="usuario: ${usuarios}">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${usuario.nombreUsuario}"></h5>
+                        <p class="card-text" th:text="${usuario.password}"></p>
+                        <p class="card-text" th:text="${usuario.nombre}"></p>
+                        <p class="card-text" th:text="${usuario.direccion}"></p>
+                        <p class="card-text" th:text="${usuario.CP}"></p>
+                        <p class="card-text" th:text="${usuario.DNI}"></p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Fecha de creación: <span th:text="${usuario.fechaCreacion}"></span></small>
+                    </div>
+                    <div class="card-footer">
+                        <a th:href="@{/usuarios/{id}(id=${usuario.id})}" class="btn btn-sm btn-info">
+                            <i class="fas fa-eye"></i>
+                            Ver</a>
+                        <a th:href="@{/usuarios/update/{id}(id=${usuario.id})}" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i>
+                            Editar</a>
+                        <a th:href="@{/usuarios/delete/{id}(id=${usuario.id})}" class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash"></i>
+                            Borrar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <table class="table table-striped" id="usuarioList" th:if="${usuarios.size() > 0}">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>NOMBRE DE USUARIO</th>
-                <th>PASSWORD</th>
-                <th>NOMBRE</th>
-                <th>DIRECCIÓN</th>
-                <th>CP</th>
-                <th>DNI</th>
-                <th>FECHA DE CREACIÓN</th>
-                <th>ACCIONES</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="usuario: ${usuarios}">
-                <td th:text="${usuario.id}"></td>
-                <td th:text="${usuario.nombreUsuario}"></td>
-                <td th:text="${usuario.password}"></td>
-                <td th:text="${usuario.nombre}"></td>
-                <td th:text="${usuario.direccion}"></td>
-                <td th:text="${usuario.CP}"></td>
-                <td th:text="${usuario.dni}"></td>
-                <td th:text="${usuario.fechaCreacion}"></td>
-                <td>
-
-                    <a th:href="@{/usuarios/{id}(id=${usuario.id})}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i> Ver</a>
-                    <a th:href="@{/usuarios/update/{id}(id=${usuario.id})}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Editar</a>
-                    <a th:href="@{/usuarios/delete/{id}(id=${usuario.id})}" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Borrar</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
     <p th:if="${usuarios.size() == 0}">
         No hay usuarios.
     </p>
 </div>
+<div th:replace="~{footer :: footer1}"></div>
 
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/webjars/font-awesome/js/all.min.js}"></script>
 </body>
 </html>
