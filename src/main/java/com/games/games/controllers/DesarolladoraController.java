@@ -1,8 +1,8 @@
 package com.games.games.controllers;
 
-import com.certidevs.model.Manufacturer;
-import com.certidevs.model.Product;
-import com.certidevs.repository.ManufacturerRepository;
+import com.games.games.models.Desarrolladora;
+import com.games.games.models.Juego;
+import com.games.games.repositories.DesarrolladoraRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -25,4 +25,5 @@ public class DesarolladoraController {
                 desarrolladoraRepo.findAll());
         return "desarolladora-list";
     }
+
 }

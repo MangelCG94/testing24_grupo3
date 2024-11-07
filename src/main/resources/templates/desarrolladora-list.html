@@ -7,32 +7,26 @@
 <body>
 
 <h1>DESARROLLADORAS</h1>
-<a href="/manufacturers/new">Crear nuevo fabricante</a>
-<table id="manufacturerList" th:if="${manufacturers.size() > 0}">
+<a href="/desarrolladoras/new">Crear nuevo fabricante</a>
+<table id="desarrolladoraList" th:if="${desarrolladoras.size() > 0}">
   <tr>
     <th>ID</th>
     <th>NOMBRE</th>
     <th>DESCRIPCIÓN</th>
     <th>LOGO</th>
     <th>AÑO</th>
-    <th>ACCIONES</th>
   </tr>
-  <tr th:each="manufacturer: ${manufacturers}">
-    <td th:text="${manufacturer.nombreCom}"></td>
+  <tr th:each="desarrolladora: ${desarrolladoras}">
+    <td th:text="${desarrolladora.nombreCom}"></td>
     <td>
-      <img th:src="${manufacturer.imagenLogo}" alt="Logo" style="max-width: 60px;">
+      <img th:src="${desarrolladora.imagenLogo}" alt="Logo" style="max-width: 60px;">
     </td>
-    <td th:text="${manufacturer.anyoFundacion}"></td>
-    <td th:text="${manufacturer.pais}"></td>
-    <td>
-      <a th:href="@{/manufacturers/{id}(id=${manufacturer.id})}">Ver</a>
-      <a th:href="@{/manufacturers/update/{id}(id=${manufacturer.id})}">Editar</a>
-      <a th:href="@{/manufacturers/delete/{id}(id=${manufacturer.id})}">Borrar</a>
-    </td>
+    <td th:text="${desarrolladora.anyoFundacion}"></td>
+    <td th:text="${desarrolladora.pais}"></td>
   </tr>
 
 </table>
-<p th:if="${manufacturers.size() == 0}">
+<p th:if="${desarrolladoras.size() == 0}">
   DESARROLLADORAS NO ENCONTRADAS.
 </p>
 
