@@ -2,6 +2,7 @@ package com.games.games.controllers;
 
 import com.games.games.models.Compra;
 import com.games.games.repositories.CompraRepository;
+import com.games.games.repositories.JuegoRepository;
 import com.games.games.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ public class CompraController {
 
     private CompraRepository compraRepository;
     private UsuarioRepository usuarioRepository;
-    private JuegoController juegoController;
+    private JuegoRepository juegoRepository;
 
     //http://localhost:8080/compras
     @GetMapping("compras")
