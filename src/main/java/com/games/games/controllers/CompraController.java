@@ -3,6 +3,7 @@ package com.games.games.controllers;
 import com.games.games.models.Compra;
 import com.games.games.repositories.CompraRepository;
 import com.games.games.repositories.JuegoRepository;
+import com.games.games.repositories.JuegosUsuarioRepository;
 import com.games.games.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
