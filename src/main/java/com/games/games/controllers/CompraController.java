@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class CompraController {
 
     private CompraRepository compraRepository;
-    private UsuarioRepository usuarioRepository;
-    private JuegoRepository juegoRepository;
+    private JuegosUsuarioRepository juegosUsuarioRepository;
 
     //http://localhost:8080/compras
     @GetMapping("compras")
@@ -52,8 +51,7 @@ public class CompraController {
     @GetMapping("compras/new")
     public String formularioParaCrearCompra(Model model) {
         model.addAttribute("compra", new Compra());
-        model.addAttribute("usuarios", usuarioRepository.findAll());
-        model.addAttribute("juegos", juegoRepository.findAll());
+        model.addAttribute("juegosUsuario", juegosUsuarioRepository.findAll());
         return "compra-form";
     }
 
@@ -62,8 +60,7 @@ public class CompraController {
     public String formularioParaActualizarCompra(@PathVariable Long id, Model model) {
         compraRepository.findById(id).
                 ifPresent(compra -> model.addAttribute("compra", compra));
-        model.addAttribute("usuarios", usuarioRepository.findAll());
-        model.addAttribute("juegos", juegoRepository.findAll());
+        model.addAttribute("juegosUsuario", juegosUsuarioRepository.findAll());
         return "compra-form";
     }
 
@@ -74,8 +71,7 @@ public class CompraController {
         } else {
             compraRepository.findById(compra.getId()).ifPresent(compraDB -> {
                 compraDB.setFechaCompra(compra.getFechaCompra());
-                compraDB.setIdUsuario(compra.getIdUsuario());
-                compraDB.setIdJuego(compra.getIdJuego());
+                compraDB.setJuegosUsuario(compra.getJuegosUsuario());
                 compraRepository.save(compraDB);
             });
         }

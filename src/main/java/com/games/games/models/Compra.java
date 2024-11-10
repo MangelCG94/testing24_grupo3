@@ -22,9 +22,7 @@ public class Compra {
     @CreatedDate
     private Instant fechaCompra;
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
-    private Long idUsuario;
-    @ManyToOne
-    @JoinColumn(name = "id_juego")
-    private Long idJuego;
+    @JoinColumn(name = "id_juegos_de_usuario")
+    private JuegosUsuario juegosUsuario;
+
 }
