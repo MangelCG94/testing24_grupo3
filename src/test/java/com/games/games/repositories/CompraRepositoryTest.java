@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @DataJpaTest
 class CompraRepositoryTest {
@@ -23,12 +27,12 @@ class CompraRepositoryTest {
 
     @Test
     void findByFechaCompra() {
-        Compra compra1 = Compra.builder().fechaCompra(Instant.now()).build();
-        Compra compra2 = Compra.builder().fechaCompra(Instant.now()).build();
+        Compra compra1 = Compra.builder().fechaCompra(10000000L).build();
+        Compra compra2 = Compra.builder().fechaCompra(20000000L).build();
 
         compraRepository.saveAll(List.of(compra1, compra2));
 
-        List<Compra> compras = compraRepository.findByFechaCompra(Instant.now());
+        List<Compra> compras = compraRepository.findByFechaCompra(10000000L);
 
         assertEquals(2, compras.size());
         assertTrue(compras.contains(compra1));
@@ -60,7 +64,7 @@ class CompraRepositoryTest {
     void encuentraTodasLasComprasConJuegosDeUsuario() {
 
         Compra compra1 = Compra.builder()
-                .fechaCompra(Instant.now())
+                .fechaCompra(LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli())
                 .juegosUsuario(JuegosUsuario.builder().build())
                 .build();
 
@@ -83,7 +87,19 @@ class CompraRepositoryTest {
         assertNotNull(compras);
         assertEquals(1, compras.size());
         CompraConJuegosUsuario dto = compras.get(0);
-        assertEquals(compra1.getId(), dto.compraId());
+        assertEquals(compra1.getIdCompra(), dto.compraId());
+    }
+
+    @Test
+    void finByFechaCompraEntre() {
+
+        Compra compra1 = Compra.builder().fechaCompra(LocalDateTime.now().toInstant(ZoneOffset.ofHoursMinutesSeconds(14,30,00)).toEpochMilli()).build();
+        Compra compra2 = Compra.builder().fechaCompra(LocalDateTime.now().toInstant(ZoneOffset.ofHoursMinutesSeconds(23,30,00)).toEpochMilli()).build();
+
+        Instant startDate = Instant.now();
+        Instant endDate = Instant.now().plusSeconds(160000);
+
+        when(compraRepository.findByFechaCompraEntre(startDate, endDate)).thenReturn(Arrays.asList(compra1, compra2));
 
     }
 }
