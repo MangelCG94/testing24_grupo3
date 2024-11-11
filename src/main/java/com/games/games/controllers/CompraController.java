@@ -67,10 +67,10 @@ public class CompraController {
 
     @PostMapping("compras")
     public String guardarCompra(@ModelAttribute Compra compra) {
-        if (compra.getId() == null) {
+        if (compra.getIdCompra() == null) {
             compraRepository.save(compra);
         } else {
-            compraRepository.findById(compra.getId()).ifPresent(compraDB -> {
+            compraRepository.findById(compra.getIdCompra()).ifPresent(compraDB -> {
                 compraDB.setFechaCompra(compra.getFechaCompra());
                 compraDB.setJuegosUsuario(compra.getJuegosUsuario());
                 compraRepository.save(compraDB);
