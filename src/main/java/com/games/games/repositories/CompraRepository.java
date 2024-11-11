@@ -12,7 +12,9 @@ import java.util.List;
 
 public interface CompraRepository extends JpaRepository<Compra, Long> {
 
-    List<Compra> findByFechaCompra(Instant fechaCompra);
+    List<Compra> findByFechaCompra(Long fechaCompra);
+
+    List<Compra> findByFechaCompraEntre(Instant fechaCompraInicio, Instant fechaCompraFin);
 
     List<Compra> findByJuegosUsuario(JuegosUsuario juegosUsuario);
 
@@ -33,4 +35,7 @@ public interface CompraRepository extends JpaRepository<Compra, Long> {
     GROUP BY c.id, c.fechaCompra, u.nombreUsuario, j.nombreJuego,
     """)
     List<CompraConJuegosUsuario> encuentraTodasLasComprasConJuegosDeUsuario(@Param("idUsuario") Long idUsuario, @Param("fechaCompra") Instant fechaCompra);
+
+
+
 }
