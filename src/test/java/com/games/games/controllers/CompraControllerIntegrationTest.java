@@ -1,6 +1,7 @@
 package com.games.games.controllers;
 
 import com.games.games.models.Compra;
+import com.games.games.models.JuegosUsuario;
 import com.games.games.repositories.CompraRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +37,10 @@ public class CompraControllerIntegrationTest {
     void encontrarTodasCompras() throws Exception {
 
         compraRepository.saveAll(List.of(
-                Compra.builder().id(1L).idUsuario(1L).idJuego(1L).build(),
-                Compra.builder().id(2L).idUsuario(2L).idJuego(2L).build(),
-                Compra.builder().id(3L).idUsuario(3L).idJuego(3L).build()
+                Compra.builder().idCompra(1L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build(),
+                Compra.builder().idCompra(2L).juegosUsuario(JuegosUsuario.builder().id(2L).build()).build(),
+                Compra.builder().idCompra(3L).juegosUsuario(JuegosUsuario.builder().id(3L).build()).build()
+
         ));
 
         System.out.println("Encuentra todas las compras: " + compraRepository.count());
@@ -53,12 +55,12 @@ public class CompraControllerIntegrationTest {
     @Test
     void encontrarPorIdCuandoExisteCompra() throws Exception {
 
-        var compra = compraRepository.save(Compra.builder().id(1L).idUsuario(1L).idJuego(1L).build());
+        var compra = compraRepository.save(Compra.builder().idCompra(1L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build());
 
         System.out.println("Encuentra todas las compras: " + compraRepository.count());
-        System.out.println("Encuentra compra guardada: " + compra.getId());
+        System.out.println("Encuentra compra guardada: " + compra.getIdCompra());
 
-        mockMvc.perform(get("/compras/" + compra.getId()))
+        mockMvc.perform(get("/compras/" + compra.getIdCompra()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("compra-list"))
                 .andExpect(model().attributeExists("compras"));
@@ -79,8 +81,8 @@ public class CompraControllerIntegrationTest {
     void formularioParaCrearCompra() throws Exception {
 
         compraRepository.saveAll(List.of(
-                Compra.builder().id(1L).idUsuario(1L).build(),
-                Compra.builder().id(2L).idUsuario(2L).build()
+                Compra.builder().idCompra(1L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build(),
+                Compra.builder().idCompra(2L).juegosUsuario(JuegosUsuario.builder().id(2L).build()).build()
                 ));
 
         mockMvc.perform(get("compras/crear"))
@@ -96,10 +98,10 @@ public class CompraControllerIntegrationTest {
     @Test
     void formularioParaEditarCompraSiExiste() throws Exception {
 
-        Compra compra = Compra.builder().id(1L).idUsuario(1L).build();
+        Compra compra = Compra.builder().idCompra(1L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build();
         compraRepository.save(compra);
 
-        mockMvc.perform(get("compras/editar/" + compra.getId()))
+        mockMvc.perform(get("compras/editar/" + compra.getIdCompra()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("compra-form"))
                 .andExpect(model().attributeExists("compra"));
@@ -119,7 +121,7 @@ public class CompraControllerIntegrationTest {
     @Test
     void guardarCompra_Nueva() throws Exception {
 
-        Compra compra = Compra.builder().id(1L).idUsuario(1L).build();
+        Compra compra = Compra.builder().idCompra(1L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build();
         compraRepository.save(compra);
 
         mockMvc.perform
@@ -132,24 +134,24 @@ public class CompraControllerIntegrationTest {
     @Test
     void guardarCompra_Existente() throws Exception {
 
-        Compra compra = Compra.builder().id(1L).idUsuario(1L).build();
+        Compra compra = Compra.builder().idCompra(1L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build();
         compraRepository.save(compra);
 
         mockMvc.perform
                 (post("/compras")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("id", String.valueOf(compra.getId()))
+                        .param("id", String.valueOf(compra.getIdCompra()))
                         .param("idUsuario", "2L")
                 ).andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/compras"));
 
-        Optional<Compra> OpcionalDeCompraGuardada = compraRepository.findById(compra.getId());
+        Optional<Compra> OpcionalDeCompraGuardada = compraRepository.findById(compra.getIdCompra());
         assertTrue(OpcionalDeCompraGuardada.isPresent());
 
         Compra compraGuardada = OpcionalDeCompraGuardada.get();
 
-        assertEquals(compra.getId(), compraGuardada.getId());
-        assertEquals(2L, compraGuardada.getIdUsuario());
+        assertEquals(compra.getIdCompra(), compraGuardada.getIdCompra());
+        assertEquals(2L, compraGuardada.getJuegosUsuario().getId());
     }
 
     @Test
