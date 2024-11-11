@@ -1,6 +1,7 @@
 package com.games.games.controllers;
 
 import com.games.games.models.Compra;
+import com.games.games.models.JuegosUsuario;
 import com.games.games.repositories.CompraRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,11 +34,9 @@ class CompraControllerUTest {
     void encontrarTodasCompras() {
 
         when(compraRepository.findAll()).thenReturn(List.of(
-
-                Compra.builder().id(1L).fechaCompra(Date.from(Instant.now()).toInstant()).idUsuario(1L).idJuego(1L).build(),
-                Compra.builder().id(1L).fechaCompra(Date.from(Instant.now()).toInstant()).idUsuario(2L).idJuego(2L).build(),
-                Compra.builder().id(1L).fechaCompra(Date.from(Instant.now()).toInstant()).idUsuario(3L).idJuego(3L).build()
-
+                Compra.builder().idCompra(1L).fechaCompra(1000000000L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build(),
+                Compra.builder().idCompra(2L).fechaCompra(2000000000L).juegosUsuario(JuegosUsuario.builder().id(2L).build()).build(),
+                Compra.builder().idCompra(3L).fechaCompra(3000000000L).juegosUsuario(JuegosUsuario.builder().id(3L).build()).build()
         ));
         String view = compraController.encontrarTodasCompras(model);
 
@@ -48,7 +47,7 @@ class CompraControllerUTest {
     @Test
     void encontrarPorIdCuandoExisteCompra() {
 
-        Compra compra1 = Compra.builder().id(1L).fechaCompra(Date.from(Instant.now()).toInstant()).idUsuario(1L).idJuego(1L).build();
+        Compra compra1 = Compra.builder().idCompra(1L).fechaCompra(1000000000L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build();
         when(compraRepository.findById(1L)).thenReturn(Optional.of(compra1));
 
         String view = compraController.encontrarPorIdCompra(1L, model);
@@ -97,7 +96,7 @@ class CompraControllerUTest {
     @Test
     void formularioParaActualizarCompraSiExiste() {
 
-        Compra compra1 = Compra.builder().id(1L).fechaCompra(Date.from(Instant.now()).toInstant()).idUsuario(1L).idJuego(1L).build();
+        Compra compra1 = Compra.builder().idCompra(1L).fechaCompra(1000000000L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build();
         when(compraRepository.findById(1L)).thenReturn(Optional.of(compra1));
 
         String view = compraController.formularioParaActualizarCompra(1L, model);
@@ -123,7 +122,7 @@ class CompraControllerUTest {
     @Test
     void guardarCompraNueva() {
 
-        Compra compra1 = Compra.builder().id(1L).fechaCompra(Date.from(Instant.now()).toInstant()).idUsuario(1L).idJuego(1L).build();
+        Compra compra1 = Compra.builder().idCompra(1L).fechaCompra(1000000000L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build();
 
         String view = compraController.guardarCompra(compra1);
 
@@ -134,16 +133,16 @@ class CompraControllerUTest {
     @Test
     void guardarCompraExistente() {
 
-        Compra compra1 = Compra.builder().id(1L).fechaCompra(Date.from(Instant.now()).toInstant()).idUsuario(1L).idJuego(1L).build();
+        Compra compra1 = Compra.builder().idCompra(1L).fechaCompra(1000000000L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build();
 
-        Compra compraActualizada = Compra.builder().id(1L).fechaCompra(Date.from(Instant.now()).toInstant()).idUsuario(2L).idJuego(1L).build();
+        Compra compraActualizada = Compra.builder().idCompra(2L).fechaCompra(2000000000L).juegosUsuario(JuegosUsuario.builder().id(2L).build()).build();
 
         String view = compraController.guardarCompra(compraActualizada);
 
         assertEquals("redirect:/compras", view);
         verify(compraRepository).findById(1L);
         verify(compraRepository).save(compra1);
-        assertEquals(compraActualizada.getIdUsuario(), compra1.getIdUsuario());
+        assertEquals(compraActualizada.getJuegosUsuario(), compra1.getJuegosUsuario());
     }
 
     @Test
