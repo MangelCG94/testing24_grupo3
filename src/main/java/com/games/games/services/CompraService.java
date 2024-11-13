@@ -1,9 +1,13 @@
 package com.games.games.services;
 
 import com.games.games.models.Compra;
+import com.games.games.models.Juego;
 import com.games.games.models.JuegosUsuario;
+import com.games.games.models.Usuario;
 import com.games.games.repositories.CompraRepository;
+import com.games.games.repositories.JuegoRepository;
 import com.games.games.repositories.JuegosUsuarioRepository;
+import com.games.games.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +20,8 @@ import java.util.List;
 public class CompraService {
 
     private final CompraRepository compraRepository;
-    private final JuegosUsuarioRepository juegosUsuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final JuegoRepository juegoRepository;
 
     public Compra getCompraById(Long id) {
         return compraRepository.findById(id)
@@ -27,8 +32,8 @@ public class CompraService {
         return compraRepository.findAll();
     }
 
-    public List<Compra> getComprasByJuegosUsuario(JuegosUsuario juegosUsuario) {
-        return compraRepository.findByJuegosUsuario(juegosUsuario);
+    public List<Compra> getComprasByUsuario(Usuario usuario) {
+        return compraRepository.findByUsuarios(usuario);
     }
 
     public List<Compra> findByFechaCompraEntreFechas(Instant startDate, Instant endDate) {
@@ -36,22 +41,33 @@ public class CompraService {
     }
 
     @Transactional
-    public Compra hazCompra(Long fechaCompra, Long juegosUsuarioId) {
+    public Compra hazCompra(Instant fechaCompra, Long juegoId, Long usuarioId) {
         // Validar que la operación sea positiva
-        if (juegosUsuarioId <= 0) {
+        List<Juego> juegos = List.of(Juego.builder().id(1L).build());
+        List<Usuario> usuarios = List.of(Usuario.builder().id(1L).build());
+        if (juegos.size() <= 0) {
             throw new IllegalArgumentException("La cantidad debe ser mayor que cero.");
         }
 
-        // Buscar el juego de usuario por ID
-        JuegosUsuario juegosUsuario = juegosUsuarioRepository.findById(juegosUsuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+        if (usuarios.size() <= 0) {
+            throw new IllegalArgumentException("La cantidad debe ser mayor que cero.");
+        }
+
+        // Buscar el usuario por ID
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        // Buscar el juego por ID
+        Juego juego = juegoRepository.findById(juegoId)
+                .orElseThrow(() -> new IllegalArgumentException("Juego no encontrado"));
 
         // Crear la compra
 
         Compra compra = Compra.builder()
                 .idCompra(1L)
                 .fechaCompra(fechaCompra)
-                .juegosUsuario(juegosUsuario)
+                .usuario(usuario)
+                .juego(juego)
                 .build();
 
         // Guardar la compra en base de datos
@@ -65,8 +81,8 @@ public class CompraService {
         Compra compra = compraRepository.findById(purchaseId)
                 .orElseThrow(() -> new IllegalArgumentException("Compra no encontrada")); // Lanza una excepción si no existe
 
-        // Obtener el juego de usuario asociado a la compra
-        JuegosUsuario juegosUsuario = compra.getJuegosUsuario(); // Obtiene el producto de la compra
+        // Obtener el juego asociado a la compra
+        Juego juego = compra.getJuego(); // Obtiene el producto de la compra
 
         // Eliminar la compra
         compraRepository.delete(compra); // Elimina la compra
@@ -75,4 +91,5 @@ public class CompraService {
     public List<Compra> findbyFechaCompraEntreFechas(Instant startDate, Instant endDate) {
         return compraRepository.findByFechaCompraEntre(startDate, endDate);
     }
+
 }
