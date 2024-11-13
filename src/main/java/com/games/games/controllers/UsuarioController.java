@@ -4,15 +4,18 @@ import com.games.games.models.Usuario;
 import com.games.games.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @AllArgsConstructor
 @Controller
+@RestController
 public class UsuarioController {
 
     private UsuarioRepository usuarioRepository;
@@ -94,4 +97,59 @@ public class UsuarioController {
         }
         return "redirect:/usuarios";
     }
+
+    // Métodos con API Rest
+
+    @GetMapping("usuarios") // localhost:8080/usuarios?nombre=Juan
+    public ResponseEntity<String> encuentraNombreUsuario(@RequestParam(required = false) String nombreUsuario) {
+        return ResponseEntity.ok("Bienvenido, " + nombreUsuario);
+    }
+
+    // CRUD
+
+    @GetMapping("usuarios") // localhost:8080/usuarios
+    public ResponseEntity<List<Usuario>> encuentraTodosUsuariosAPI() {
+        return ResponseEntity.ok(usuarioRepository.findAll());
+    }
+
+    @GetMapping("usuarios/{id}") // localhost:8080/usuarios/1
+    public ResponseEntity<Usuario> encontrarUsuarioPorID_API (@PathVariable Long id){
+        return usuarioRepository.findById(id)
+                .map(usuario -> {
+                    return ResponseEntity.ok(usuario);
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @PostMapping("usuarios")
+    public ResponseEntity<Usuario> crearUsuarioAPI(@RequestBody Usuario usuario){
+        if (usuario.getId() != null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+        usuarioRepository.save(usuario);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+    }
+
+    @PutMapping("usuarios")
+    public ResponseEntity<Usuario> editarUsuarioAPI(@RequestBody Usuario usuario){
+        if (usuario.getId() == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+
+        usuarioRepository.save(usuario);
+
+        return ResponseEntity.ok(usuario);
+    }
+
+    @DeleteMapping("usuarios/{id}")
+    public ResponseEntity<Void> borrarUsuarioAPI(@PathVariable Long id){
+        try {
+            usuarioRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
+    }
+
+
 }
