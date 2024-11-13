@@ -1,10 +1,8 @@
 package com.games.games.dtos;
 
-public record CompraConJuegosUsuario(
+public record CompraConJuegosDTO(
         Long compraId,
         Long fechaCompra,
-        Long usuarioId,
-        String nombreUsuario,
         Long juegoId,
         String nombreJuego
 ) {
