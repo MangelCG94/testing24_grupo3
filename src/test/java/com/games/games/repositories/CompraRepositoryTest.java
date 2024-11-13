@@ -92,14 +92,22 @@ class CompraRepositoryTest {
 
     @Test
     void finByFechaCompraEntre() {
+        Compra compra1 = Compra.builder()
+                .fechaCompra(Instant.now().minusSeconds(10000).toEpochMilli())
+                .build();
+        Compra compra2 = Compra.builder()
+                .fechaCompra(Instant.now().minusSeconds(5000).toEpochMilli())
+                .build();
 
-        Compra compra1 = Compra.builder().fechaCompra(LocalDateTime.now().toInstant(ZoneOffset.ofHoursMinutesSeconds(14,30,00)).toEpochMilli()).build();
-        Compra compra2 = Compra.builder().fechaCompra(LocalDateTime.now().toInstant(ZoneOffset.ofHoursMinutesSeconds(23,30,00)).toEpochMilli()).build();
+        compraRepository.saveAll(List.of(compra1, compra2));
 
-        Instant startDate = Instant.now();
-        Instant endDate = Instant.now().plusSeconds(160000);
+        Instant startDate = Instant.now().minusSeconds(15000);
+        Instant endDate = Instant.now();
 
-        when(compraRepository.findByFechaCompraEntre(startDate, endDate)).thenReturn(Arrays.asList(compra1, compra2));
+        List<Compra> compras = compraRepository.findByFechaCompraEntre(startDate, endDate);
 
+        assertEquals(2, compras.size());
+        assertTrue(compras.contains(compra1));
+        assertTrue(compras.contains(compra2));
     }
 }
