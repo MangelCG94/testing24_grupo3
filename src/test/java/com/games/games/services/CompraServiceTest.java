@@ -1,9 +1,13 @@
 package com.games.games.services;
 
 import com.games.games.models.Compra;
+import com.games.games.models.Juego;
 import com.games.games.models.JuegosUsuario;
+import com.games.games.models.Usuario;
 import com.games.games.repositories.CompraRepository;
+import com.games.games.repositories.JuegoRepository;
 import com.games.games.repositories.JuegosUsuarioRepository;
+import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,26 +31,37 @@ class CompraServiceTest {
     private CompraRepository compraRepository;
 
     @Mock
-    private JuegosUsuarioRepository juegosUsuarioRepository;
+    private JuegoRepository juegoRepository;
+
+    @Mock
+    private UsuarioRepository usuarioRepository;
 
     @InjectMocks
     private CompraService compraService;
 
     private Compra compra;
-    private JuegosUsuario juegosUsuario;
+    private Juego juego;
+    private Usuario usuario;
 
     @BeforeEach
     void setUp() {
         compra = Compra.builder()
                 .idCompra(1L)
-                .fechaCompra(1677721600L)
-                .juegosUsuario(juegosUsuario)
+                .fechaCompra(Instant.ofEpochSecond(1677721600L))
+                .juego(juego)
+                .usuario(usuario)
                 .build();
 
-        juegosUsuario = JuegosUsuario.builder()
+        usuario = Usuario.builder()
                 .id(1L)
-                .time(150L)
+                .nombreUsuario("Javi82")
                 .build();
+
+        juego = Juego.builder()
+                .id(1L)
+                .nombre("The legend of Zelda")
+                .build();
+
     }
 
     @Test
@@ -57,7 +72,9 @@ class CompraServiceTest {
 
         assertNotNull(result,"El resultado no debería ser nulo");
         assertEquals(1L, result.getIdCompra(), "El ID de la compra debería ser 1");
-        assertEquals(1677721600L, result.getFechaCompra(), "La fecha de compra debería ser 1677721600");
+        Instant expectedFechaCompra = Instant.ofEpochSecond(1677721600L);
+        assertEquals(expectedFechaCompra, result.getFechaCompra(), "La fecha de compra debería ser 1677721600");
+
 
         verify(compraRepository, times(1)).findById(1L);
     }
@@ -90,15 +107,15 @@ class CompraServiceTest {
 
     @Test
     void getComprasByFecha() {
-        when(compraRepository.findByJuegosUsuario(juegosUsuario)).thenReturn(Arrays.asList(compra));
+        when(compraRepository.findByUsuarios(usuario)).thenReturn(Arrays.asList(compra));
 
-        List<Compra> resultado = compraService.getComprasByJuegosUsuario(juegosUsuario);
+        List<Compra> resultado = compraService.getComprasByUsuario(usuario);
 
         assertNotNull(resultado, "El resultado no debería ser nulo");
         assertEquals(1, resultado.size(), "Debería haber una compra en la lista");
         assertEquals(compra, resultado.get(0), "La compra en la lista debería ser igual a la compra de prueba");
 
-        verify(compraRepository, times(1)).findByJuegosUsuario(juegosUsuario);
+        verify(compraRepository, times(1)).findByUsuarios(usuario);
     }
 
     @Test
@@ -122,7 +139,7 @@ class CompraServiceTest {
     void hazCompra() {
         when(compraRepository.save(any(Compra.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Compra resultado = compraService.hazCompra(1677721600L, 1L);
+        Compra resultado = compraService.hazCompra(Instant.ofEpochSecond(10000), 1L, 1L);
 
         assertNotNull(resultado, "El resultado no debería ser nulo");
         assertEquals(1L, resultado.getIdCompra(), "El ID de la compra debería ser 1");
