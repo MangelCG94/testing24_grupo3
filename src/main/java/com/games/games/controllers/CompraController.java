@@ -1,17 +1,16 @@
 package com.games.games.controllers;
 
 import com.games.games.models.Compra;
+import com.games.games.models.JuegosUsuario;
 import com.games.games.repositories.CompraRepository;
 import com.games.games.repositories.JuegoRepository;
 import com.games.games.repositories.JuegosUsuarioRepository;
 import com.games.games.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @Controller
@@ -80,6 +79,7 @@ public class CompraController {
 
     }
 
+    //http://localhost:8080/compras/delete/1
     @GetMapping("compras/delete/{id}")
     public String borrarPorIdCompra(@PathVariable Long id) {
         try {
@@ -103,4 +103,5 @@ public class CompraController {
         }
         return "redirect:/compras";
     }
+
 }
