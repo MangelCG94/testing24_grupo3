@@ -1,7 +1,9 @@
 package com.games.games.controllers;
 
 import com.games.games.models.Compra;
+import com.games.games.models.Juego;
 import com.games.games.models.JuegosUsuario;
+import com.games.games.models.Usuario;
 import com.games.games.repositories.CompraRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +39,9 @@ public class CompraControllerIntegrationTest {
     void encontrarTodasCompras() throws Exception {
 
         compraRepository.saveAll(List.of(
-                Compra.builder().idCompra(1L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build(),
-                Compra.builder().idCompra(2L).juegosUsuario(JuegosUsuario.builder().id(2L).build()).build(),
-                Compra.builder().idCompra(3L).juegosUsuario(JuegosUsuario.builder().id(3L).build()).build()
+                Compra.builder().idCompra(1L).usuario(Usuario.builder().id(1L).build()).juego(Juego.builder().id(1L).build()).build(),
+                Compra.builder().idCompra(2L).usuario(Usuario.builder().id(2L).build()).juego(Juego.builder().id(2L).build()).build(),
+                Compra.builder().idCompra(3L).usuario(Usuario.builder().id(2L).build()).juego(Juego.builder().id(2L).build()).build()
 
         ));
 
@@ -55,7 +57,7 @@ public class CompraControllerIntegrationTest {
     @Test
     void encontrarPorIdCuandoExisteCompra() throws Exception {
 
-        var compra = compraRepository.save(Compra.builder().idCompra(1L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build());
+        var compra = compraRepository.save(Compra.builder().idCompra(1L).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build());
 
         System.out.println("Encuentra todas las compras: " + compraRepository.count());
         System.out.println("Encuentra compra guardada: " + compra.getIdCompra());
@@ -81,8 +83,8 @@ public class CompraControllerIntegrationTest {
     void formularioParaCrearCompra() throws Exception {
 
         compraRepository.saveAll(List.of(
-                Compra.builder().idCompra(1L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build(),
-                Compra.builder().idCompra(2L).juegosUsuario(JuegosUsuario.builder().id(2L).build()).build()
+                Compra.builder().idCompra(1L).usuario(Usuario.builder().id(1L).build()).juego(Juego.builder().id(1L).build()).build(),
+                Compra.builder().idCompra(2L).usuario(Usuario.builder().id(2L).build()).juego(Juego.builder().id(2L).build()).build()
                 ));
 
         mockMvc.perform(get("compras/crear"))
@@ -98,7 +100,8 @@ public class CompraControllerIntegrationTest {
     @Test
     void formularioParaEditarCompraSiExiste() throws Exception {
 
-        Compra compra = Compra.builder().idCompra(1L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build();
+        Compra compra = Compra.builder().idCompra(1L).usuario(Usuario.builder().id(1L).build()).juego(Juego.builder().id(1L).build()).build();
+
         compraRepository.save(compra);
 
         mockMvc.perform(get("compras/editar/" + compra.getIdCompra()))
@@ -121,7 +124,7 @@ public class CompraControllerIntegrationTest {
     @Test
     void guardarCompra_Nueva() throws Exception {
 
-        Compra compra = Compra.builder().idCompra(1L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build();
+        Compra compra = Compra.builder().idCompra(1L).usuario(Usuario.builder().id(1L).build()).juego(Juego.builder().id(1L).build()).build();
         compraRepository.save(compra);
 
         mockMvc.perform
@@ -134,7 +137,7 @@ public class CompraControllerIntegrationTest {
     @Test
     void guardarCompra_Existente() throws Exception {
 
-        Compra compra = Compra.builder().idCompra(1L).juegosUsuario(JuegosUsuario.builder().id(1L).build()).build();
+        Compra compra = Compra.builder().idCompra(1L).usuario(Usuario.builder().id(1L).build()).juego(Juego.builder().id(1L).build()).build();
         compraRepository.save(compra);
 
         mockMvc.perform
@@ -151,7 +154,7 @@ public class CompraControllerIntegrationTest {
         Compra compraGuardada = OpcionalDeCompraGuardada.get();
 
         assertEquals(compra.getIdCompra(), compraGuardada.getIdCompra());
-        assertEquals(2L, compraGuardada.getJuegosUsuario().getId());
+        assertEquals(2L, compraGuardada.getJuego().getId(), compraGuardada.getUsuario().getId());
     }
 
     @Test
