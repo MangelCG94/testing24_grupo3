@@ -84,7 +84,7 @@ public class UsuarioControllerIntegrationTest {
         usuarioRepository.saveAll(List.of(
                 Usuario.builder().nombre("Juan").build(),
                 Usuario.builder().nombre("José").build()
-                ));
+        ));
 
         mockMvc.perform(get("usuarios/crear"))
                 .andExpect(status().isOk())
@@ -127,8 +127,8 @@ public class UsuarioControllerIntegrationTest {
         usuarioRepository.save(usuario);
 
         mockMvc.perform
-                (post("/usuarios/crear")
-                ).andExpect(status().is3xxRedirection())
+                        (post("/usuarios/crear")
+                        ).andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/usuarios"));
 
     }
@@ -140,11 +140,11 @@ public class UsuarioControllerIntegrationTest {
         usuarioRepository.save(usuario);
 
         mockMvc.perform
-                (post("/usuarios")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("id", String.valueOf(usuario.getId()))
-                        .param("nombreUsuario", "Juan Raimundo")
-                ).andExpect(status().is3xxRedirection())
+                        (post("/usuarios")
+                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                .param("id", String.valueOf(usuario.getId()))
+                                .param("nombreUsuario", "Juan Raimundo")
+                        ).andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/usuarios"));
 
         Optional<Usuario> OpcionalDeUsuarioGuardado = usuarioRepository.findById(usuario.getId());
@@ -157,7 +157,7 @@ public class UsuarioControllerIntegrationTest {
     }
 
     @Test
-    void borrarUsuarioPorId() throws Exception{
+    void borrarUsuarioPorId() throws Exception {
 
         mockMvc.perform(get("/usuarios/borrar/1"))
                 .andExpect(status().is3xxRedirection())
@@ -166,10 +166,52 @@ public class UsuarioControllerIntegrationTest {
     }
 
     @Test
-    void borrarTodosLosUsuarios() throws Exception{
+    void borrarTodosLosUsuarios() throws Exception {
 
         mockMvc.perform(get("/usuarios/borrar/todos"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/usuarios"));
+    }
+
+    @Test
+    void encontrarTodosUsuariosAPI() throws Exception {
+
+        usuarioRepository.saveAll(List.of(
+                Usuario.builder().nombreUsuario("Javi82").password("javito").build(),
+                Usuario.builder().nombreUsuario("Pepi89").password("pepita").build(),
+                Usuario.builder().nombreUsuario("Jorge01").password("jorgito").build()
+        ));
+
+        mockMvc.perform(get("/usuarios")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].nombreUsuario").value("Javi82"))
+                .andExpect(jsonPath("$[1].nombreUsuario").value("Pepi89"));
+    }
+
+    @Test
+    void encontrarPorID_API () throws Exception {
+        var usuario = Usuario.builder().nombreUsuario("Pepe82").password("pepito").build();
+        usuarioRepository.save(usuario);
+
+        mockMvc.perform(get("/usuarios/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombreUsuario").value("Pepe82"))
+                .andExpect(jsonPath("$.password").value("pepito"));
+    }
+
+    @Test
+    void encontrarPorIDNoEncontrado_API() throws Exception {
+        mockMvc.perform(get("/usuarios/{id}", 9999)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void crear_API() throws Exception {
+        var usuario = Usuario.builder().nombreUsuario("Pepe82").password("pepito").build();
+        usuarioRepository.save(usuario);
+
     }
 }
