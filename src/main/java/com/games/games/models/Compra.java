@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.time.Instant;
+
 @Entity
 @Getter
 @Setter
@@ -17,9 +19,12 @@ public class Compra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCompra;
     @CreatedDate
-    private Long fechaCompra;
+    private Instant fechaCompra;
     @ManyToOne
-    @JoinColumn(name = "id_juegos_de_usuario")
-    private JuegosUsuario juegosUsuario;
+    @JoinColumn(name = "id_juego")
+    private Juego juego;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
 
 }
