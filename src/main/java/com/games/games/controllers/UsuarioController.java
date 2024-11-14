@@ -4,6 +4,7 @@ import com.games.games.models.Usuario;
 import com.games.games.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -129,6 +130,13 @@ public class UsuarioController {
         usuarioRepository.save(usuario);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+    }
+
+    @PostMapping("usuarios/filtro")
+    public ResponseEntity<List<Usuario>> encuentraPorFiltro(@RequestBody Usuario usuario){
+        var usuarios = usuarioRepository.findAll(Example.of(usuario));
+
+        return ResponseEntity.ok(usuarios);
     }
 
     @PutMapping("usuarios")
