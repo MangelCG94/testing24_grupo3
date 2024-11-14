@@ -39,6 +39,7 @@ public class UsuarioControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+
     @Test
     void encontrarTodos() throws Exception {
 
