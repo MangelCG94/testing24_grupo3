@@ -1,5 +1,6 @@
 package com.games.games.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.games.games.models.Usuario;
 import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,9 @@ public class UsuarioControllerIntegrationTest {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     void encontrarTodos() throws Exception {
@@ -212,6 +216,14 @@ public class UsuarioControllerIntegrationTest {
     void crear_API() throws Exception {
         var usuario = Usuario.builder().nombreUsuario("Pepe82").password("pepito").build();
         usuarioRepository.save(usuario);
+		  mockMvc.perform(post("/usuarios")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(usuario))
+                )
+                .andExpect(status().isCreated()) // verificar que la respuesta sea 201, created
+                // Verificamos que el campo "name" en la respuesta JSON tenga el valor de "Pepe82"
+                .andExpect(jsonPath("$.nombreUsuario").value("Pepe82"));
+
 
     }
 }
