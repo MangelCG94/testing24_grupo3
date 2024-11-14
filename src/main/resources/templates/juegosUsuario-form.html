@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${juegosUsuario.id != null} ? 'Editar Juego de Usuario' : 'Crear Juego de Usuario'"></title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}">
+  <link rel="shortcut icon" href="#" />
+</head>
+<body>
+
+<div th:replace="~{navbar :: nav1}"></div>
+
+<div class="container mt-4">
+  <h1 th:text="${juegosUsuario.id != null} ? 'Editar Juego de Usuario' : 'Crear Juego de Usuario'"></h1>
+
+  <form th:object="${juegosUsuario}" th:action="@{/juegosUsuario}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+
+    <div class="mb-3">
+      <label for="juego" class="form-label">Juego</label>
+      <select id="juego" th:field="*{juego.id}" class="form-select">
+        <option th:each="juego : ${juegos}" th:value="${juego.id}" th:text="${juego.nombre}"></option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="usuario" class="form-label">Usuario</label>
+      <select id="usuario" th:field="*{usuario.id}" class="form-select">
+        <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nombreUsuario}"></option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      <i class="fas fa-save"></i> Guardar
+    </button>
+    <a th:href="@{/juegosUsuario}" class="btn btn-secondary">
+      <i class="fas fa-arrow-left"></i> Cancelar</a>
+  </form>
+</div>
+
+<div th:replace="~{footer :: footer1}"></div>
+
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/webjars/font-awesome/js/all.min.js}"></script>
+</body>
+</html>

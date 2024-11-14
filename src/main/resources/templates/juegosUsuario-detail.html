@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Detalle de Juego de Usuario</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}">
+  <link rel="shortcut icon" href="#" />
+</head>
+<body>
+
+<div th:replace="~{navbar :: nav1}"></div>
+
+<div class="container mt-4">
+  <h1>Detalle de Juego de Usuario</h1>
+
+  <div th:if="${juegosUsuario}">
+    <h2 th:text="${juegosUsuario.juego.nombreJuego}">Nombre del Juego</h2>
+    <p><strong>Usuario:</strong> <span th:text="${juegosUsuario.usuario.nombreUsuario}"></span></p>
+    <p><strong>Fecha de Registro:</strong> <span th:text="${juegosUsuario.fechaRegistro}"></span></p>
+  </div>
+
+  <div th:unless="${juegosUsuario}">
+    <p>No hay juegos que mostrar.</p>
+  </div>
+
+  <a th:href="@{/juegosUsuario}" class="btn btn-secondary mt-3">
+    <i class="fas fa-arrow-left"></i> Volver a la lista</a>
+</div>
+
+<div th:replace="~{footer :: footer1}"></div>
+
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/webjars/font-awesome/js/all.min.js}"></script>
+</body>
+</html>
