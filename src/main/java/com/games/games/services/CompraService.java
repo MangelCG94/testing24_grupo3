@@ -37,7 +37,7 @@ public class CompraService {
     }
 
     public List<Compra> findByFechaCompraEntreFechas(Instant startDate, Instant endDate) {
-        return compraRepository.findByFechaCompraEntre(startDate, endDate);
+        return compraRepository.findByFechaCompraBetween(startDate, endDate);
     }
 
     @Transactional
@@ -89,7 +89,7 @@ public class CompraService {
     }
 
     public List<Compra> findbyFechaCompraEntreFechas(Instant startDate, Instant endDate) {
-        return compraRepository.findByFechaCompraEntre(startDate, endDate);
+        return compraRepository.findByFechaCompraBetween(startDate, endDate);
     }
 
 }
