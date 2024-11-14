@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>FORMULARIO DESARROLLADORA</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}">
+</head>
+<body>
+
+<div th:replace="~{navbar :: nav1}"></div>
+
+<div class="container mt-4">
+    <!--<h1 th:if="${manufacturer.id}">Editar manufacturer <span th:text="${manufacturer.id}"></span></h1>
+<h1 th:unless="${manufacturer.id}">Crear nuevo manufacturer</h1>-->
+    <h1 th:text="${manufacturer.id != null} ? 'Editar fabricante' : 'Crear nuevo fabricante'"></h1>
+
+    <!-- Ver Sintaxis Thymeleaf:
+    https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html#standard-expression-syntax
+    -->
+    <form method="POST" th:object="${Desarroladora}" th:action="@{/desarrolladoras}">
+
+        <input type="hidden" id="id" th:field="*{id}" />
+
+        <div class="mb-3">
+            <label for="nombreCom" class="form-label">Nombre compañia</label>
+            <input type="text" id="nombreCom" th:field="*{nombreCom}" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+            <label for="pais" class="form-label">País</label>
+            <input type="text" id="pais" rows="5" cols="50" th:field="*{'pais'}" class="form-control"></input>
+        </div>
+        <div class="mb-3">
+            <label for="imagenLogo" class="form-label">URL de la imagen</label>
+            <input type="text" id="imagenLogo" th:field="*{imagenLogo}" class="form-control"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="anyoFundacion" class="form-label">Año fundación</label>
+            <input type="number" id="anyoFundacion" th:field="*{anyoFundacion}" class="form-control"/>
+        </div>
+
+
+        <button type="submit" th:if="${manufacturer.id}" class="btn btn-primary">
+            <i class="fas fa-save"></i>
+            CREAR</button>
+        <button type="submit" th:unless="${manufacturer.id}" class="btn btn-primary">
+            <i class="fas fa-save"></i>
+            EDITAR</button>
+        <a th:href="@{/manufacturers}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            Cancelar
+        </a>
+    </form>
+</div>
+
+<div th:replace="~{footer :: footer1}"></div>
+
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/webjars/font-awesome/js/all.min.js}"></script>
+</body>
+</html>
