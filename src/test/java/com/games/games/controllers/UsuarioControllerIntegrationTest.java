@@ -3,6 +3,7 @@ package com.games.games.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.games.games.models.Usuario;
 import com.games.games.repositories.UsuarioRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,8 +22,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -39,6 +39,11 @@ public class UsuarioControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+
+    @BeforeEach
+    void setUp(){
+        usuarioRepository.deleteAll();
+    }
 
     @Test
     void encontrarTodos() throws Exception {
@@ -178,6 +183,8 @@ public class UsuarioControllerIntegrationTest {
                 .andExpect(redirectedUrl("/usuarios"));
     }
 
+    //Test API Rest
+
     @Test
     void encontrarTodosUsuariosAPI() throws Exception {
 
@@ -225,6 +232,82 @@ public class UsuarioControllerIntegrationTest {
                 // Verificamos que el campo "name" en la respuesta JSON tenga el valor de "Pepe82"
                 .andExpect(jsonPath("$.nombreUsuario").value("Pepe82"));
 
+    }
+
+    @Test
+    void errorAlCrear_API() throws Exception {
+        var usuario = Usuario.builder().id(1L).nombreUsuario("Pepe82").password("pepito").build();
+
+        mockMvc.perform(post("/usuarios")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(usuario))
+                )
+                .andExpect(status().isBadRequest()); // verificar que la respuesta sea 400, BadRequest
 
     }
+
+    @Test
+    void actualizar_API() throws Exception {
+        var usuario = Usuario.builder().nombreUsuario("Pepe82").password("pepito").build();
+        usuarioRepository.save(usuario);
+
+        usuario.setNombreUsuario("Javi82");
+        usuario.setPassword("javito");
+
+        mockMvc.perform(put("/usuarios")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(usuario))
+                )
+                .andExpect(status().isCreated()) // verificar que la respuesta sea 201, created
+                // Verificamos que el campo "name" en la respuesta JSON tenga el valor de "Pepe82"
+                .andExpect(jsonPath("$.nombreUsuario").value("Pepe82"));
+
+        var usuarioDB = usuarioRepository.findById(usuario.getId()).orElseThrow();
+        assertEquals("Javi82", usuarioDB.getNombreUsuario());
+    }
+
+    @Test
+    void errorAlActualizar_API() throws Exception {
+        var usuario = Usuario.builder().nombreUsuario("Pepe82").password("pepito").build();
+
+        mockMvc.perform(put("/usuarios")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(usuario))
+                )
+                .andExpect(status().isBadRequest()); // verificar que la respuesta sea 201, created
+   }
+
+   @Test
+   void borrarPorId_API() throws Exception {
+       var usuario = Usuario.builder().nombreUsuario("Pepe82").password("pepito").build();
+       usuarioRepository.save(usuario);
+
+       mockMvc.perform(put("/usuarios")
+               .contentType(MediaType.APPLICATION_JSON)
+       ).andExpect(status().isNoContent()); // verificar que la respuesta es 204, isNoContent
+
+   }
+
+   @Test
+   void filtrarUsuario_API() throws Exception {
+       usuarioRepository.saveAll(List.of(
+               Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(12334).DNI("19797477M").fechaCreacion(Date.from(Instant.now())).build(),
+               Usuario.builder().id(2L).nombreUsuario("Pedro").password("2341").nombre("Pedro").direccion("Calle 2").CP(12344).DNI("19237477M").fechaCreacion(Date.from(Instant.now())).build()
+       ));
+
+       String filterJSON = """
+               {
+                    "nombre":"Pedro"
+               }
+               """;
+
+       mockMvc.perform(post("/usuarios/filtro")
+               .contentType(MediaType.APPLICATION_JSON)
+               .content(filterJSON)
+                ).andExpect(status().isOk())
+               .andExpect(jsonPath("$[0].name").value("Pedro"))
+               .andExpect(jsonPath("$[0].password").value("2341"));
+
+
+   }
 }
