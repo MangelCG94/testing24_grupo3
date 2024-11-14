@@ -26,4 +26,22 @@ public class DesarolladoraController {
         return "desarolladora-list";
     }
 
+    @GetMapping("desarrolladoras/{id}")
+    public String findById(@PathVariable Long id, Model model) {
+        desarrolladoraRepo.findById(id)
+                .ifPresent(manufacturer -> model.addAttribute("manufacturer", manufacturer));
+        // Extra: podemos cargar más datos, por ejemplo products de este manufacturer
+        return "desarrolladora-detail";
+    }
+
+    @GetMapping("desarrolladoras/crear")
+    public String getFormToCreate(Model model) {
+        Desarrolladora desarrolladora = new Desarrolladora(); // Crear manufacturer
+        desarrolladora.setAddress(new Address()); // Inicializa una nueva dirección para el fabricante
+        model.addAttribute("desarrolladora", desarrolladora);
+        // model.addAttribute("manufacturer", new Manufacturer());
+        return "desarrolladora-form";
+    }
+
+
 }
