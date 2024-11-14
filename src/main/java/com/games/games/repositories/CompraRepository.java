@@ -15,7 +15,7 @@ public interface CompraRepository extends JpaRepository<Compra, Long> {
 
     List<Compra> findByFechaCompra(Instant fechaCompra);
 
-    List<Compra> findByFechaCompraEntre(Instant fechaCompraInicio, Instant fechaCompraFin);
+    List<Compra> findByFechaCompraBetween(Instant fechaCompraInicio, Instant fechaCompraFin);
 
     List<Compra> findByUsuarios(Usuario usuario);
 
