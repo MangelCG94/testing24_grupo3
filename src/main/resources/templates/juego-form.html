@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${juego.id != null} ? 'Editar Juego' : 'Crear Juego'"></title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}">
+  <link rel="shortcut icon" href="#" />
+</head>
+<body>
+
+<div th:replace="~{navbar :: nav1}"></div>
+
+<div class="container mt-4">
+  <h1 th:text="${juego.id != null} ? 'Editar Juego' : 'Crear Juego'"></h1>
+
+  <form th:object="${juego}" th:action="@{/juegos}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre del Juego</label>
+      <input type="text" id="nombre" th:field="*{nombre}" class="form-control" required/>
+    </div>
+
+    <div class="mb-3">
+      <label for="descripcion" class="form-label">Descripción</label>
+      <textarea id="descripcion" th:field="*{descripcion}" class="form-control" rows="3" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="genero" class="form-label">Género</label>
+      <input type="text" id="genero" th:field="*{genero}" class="form-control" required/>
+    </div>
+
+    <div class="mb-3">
+      <label for="fechaLanzamiento" class="form-label">Fecha de lanzamiento</label>
+      <input type="date" id="fechaLanzamiento" th:field="*{fechaLanzamiento}" class="form-control" required/>
+    </div>
+
+    <div class="mb-3">
+      <label for="precio" class="form-label">Precio</label>
+      <input type="number" id="precio" th:field="*{precio}" class="form-control" step="0.01" required/>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      <i class="fas fa-save"></i> Guardar
+    </button>
+    <a th:href="@{/juegos}" class="btn btn-secondary">
+      <i class="fas fa-arrow-left"></i> Cancelar</a>
+  </form>
+</div>
+
+<div th:replace="~{footer :: footer1}"></div>
+
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/webjars/font-awesome/js/all.min.js}"></script>
+</body>
+</html>
