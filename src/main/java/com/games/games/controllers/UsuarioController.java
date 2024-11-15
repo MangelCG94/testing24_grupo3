@@ -194,7 +194,6 @@ public class UsuarioController {
         } catch (Exception e) {
             log.error("Error al eliminar un cliente", e);
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Error al eliminar un cliente");
-
         }
     }
 }
