@@ -3,6 +3,7 @@ package com.games.games.controllers;
 import com.games.games.models.Usuario;
 import com.games.games.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Slf4j
 @AllArgsConstructor
 @Controller
 @RestController
@@ -159,5 +161,40 @@ public class UsuarioController {
         }
     }
 
+    // Método PATCH
+    // Actualización parcial de un usuario
+    @PatchMapping(value = "usuarios/{id}", consumes = {"application/json", "application/merge-patch+json"})
+    public ResponseEntity<Usuario> actualizacionParcial(
+            @PathVariable Long id, @RequestBody Usuario usuario
+    ) {
+        if (id == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
 
+        return usuarioRepository.findById(id)
+                .map(usuarioExistente -> {
+                    if (usuario.getNombreUsuario() != null) usuarioExistente.setNombreUsuario(usuario.getNombreUsuario());
+                    if (usuario.getPassword() != null) usuarioExistente.setPassword(usuario.getPassword());
+                    if (usuario.getNombre() != null) usuarioExistente.setNombre(usuario.getNombre());
+                    if (usuario.getDireccion() != null) usuarioExistente.setDireccion(usuario.getDireccion());
+                    if (usuario.getCP() != null) usuarioExistente.setCP(usuario.getCP());
+                    if (usuario.getDNI() != null) usuarioExistente.setDNI(usuario.getDNI());
+                    if (usuario.getFechaCreacion() != null) usuarioExistente.setFechaCreacion(usuario.getFechaCreacion());
+                    usuarioRepository.save(usuarioExistente);
+                    return ResponseEntity.ok(usuarioExistente);
+                })
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @DeleteMapping("usuarios")
+    public ResponseEntity<Void> borrarTodo(@RequestBody List<Long> ids){
+        try {
+            usuarioRepository.deleteAllByIdInBatch(ids);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            log.error("Error al eliminar un cliente", e);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Error al eliminar un cliente");
+
+        }
+    }
 }
