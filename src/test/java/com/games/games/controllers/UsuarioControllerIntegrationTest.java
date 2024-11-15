@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.games.games.models.Usuario;
 import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -308,6 +309,106 @@ public class UsuarioControllerIntegrationTest {
                .andExpect(jsonPath("$[0].name").value("Pedro"))
                .andExpect(jsonPath("$[0].password").value("2341"));
 
+   }
+
+   @Test
+   void filtrarUsuarioSinExito_API() throws Exception {
+       usuarioRepository.saveAll(List.of(
+               Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(12334).DNI("19797477M").fechaCreacion(Date.from(Instant.now())).build(),
+               Usuario.builder().id(2L).nombreUsuario("Pedro").password("2341").nombre("Pedro").direccion("Calle 2").CP(12344).DNI("19237477M").fechaCreacion(Date.from(Instant.now())).build()
+       ));
+
+       String filterJSON = """
+               {
+                    "nombre":"Pablo"
+               }
+               """;
+
+       mockMvc.perform(post("/usuarios/filtro")
+               .contentType(MediaType.APPLICATION_JSON)
+               .content(filterJSON)
+       ).andExpect(status().isOk())
+       .andExpect(jsonPath("$", hasSize(0)));
+   }
+
+   @Test
+   void actualizarUsuarioParcialmente_API() throws Exception {
+       Usuario usuarioDesdeDB = Usuario.builder()
+               .nombreUsuario("Mari82")
+               .password("Marieta")
+               .nombre("María Pérez")
+               .direccion("Calle de las Conchas, 18")
+               .CP(14200)
+               .DNI("12345678M")
+               .fechaCreacion(Date.from(Instant.now()))
+               .build();
+       usuarioRepository.save(usuarioDesdeDB);
+
+       String usuarioPatchJson = """
+               {
+                    "password": "marijose",
+                    "direccion": "Calle de la Alegría, 24" 
+               }
+               """;
+
+       mockMvc.perform(patch("/customers/" + usuarioDesdeDB.getId())
+               .contentType(MediaType.APPLICATION_JSON)
+               .content(usuarioPatchJson))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.password").value("marijose"))
+               .andExpect(jsonPath("$.direccion").value("Calle de la Alegría, 24"));
+
+       Usuario usuarioActualizado = usuarioRepository.findById(usuarioDesdeDB.getId())
+               .orElseThrow(() -> new AssertionError("Usuario no encontrado en base de datos"));
+
+       assertEquals("marijose", usuarioActualizado.getPassword());
+   }
+
+   @Test
+   void actualizarUsuarioParcialmentePorId_NoEncontrado_API() throws Exception{
+
+       String usuarioPatchJson = """
+               {
+                    "password": "marijose",
+                    "direccion": "Calle de la Alegría, 24" 
+               }
+               """;
+
+       mockMvc.perform(patch("/customers/{id}", 954)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(usuarioPatchJson))
+               .andExpect(status().isNotFound());
 
    }
+
+    @Test
+    void borrarTodosLosUsuarios_API() throws Exception {
+        List<Usuario> usuarios = usuarioRepository.saveAll(List.of(
+                Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(12334).DNI("19797477M").fechaCreacion(Date.from(Instant.now())).build(),
+                Usuario.builder().id(2L).nombreUsuario("Pedro").password("2341").nombre("Pedro").direccion("Calle 2").CP(12344).DNI("19237477M").fechaCreacion(Date.from(Instant.now())).build(),
+                Usuario.builder().id(3L).nombreUsuario("Carlos").password("3124").nombre("Carlos").direccion("Calle 3").CP(44147).DNI("13464497M").fechaCreacion(Date.from(Instant.now())).build()
+        ));
+
+        List<Long> ids = usuarios.stream().map(Usuario::getId).toList();
+
+        String idsJson = new ObjectMapper().writeValueAsString(ids);
+
+        mockMvc.perform(delete("/customers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(idsJson))
+                .andExpect(status().isNoContent());
+
+        List<Usuario> usuariosRestantes = usuarioRepository.findAllById(ids);
+        assertTrue(usuariosRestantes.isEmpty());
+
+    }
+
+    @Test
+    void borrarTodosLosUsuarios_SinIds_API() throws Exception{
+        mockMvc.perform(delete("/customers")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(""))
+                .andExpect(status().isBadRequest());
+
+    }
 }
