@@ -36,9 +36,9 @@ class CompraControllerUTest {
     void encontrarTodasCompras() {
 
         when(compraRepository.findAll()).thenReturn(List.of(
-                Compra.builder().idCompra(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build(),
-                Compra.builder().idCompra(2L).fechaCompra(Instant.ofEpochSecond(2000000000L)).juego(Juego.builder().id(2L).build()).usuario(Usuario.builder().id(1L).build()).build(),
-                Compra.builder().idCompra(3L).fechaCompra(Instant.ofEpochSecond(3000000000L)).juego(Juego.builder().id(3L).build()).usuario(Usuario.builder().id(1L).build()).build()
+                Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build(),
+                Compra.builder().id(2L).fechaCompra(Instant.ofEpochSecond(2000000000L)).juego(Juego.builder().id(2L).build()).usuario(Usuario.builder().id(1L).build()).build(),
+                Compra.builder().id(3L).fechaCompra(Instant.ofEpochSecond(3000000000L)).juego(Juego.builder().id(3L).build()).usuario(Usuario.builder().id(1L).build()).build()
         ));
         String view = compraController.encontrarTodasCompras(model);
 
@@ -49,10 +49,10 @@ class CompraControllerUTest {
     @Test
     void encontrarPorIdCuandoExisteCompra() {
 
-        Compra compra1 = Compra.builder().idCompra(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
+        Compra compra1 = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
         when(compraRepository.findById(1L)).thenReturn(Optional.of(compra1));
 
-        String view = compraController.encontrarPorIdCompra(1L, model);
+        String view = compraController.encontrarPorId(1L, model);
 
         assertEquals("compra-form", view);
         verify(compraRepository).findById(1L);
@@ -65,7 +65,7 @@ class CompraControllerUTest {
 
         when(compraRepository.findById(1L)).thenReturn(Optional.empty());
 
-        String view = compraController.encontrarPorIdCompra(1L, model);
+        String view = compraController.encontrarPorId(1L, model);
 
         assertEquals("compra-detail", view);
         verify(compraRepository).findById(1L);
@@ -77,7 +77,7 @@ class CompraControllerUTest {
 
         when(compraRepository.findById(1L)).thenReturn(Optional.empty());
 
-        String view = compraController.encontrarPorIdCompra2(1L, model);
+        String view = compraController.encontrarPorId2(1L, model);
 
         assertEquals("error", view);
         verify(compraRepository).findById(1L);
@@ -98,7 +98,7 @@ class CompraControllerUTest {
     @Test
     void formularioParaActualizarCompraSiExiste() {
 
-        Compra compra1 = Compra.builder().idCompra(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
+        Compra compra1 = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
         when(compraRepository.findById(1L)).thenReturn(Optional.of(compra1));
 
         String view = compraController.formularioParaActualizarCompra(1L, model);
@@ -124,7 +124,7 @@ class CompraControllerUTest {
     @Test
     void guardarCompraNueva() {
 
-        Compra compra1 = Compra.builder().idCompra(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
+        Compra compra1 = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
 
         String view = compraController.guardarCompra(compra1);
 
@@ -135,9 +135,9 @@ class CompraControllerUTest {
     @Test
     void guardarCompraExistente() {
 
-        Compra compra1 = Compra.builder().idCompra(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
+        Compra compra1 = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
 
-        Compra compraActualizada = Compra.builder().idCompra(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
+        Compra compraActualizada = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
 
         String view = compraController.guardarCompra(compraActualizada);
 
@@ -149,9 +149,9 @@ class CompraControllerUTest {
     }
 
     @Test
-    void borrarPorIdCompra() {
+    void borrarPorid() {
 
-        String view = compraController.borrarPorIdCompra(1L);
+        String view = compraController.borrarPorId(1L);
 
         assertEquals("redirect:/compras", view);
         verify(compraRepository).deleteById(1L);
@@ -163,32 +163,12 @@ class CompraControllerUTest {
         doThrow(new RuntimeException("Error al borrar"))
                 .when(compraRepository).deleteById(1L);
 
-        String view = compraController.borrarPorIdCompra(1L);
+        String view = compraController.borrarPorId(1L);
 
         assertEquals("error", view);
         verify(compraRepository).deleteById(1L);
     }
 
-    @Test
-    void borrarPorIdTodasLasCompras() {
-
-        String view = compraController.borrarTodasLasCompras();
-
-        assertEquals("redirect:/compras", view);
-        verify(compraRepository).deleteAll();
-    }
-
-    @Test
-    void borrarPorIdTodasLasCompras_ErrorCapturado() {
-
-        doThrow(new RuntimeException("Error al borrar"))
-                .when(compraRepository).deleteAll();
-
-        String view = compraController.borrarTodasLasCompras();
-
-        assertEquals("error", view);
-        verify(compraRepository).deleteAll();
-    }
 
 
 }
