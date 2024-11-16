@@ -64,7 +64,7 @@ public class CompraService {
         // Crear la compra
 
         Compra compra = Compra.builder()
-                .idCompra(1L)
+                .id(1L)
                 .fechaCompra(fechaCompra)
                 .usuario(usuario)
                 .juego(juego)
