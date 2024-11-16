@@ -18,7 +18,6 @@ import java.util.List;
 @Slf4j
 @AllArgsConstructor
 @Controller
-@RestController
 public class UsuarioController {
 
     private UsuarioRepository usuarioRepository;
