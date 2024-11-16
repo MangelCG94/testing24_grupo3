@@ -18,14 +18,14 @@
         <div class="card mb-3">
             <div class="row g-0">
                 <div class="col-md-4 mt-3">
-                    <h5 class="card-title" th:text="${compra.idUsuario.nombreUsuario}"></h5>
-                    <p class="card-text" th:text="${compra.idUsuario.password}"></p>
-                    <p class="card-text" th:text="${compra.idUsuario.nombre}"></p>
-                    <p class="card-text" th:text="${compra.idUsuario.direccion}"></p>
-                    <p class="card-text" th:text="${compra.idUsuario.CP}"></p>
-                    <p class="card-text" th:text="${compra.idUsuario.DNI}"></p>
+                    <h5 class="card-title" th:text="${compra.usuario.nombreUsuario}"></h5>
+                    <p class="card-text" th:text="${compra.usuario.password}"></p>
+                    <p class="card-text" th:text="${compra.usuario.nombre}"></p>
+                    <p class="card-text" th:text="${compra.usuario.direccion}"></p>
+                    <p class="card-text" th:text="${compra.usuario.CP}"></p>
+                    <p class="card-text" th:text="${compra.usuario.DNI}"></p>
                     <p class="card-text"><small class text-muted>
-                        Fecha de creación: <span th:text="${compra.idUsuario.fechaCreacion}"></span>
+                        Fecha de creación: <span th:text="${compra.usuario.fechaCreacion}"></span>
                         </small></p>
                     <div class="card-footer">
                         <a th:href="@{/compras/update/{id}(id=${compra.id})}" class="btn btn-primary">
