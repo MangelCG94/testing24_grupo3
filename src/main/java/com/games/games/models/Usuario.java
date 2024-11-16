@@ -12,6 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Builder
+@Table(name = "usuarios")
 public class Usuario {
 
     @Id
