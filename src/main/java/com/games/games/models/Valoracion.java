@@ -17,8 +17,8 @@ public class Valoracion {
     private Integer fechaValoracion;
     @ManyToOne
     @JoinColumn(name = "id_usuario")
-    private Long idUsuario;
+    private Usuario usuario;
     @ManyToOne
     @JoinColumn(name = "id_juego")
-    private Long idJuego;
+    private Juego juego;
 }

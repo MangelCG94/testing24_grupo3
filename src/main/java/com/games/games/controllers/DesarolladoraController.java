@@ -19,7 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class DesarolladoraController {
     private DesarrolladoraRepository desarrolladoraRepo;
 
-    @GetMapping("Desarrolladoras")
+    @GetMapping("desarrolladoras")
     public String findAll(Model model){
         model.addAttribute("desarolladoras",
                 desarrolladoraRepo.findAll());
@@ -34,14 +34,17 @@ public class DesarolladoraController {
         return "desarrolladora-detail";
     }
 
-    @GetMapping("desarrolladoras/crear")
+
+    @GetMapping("desarrolladoras/new")
     public String getFormToCreate(Model model) {
-        Desarrolladora desarrolladora = new Desarrolladora(); // Crear manufacturer
-        desarrolladora.setAddress(new Address()); // Inicializa una nueva dirección para el fabricante
+        Desarrolladora desarrolladora = new Desarrolladora();
         model.addAttribute("desarrolladora", desarrolladora);
-        // model.addAttribute("manufacturer", new Manufacturer());
         return "desarrolladora-form";
     }
 
-
+    @GetMapping("desarrolladoras/update/{id}")
+    public String formularioParaActualizar(@PathVariable Long id, Model model) {
+        desarrolladoraRepo.findById(id).
+                ifPresent(usuario -> model.addAttribute("usuario", usuario));
+        return "usuario-form";
 }
