@@ -4,6 +4,7 @@ import com.games.games.dtos.CompraConJuegosDTO;
 import com.games.games.models.Compra;
 import com.games.games.models.Juego;
 import com.games.games.models.Usuario;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -26,6 +27,13 @@ class CompraRepositoryTest {
 
     @Autowired
     private JuegoRepository juegoRepository;
+
+    @BeforeEach
+    void setUp(){
+        compraRepository.deleteAll();
+        usuarioRepository.deleteAll();
+        juegoRepository.deleteAll();
+    }
 
     @Test
     void findByFechaCompra() {
