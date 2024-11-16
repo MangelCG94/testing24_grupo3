@@ -1,9 +1,12 @@
 package com.games.games.dtos;
 
+import com.games.games.models.Juego;
+
+import java.time.Instant;
+
 public record CompraConJuegosDTO(
         Long compraId,
-        Long fechaCompra,
-        Long juegoId,
-        String nombreJuego
+        Instant fechaCompra,
+        Juego juego
 ) {
 }
