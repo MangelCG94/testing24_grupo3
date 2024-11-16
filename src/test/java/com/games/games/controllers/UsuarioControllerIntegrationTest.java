@@ -195,7 +195,7 @@ public class UsuarioControllerIntegrationTest {
                 Usuario.builder().nombreUsuario("Jorge01").password("jorgito").build()
         ));
 
-        mockMvc.perform(get("/usuarios")
+        mockMvc.perform(get("/usuarios/api")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nombreUsuario").value("Javi82"))
@@ -207,7 +207,7 @@ public class UsuarioControllerIntegrationTest {
         var usuario = Usuario.builder().nombreUsuario("Pepe82").password("pepito").build();
         usuarioRepository.save(usuario);
 
-        mockMvc.perform(get("/usuarios/{id}", 1)
+        mockMvc.perform(get("/usuarios/api/{id}", 1)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombreUsuario").value("Pepe82"))
@@ -225,7 +225,7 @@ public class UsuarioControllerIntegrationTest {
     void crear_API() throws Exception {
         var usuario = Usuario.builder().nombreUsuario("Pepe82").password("pepito").build();
         usuarioRepository.save(usuario);
-		  mockMvc.perform(post("/usuarios")
+		  mockMvc.perform(post("/usuarios/api")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(usuario))
                 )
@@ -239,7 +239,7 @@ public class UsuarioControllerIntegrationTest {
     void errorAlCrear_API() throws Exception {
         var usuario = Usuario.builder().id(1L).nombreUsuario("Pepe82").password("pepito").build();
 
-        mockMvc.perform(post("/usuarios")
+        mockMvc.perform(post("/usuarios/api")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(usuario))
                 )
@@ -255,7 +255,7 @@ public class UsuarioControllerIntegrationTest {
         usuario.setNombreUsuario("Javi82");
         usuario.setPassword("javito");
 
-        mockMvc.perform(put("/usuarios")
+        mockMvc.perform(put("/usuarios/api")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(usuario))
                 )
@@ -271,7 +271,7 @@ public class UsuarioControllerIntegrationTest {
     void errorAlActualizar_API() throws Exception {
         var usuario = Usuario.builder().nombreUsuario("Pepe82").password("pepito").build();
 
-        mockMvc.perform(put("/usuarios")
+        mockMvc.perform(put("/usuarios/api")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(usuario))
                 )
@@ -283,7 +283,7 @@ public class UsuarioControllerIntegrationTest {
        var usuario = Usuario.builder().nombreUsuario("Pepe82").password("pepito").build();
        usuarioRepository.save(usuario);
 
-       mockMvc.perform(put("/usuarios")
+       mockMvc.perform(put("/usuarios/api")
                .contentType(MediaType.APPLICATION_JSON)
        ).andExpect(status().isNoContent()); // verificar que la respuesta es 204, isNoContent
 
@@ -302,7 +302,7 @@ public class UsuarioControllerIntegrationTest {
                }
                """;
 
-       mockMvc.perform(post("/usuarios/filtro")
+       mockMvc.perform(post("/usuarios/api/filtro")
                .contentType(MediaType.APPLICATION_JSON)
                .content(filterJSON)
                 ).andExpect(status().isOk())
@@ -324,7 +324,7 @@ public class UsuarioControllerIntegrationTest {
                }
                """;
 
-       mockMvc.perform(post("/usuarios/filtro")
+       mockMvc.perform(post("/usuarios/api/filtro")
                .contentType(MediaType.APPLICATION_JSON)
                .content(filterJSON)
        ).andExpect(status().isOk())
@@ -351,7 +351,7 @@ public class UsuarioControllerIntegrationTest {
                }
                """;
 
-       mockMvc.perform(patch("/customers/" + usuarioDesdeDB.getId())
+       mockMvc.perform(patch("/usuarios/api/" + usuarioDesdeDB.getId())
                .contentType(MediaType.APPLICATION_JSON)
                .content(usuarioPatchJson))
                .andExpect(status().isOk())
@@ -374,7 +374,7 @@ public class UsuarioControllerIntegrationTest {
                }
                """;
 
-       mockMvc.perform(patch("/customers/{id}", 954)
+       mockMvc.perform(patch("/usuarios/api/{id}", 954)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(usuarioPatchJson))
                .andExpect(status().isNotFound());
@@ -393,7 +393,7 @@ public class UsuarioControllerIntegrationTest {
 
         String idsJson = new ObjectMapper().writeValueAsString(ids);
 
-        mockMvc.perform(delete("/customers")
+        mockMvc.perform(delete("/usuarios/api")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(idsJson))
                 .andExpect(status().isNoContent());
@@ -405,7 +405,7 @@ public class UsuarioControllerIntegrationTest {
 
     @Test
     void borrarTodosLosUsuarios_SinIds_API() throws Exception{
-        mockMvc.perform(delete("/customers")
+        mockMvc.perform(delete("/usuarios/api")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(""))
                 .andExpect(status().isBadRequest());
