@@ -30,7 +30,6 @@ public class DesarolladoraController {
     public String findById(@PathVariable Long id, Model model) {
         desarrolladoraRepo.findById(id)
                 .ifPresent(manufacturer -> model.addAttribute("manufacturer", manufacturer));
-        // Extra: podemos cargar más datos, por ejemplo products de este manufacturer
         return "desarrolladora-detail";
     }
 
@@ -45,6 +44,7 @@ public class DesarolladoraController {
     @GetMapping("desarrolladoras/update/{id}")
     public String formularioParaActualizar(@PathVariable Long id, Model model) {
         desarrolladoraRepo.findById(id).
-                ifPresent(usuario -> model.addAttribute("usuario", usuario));
-        return "usuario-form";
+                ifPresent(desarrolladora -> model.addAttribute("desarrolladora", desarrolladora));
+        return "desarrolladora-form";
+    }
 }
