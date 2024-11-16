@@ -17,14 +17,14 @@ public class Compra {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idCompra;
+    private Long id;
     @CreatedDate
     private Instant fechaCompra;
     @ManyToOne
-    @JoinColumn(name = "id_juego")
+    @JoinColumn(name = "id_juego", nullable = false)
     private Juego juego;
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
 }

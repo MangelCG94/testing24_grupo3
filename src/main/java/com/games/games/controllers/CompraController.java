@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 @AllArgsConstructor
 @Controller
 public class CompraController {
@@ -29,27 +31,24 @@ public class CompraController {
 
     //http://localhost:8080/compras/1
     @GetMapping("compras/{id}")
-    public String encontrarPorIdCompra(@PathVariable Long id, Model model) {
+    public String encontrarPorId(@PathVariable Long id, Model model) {
         compraRepository.findById(id).
                 ifPresent(compra -> model.addAttribute("compra", compra));
         return "compra-detail";
     }
 
     @GetMapping("compras2/{id}")
-    public String encontrarPorIdCompra2(@PathVariable Long id, Model model) {
+    public String encontrarPorId2(@PathVariable Long id, Model model) {
         return compraRepository.findById(id)
                 .map(compra -> {
                     model.addAttribute("compra", compra);
                     return "compra-detail";
                 })
-                .orElseGet(() -> {
-                    model.addAttribute("mensaje", "Compra no encontrada");
-                    return "error";
-                });
+                .orElseThrow(() -> new NoSuchElementException("Compra no encontrado"));
     }
 
     //http://localhost:8080/compras/new
-    @GetMapping("compras/new")
+    @GetMapping("compras/crear")
     public String formularioParaCrearCompra(Model model) {
         model.addAttribute("compra", new Compra());
         model.addAttribute("juego", juegoRepository.findAll());
@@ -58,7 +57,7 @@ public class CompraController {
     }
 
     //http://localhost:8080/compras/edit/1
-    @GetMapping("compras/update/{id}")
+    @GetMapping("compras/editar/{id}")
     public String formularioParaActualizarCompra(@PathVariable Long id, Model model) {
         compraRepository.findById(id).
                 ifPresent(compra -> model.addAttribute("compra", compra));
@@ -69,10 +68,10 @@ public class CompraController {
 
     @PostMapping("compras")
     public String guardarCompra(@ModelAttribute Compra compra) {
-        if (compra.getIdCompra() == null) {
+        if (compra.getId() == null) {
             compraRepository.save(compra);
         } else {
-            compraRepository.findById(compra.getIdCompra()).ifPresent(compraDB -> {
+            compraRepository.findById(compra.getId()).ifPresent(compraDB -> {
                 compraDB.setFechaCompra(compra.getFechaCompra());
                 compraDB.setUsuario(compra.getUsuario());
                 compraDB.setJuego(compra.getJuego());
@@ -83,9 +82,9 @@ public class CompraController {
 
     }
 
-    //http://localhost:8080/compras/delete/1
-    @GetMapping("compras/delete/{id}")
-    public String borrarPorIdCompra(@PathVariable Long id) {
+    //http://localhost:8080/compras/borrar/1
+    @GetMapping("compras/borrar/{id}")
+    public String borrarPorId(@PathVariable Long id) {
         try {
             compraRepository.deleteById(id);
         } catch (Exception e) {
@@ -97,15 +96,5 @@ public class CompraController {
 
     }
 
-    @GetMapping("compras/delete/all")
-    public String borrarTodasLasCompras() {
-        try {
-            compraRepository.deleteAll();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "error";
-        }
-        return "redirect:/compras";
-    }
 
 }
