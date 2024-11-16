@@ -33,7 +33,7 @@ public class CompraService {
     }
 
     public List<Compra> getComprasByUsuario(Usuario usuario) {
-        return compraRepository.findByUsuarios(usuario);
+        return compraRepository.findByUsuario(usuario);
     }
 
     public List<Compra> findByFechaCompraEntreFechas(Instant startDate, Instant endDate) {
