@@ -107,7 +107,7 @@ class CompraServiceTest {
 
     @Test
     void getComprasByFecha() {
-        when(compraRepository.findByUsuarios(usuario)).thenReturn(Arrays.asList(compra));
+        when(compraRepository.findByUsuario(usuario)).thenReturn(Arrays.asList(compra));
 
         List<Compra> resultado = compraService.getComprasByUsuario(usuario);
 
@@ -115,7 +115,7 @@ class CompraServiceTest {
         assertEquals(1, resultado.size(), "Debería haber una compra en la lista");
         assertEquals(compra, resultado.get(0), "La compra en la lista debería ser igual a la compra de prueba");
 
-        verify(compraRepository, times(1)).findByUsuarios(usuario);
+        verify(compraRepository, times(1)).findByUsuario(usuario);
     }
 
     @Test
@@ -124,7 +124,7 @@ class CompraServiceTest {
         Instant startDate = Instant.now().plusSeconds(10000);
         Instant endDate = Instant.now().plusSeconds(160000);
 
-        when(compraRepository.findByFechaCompraEntre(startDate, endDate)).thenReturn(Arrays.asList(compra));
+        when(compraRepository.findByFechaCompraBetween(startDate, endDate)).thenReturn(Arrays.asList(compra));
 
         List<Compra> resultado = compraService.findByFechaCompraEntreFechas(startDate, endDate);
 
@@ -132,7 +132,7 @@ class CompraServiceTest {
         assertEquals(1, resultado.size(), "Debería haber una compra en la lista");
         assertEquals(compra, resultado.get(0), "La compra en la lista debería ser igual a la compra de prueba");
 
-        verify(compraRepository, times(1)).findByFechaCompraEntre(startDate, endDate);
+        verify(compraRepository, times(1)).findByFechaCompraBetween(startDate, endDate);
     }
 
     @Test
