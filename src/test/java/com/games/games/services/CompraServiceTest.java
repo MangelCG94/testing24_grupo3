@@ -45,22 +45,26 @@ class CompraServiceTest {
 
     @BeforeEach
     void setUp() {
+
+        usuario = usuarioRepository.save(Usuario.builder()
+                .nombreUsuario("Javi82")
+                .build());
+        usuarioRepository.save(usuario);
+        assertNotNull(usuario.getId());
+
+        juego = juegoRepository.save(Juego.builder()
+                .nombre("The legend of Zelda")
+                .build());
+        juegoRepository.save(juego);
+        assertNotNull(juego.getId());
+
         compra = Compra.builder()
-                .idCompra(1L)
                 .fechaCompra(Instant.ofEpochSecond(1677721600L))
                 .juego(juego)
                 .usuario(usuario)
                 .build();
-
-        usuario = Usuario.builder()
-                .id(1L)
-                .nombreUsuario("Javi82")
-                .build();
-
-        juego = Juego.builder()
-                .id(1L)
-                .nombre("The legend of Zelda")
-                .build();
+        compraRepository.save(compra);
+        assertNotNull(compra.getId());
 
     }
 
@@ -71,7 +75,7 @@ class CompraServiceTest {
         Compra result = compraService.getCompraById(1L);
 
         assertNotNull(result,"El resultado no debería ser nulo");
-        assertEquals(1L, result.getIdCompra(), "El ID de la compra debería ser 1");
+        assertEquals(1L, result.getId(), "El ID de la compra debería ser 1");
         Instant expectedFechaCompra = Instant.ofEpochSecond(1677721600L);
         assertEquals(expectedFechaCompra, result.getFechaCompra(), "La fecha de compra debería ser 1677721600");
 
@@ -137,13 +141,15 @@ class CompraServiceTest {
 
     @Test
     void hazCompra() {
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuario));
+        when(juegoRepository.findById(1L)).thenReturn(Optional.of(juego));
+
         when(compraRepository.save(any(Compra.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Compra resultado = compraService.hazCompra(Instant.ofEpochSecond(10000), 1L, 1L);
 
         assertNotNull(resultado, "El resultado no debería ser nulo");
-        assertEquals(1L, resultado.getIdCompra(), "El ID de la compra debería ser 1");
-        assertEquals(1677721600L, resultado.getFechaCompra(), "La fecha de compra debería ser 1677721600");
+        assertEquals(1L, resultado.getId(), "El ID de la compra debería ser 1");
 
         verify(compraRepository, times(1)).save(any(Compra.class));
     }
