@@ -2,33 +2,61 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>DESARROLLADORAS</title>
+  <title>Lista de desarrolladoras</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}">
+  <link rel="shortcut icon" href="#" />
 </head>
 <body>
 
-<h1>DESARROLLADORAS</h1>
-<a href="/desarrolladoras/new">Crear nuevo fabricante</a>
-<table id="desarrolladoraList" th:if="${desarrolladoras.size() > 0}">
-  <tr>
-    <th>ID</th>
-    <th>NOMBRE</th>
-    <th>DESCRIPCIÓN</th>
-    <th>LOGO</th>
-    <th>AÑO</th>
-  </tr>
-  <tr th:each="desarrolladora: ${desarrolladoras}">
-    <td th:text="${desarrolladora.nombreCom}"></td>
-    <td>
-      <img th:src="${desarrolladora.imagenLogo}" alt="Logo" style="max-width: 60px;">
-    </td>
-    <td th:text="${desarrolladora.anyoFundacion}"></td>
-    <td th:text="${desarrolladora.pais}"></td>
-  </tr>
+<div th:replace="~{navbar :: nav1}"></div>
 
-</table>
-<p th:if="${desarrolladoras.size() == 0}">
-  DESARROLLADORAS NO ENCONTRADAS.
-</p>
+<div class="container mt-4">
 
+  <h1>Listado de desarrolladoras</h1>
+  <div mb-3>
+
+    <a href="/desarrolladoras/new" class="btn btn-primary">
+      <i class="fas fa-plus">
+
+      </i> Crear nuevo desarrolladora</a>
+
+    <div th:if="${desarrolladoras.size() > 0}" class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="col" th:each="desarrolladora: ${desarrolladoras}">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${desarrolladora.nombreCom}"></h5>
+            <p class="card-text" th:text="${desarrolladora.pais}"></p>
+            <p class="card-text" th:text="${desarrolladora.imagenLogo}"></p>
+            <p class="card-text" th:text="${desarrolladora.anyoFundacion}"></p>
+          </div>
+          <div class="card-footer">
+            <small class="text-muted">Fecha de creación: <span th:text="${desarrolladora.fechaCreacion}"></span></small>
+          </div>
+          <div class="card-footer">
+            <a th:href="@{/desarrolladoras/{id}(id=${desarrolladora.id})}" class="btn btn-sm btn-info">
+              <i class="fas fa-eye"></i>
+              Ver</a>
+            <a th:href="@{/desarrolladoras/update/{id}(id=${desarrolladora.id})}" class="btn btn-sm btn-warning">
+              <i class="fas fa-edit"></i>
+              Editar</a>
+            <a th:href="@{/desarrolladoras/delete/{id}(id=${desarrolladora.id})}" class="btn btn-sm btn-danger">
+              <i class="fas fa-trash"></i>
+              Borrar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p th:if="${desarrolladoras.size() == 0}">
+    No hay desarrolladoras.
+  </p>
+</div>
+<div th:replace="~{footer :: footer1}"></div>
+
+<script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/webjars/font-awesome/js/all.min.js}"></script>
 </body>
 </html>
