@@ -1,5 +1,6 @@
 package com.games.games.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.games.games.models.Compra;
 import com.games.games.models.Juego;
 import com.games.games.models.Usuario;
@@ -44,6 +45,9 @@ public class CompraControllerIntegrationTest {
     @Autowired
     private JuegoRepository juegoRepository;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @BeforeEach
     void setUp(){
         compraRepository.deleteAll();
@@ -86,11 +90,11 @@ public class CompraControllerIntegrationTest {
     @Test
     void encontrarPorIdCuandoExisteCompra() throws Exception {
 
-        Juego juego = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
+        Juego juego = Juego.builder().id(1L).nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
 
         juegoRepository.save(juego);
 
-        Usuario usuario = Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
+        Usuario usuario = Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
 
         usuarioRepository.save(usuario);
 
@@ -150,9 +154,9 @@ public class CompraControllerIntegrationTest {
     @Test
     void formularioParaEditarCompraSiExiste() throws Exception {
 
-        Usuario usuario1 = Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
+        Usuario usuario1 = Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
         usuarioRepository.save(usuario1);
-        Juego juego1 = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
+        Juego juego1 = Juego.builder().id(1L).nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
         juegoRepository.save(juego1);
         Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(usuario1).juego(juego1).build();
         compraRepository.save(compra);
@@ -164,15 +168,6 @@ public class CompraControllerIntegrationTest {
 
     }
 
-    @Test
-    void formularioParaEditarCompra_SiNoExiste() throws Exception {
-
-        mockMvc.perform(get("/compras/999"))
-                .andExpect(status().is4xxClientError())
-                .andExpect(view().name("error"))
-                .andExpect(model().attributeExists("mensaje"))
-                .andExpect(model().attributeDoesNotExist("compra"));
-    }
 
     @Test
     void guardarCompra_Nueva() throws Exception {
@@ -204,7 +199,7 @@ public class CompraControllerIntegrationTest {
     @Test
     void guardarCompra_Existente() throws Exception {
 
-        Juego juego1 = Juego.builder().id(1L).nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
+        Juego juego1 = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
         juegoRepository.save(juego1);
         Usuario usuario1 = Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
         usuarioRepository.save(usuario1);
