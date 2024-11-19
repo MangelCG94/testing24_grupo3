@@ -13,9 +13,7 @@
 <div class="container mt-4">
     <h1 th:text="${desarrolladora.id != null} ? 'Editar desarrolladora' : 'Crear nueva desarrolladora'"></h1>
 
-    <!-- Ver Sintaxis Thymeleaf:
-    https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html#standard-expression-syntax
-    -->
+
     <form method="POST" th:object="${Desarroladora}" th:action="@{/desarrolladoras}">
 
         <input type="hidden" id="id" th:field="*{id}" />
