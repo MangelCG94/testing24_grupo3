@@ -2,6 +2,9 @@ package com.games.games.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
 
 @Entity
 @Getter
@@ -19,6 +22,9 @@ public class Juego {
     private String descripcion;
     private String videoUrl;
     private Double precio;
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @Column(name = "date")
+    private Date fechaLanzamiento;
 
 
     @ManyToOne

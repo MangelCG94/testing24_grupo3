@@ -25,18 +25,18 @@ public class JuegoController {
         return "juego-list";
     }
 
-    @GetMapping("customers/{id}")
+    @GetMapping("juegos/{id}")
     public String findById(@PathVariable Long id, Model model) {
         return repository.findById(id)
-                .map(customer -> {
-                    model.addAttribute("customer", customer);
-                    return "customer-detail";
+                .map(juego -> {
+                    model.addAttribute("juego", juego);
+                    return "juego-detail";
                 }).orElseThrow(() ->
-                        new NoSuchElementException("Customer not found"));
+                        new NoSuchElementException("Juego no encontrado"));
     }
 
     @PostMapping("juegos")
-    public String saveCustomer(@ModelAttribute Juego juego) {
+    public String saveJuego(@ModelAttribute Juego juego) {
         if (juego.getId() == null || !repository.existsById(juego.getId())) {
             repository.save(juego);
         } else {// else updates
@@ -51,7 +51,7 @@ public class JuegoController {
     }
 
     @GetMapping("juegos/borrar/{id}")
-    public String deleteCustomer(@PathVariable Long id) {
+    public String deleteJuego(@PathVariable Long id) {
         try {
             repository.deleteById(id);
             return "redirect:/juegos";
