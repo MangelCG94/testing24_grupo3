@@ -15,19 +15,23 @@
     <h1>Detalle de compra</h1>
 
     <div th:if="${compra}">
-        <div class="card mb-3">
-            <div class="row g-0">
-                <div class="col-md-4 mt-3">
-                    <h5 class="card-title" th:text="${compra.usuario.nombreUsuario}"></h5>
-                    <p class="card-text" th:text="${compra.usuario.password}"></p>
-                    <p class="card-text" th:text="${compra.usuario.nombre}"></p>
-                    <p class="card-text" th:text="${compra.usuario.direccion}"></p>
-                    <p class="card-text" th:text="${compra.usuario.CP}"></p>
-                    <p class="card-text" th:text="${compra.usuario.DNI}"></p>
-                    <p class="card-text"><small class text-muted>
-                        Fecha de creación: <span th:text="${compra.usuario.fechaCreacion}"></span>
-                        </small></p>
-                    <div class="card-footer">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${compra.fechaCompra}"></h5>
+                <h6 class="card-subtitle mb-2 text-body-secondary">
+                    ID: <span id="compra-id" th:text="${compra.id}"></span>
+                    <br>
+                </h6>
+                <p class="card-text">
+                    <span th:if="${compra.usuario}">
+                        <a th:href="@{/usuarios/{id}(id=${compra.usuario.id})}" th:text="${compra.usuario.nombre}"></a>
+                    </span>
+                    <span th:unless="${compra.usuario}" class="text-danger">Sin usuario</span>
+                    <span th:if="${compra.juego}">
+                        <a th:href="@{/juegos/{id}(id=${compra.juego.id})}" th:text="${compra.juego.nombre}"></a>
+                    </span>
+                    <span th:unless="${compra.juego}" class="text-danger">Sin fabricante</span>
+                </p>
                         <a th:href="@{/compras/update/{id}(id=${compra.id})}" class="btn btn-primary">
                             <i class="fas fa-edit"></i>
                             Editar</a>
@@ -37,8 +41,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
     <div th:unless="${compra}">
         <p>No existe la compra</p>

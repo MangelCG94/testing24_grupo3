@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
@@ -45,28 +46,23 @@ class CompraServiceTest {
 
     @BeforeEach
     void setUp() {
-
-        usuario = usuarioRepository.save(Usuario.builder()
+        usuario = Usuario.builder()
                 .nombreUsuario("Javi82")
-                .build());
-        usuarioRepository.save(usuario);
-        assertNotNull(usuario.getId());
+                .build();
 
-        juego = juegoRepository.save(Juego.builder()
+        juego = Juego.builder()
                 .nombre("The legend of Zelda")
-                .build());
-        juegoRepository.save(juego);
-        assertNotNull(juego.getId());
+                .build();
 
         compra = Compra.builder()
+                .id(1L)
                 .fechaCompra(Instant.ofEpochSecond(1677721600L))
                 .juego(juego)
                 .usuario(usuario)
                 .build();
-        compraRepository.save(compra);
-        assertNotNull(compra.getId());
-
     }
+
+
 
     @Test
     void getCompraByIdEncontrada() {

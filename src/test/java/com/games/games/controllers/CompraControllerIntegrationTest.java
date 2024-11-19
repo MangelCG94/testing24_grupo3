@@ -2,7 +2,6 @@ package com.games.games.controllers;
 
 import com.games.games.models.Compra;
 import com.games.games.models.Juego;
-import com.games.games.models.JuegosUsuario;
 import com.games.games.models.Usuario;
 import com.games.games.repositories.CompraRepository;
 import com.games.games.repositories.JuegoRepository;
@@ -56,24 +55,24 @@ public class CompraControllerIntegrationTest {
     @Test
     void encontrarTodasCompras() throws Exception {
 
+        Juego juego1 = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
+        Juego juego2 = Juego.builder().nombre("Juego 2").descripcion("Descripción 2").videoUrl("Url 2").precio(200d).build();
+        Juego juego3 = Juego.builder().nombre("Juego 3").descripcion("Descripción 3").videoUrl("Url 3").precio(300d).build();
 
-        usuarioRepository.saveAll(List.of(
-                Usuario.builder().id(1L).nombre("Usuario 1").password("Password 1").nombreUsuario("Nombre 1").direccion("Dirección 1").CP(11111).DNI("11111111A").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(1L).nombre("Usuario 2").password("Password 2").nombreUsuario("Nombre 2").direccion("Dirección 2").CP(22222).DNI("22222222A").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(1L).nombre("Usuario 3").password("Password 3").nombreUsuario("Nombre 3").direccion("Dirección 2").CP(33333).DNI("33333333A").fechaCreacion(Date.from(Instant.now())).build()
-        ));
+        juegoRepository.saveAll(List.of(juego1,juego2,juego3));
 
-        juegoRepository.saveAll(List.of(
-                Juego.builder().id(1L).nombre("Juego 1").descripcion("Descripción de juego 1").videoUrl("Url 1").precio(100d).build(),
-                Juego.builder().id(2L).nombre("Juego 2").descripcion("Descripción de juego 2").videoUrl("Url 2").precio(100d).build(),
-                Juego.builder().id(3L).nombre("Juego 3").descripcion("Descripción de juego 3").videoUrl("Url 3").precio(100d).build()
-        ));
+        Usuario usuario1 = Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
+        Usuario usuario2 = Usuario.builder().nombreUsuario("Jose").password("4321").nombre("José López").direccion("Calle 2").CP(15100).DNI("12345673Y").fechaCreacion(Date.from(Instant.now())).build();
+        Usuario usuario3 = Usuario.builder().nombreUsuario("María").password("1221").nombre("María Pérez").direccion("Calle 3").CP(13400).DNI("12345679L").fechaCreacion(Date.from(Instant.now())).build();
 
-        compraRepository.saveAll(List.of(
-                Compra.builder().id(1L).usuario(usuarioRepository.findById(1L).orElseThrow()).juego(juegoRepository.findById(1L).orElseThrow()).build(),
-                Compra.builder().id(2L).usuario(usuarioRepository.findById(2L).orElseThrow()).juego(juegoRepository.findById(2L).orElseThrow()).build(),
-                Compra.builder().id(3L).usuario(usuarioRepository.findById(3L).orElseThrow()).juego(juegoRepository.findById(3L).orElseThrow()).build()
-        ));
+        usuarioRepository.saveAll(List.of(usuario1,usuario2,usuario3));
+
+        Compra compra1 = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(juego1).build();
+        Compra compra2 = Compra.builder().id(2L).fechaCompra(Instant.ofEpochSecond(2000000000L)).juego(juego2).build();
+        Compra compra3 = Compra.builder().id(3L).fechaCompra(Instant.ofEpochSecond(3000000000L)).juego(juego3).build();
+
+        compraRepository.saveAll(List.of(compra1,compra2,compra3));
+
 
         System.out.println("Encuentra todas las compras: " + compraRepository.count());
 
@@ -87,34 +86,17 @@ public class CompraControllerIntegrationTest {
     @Test
     void encontrarPorIdCuandoExisteCompra() throws Exception {
 
-        Usuario usuario = usuarioRepository.save(Usuario.builder()
-                .id(1L)
-                .nombre("Usuario 1")
-                .password("Password 1")
-                .nombreUsuario("Nombre 1")
-                .direccion("Dirección 1")
-                .CP(11111)
-                .DNI("11111111A")
-                .fechaCreacion(Date.from(Instant.now()))
-                .build());
+        Juego juego = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
 
-        Juego juego = juegoRepository.save(Juego.builder()
-                .id(1L)
-                .nombre("Juego 1")
-                .descripcion("Descripción de juego 1")
-                .videoUrl("Url 1")
-                .precio(100d)
-                .build());
+        juegoRepository.save(juego);
 
-        Compra compra = compraRepository.save(Compra.builder()
-                .id(1L)
-                .usuario(usuarioRepository
-                        .findById(1L)
-                        .orElseThrow())
-                .juego(juegoRepository
-                        .findById(1L)
-                        .orElseThrow())
-                .build());
+        Usuario usuario = Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
+
+        usuarioRepository.save(usuario);
+
+        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(juego).usuario(usuario).build();
+
+        compraRepository.save(compra);
 
         System.out.println("Encuentra todas las compras: " + compraRepository.count());
         System.out.println("Encuentra compra guardada: " + compra.getId());
@@ -127,10 +109,12 @@ public class CompraControllerIntegrationTest {
     }
 
     @Test
-    void encontrarPorIdCuandoNoExisteUsuario() throws Exception {
+    void encontrarPorIdCuandoNoExisteCompra() throws Exception {
 
-        mockMvc.perform(get("/compras/9999"))
-                .andExpect(status().isBadRequest())
+
+
+        mockMvc.perform(get("/compras2/1"))
+                .andExpect(status().is4xxClientError())
                 .andExpect(view().name("error"))
                 .andExpect(model().attributeExists("mensaje"))
                 .andExpect(model().attributeDoesNotExist("compra"));
@@ -139,26 +123,25 @@ public class CompraControllerIntegrationTest {
     @Test
     void formularioParaCrearCompra() throws Exception {
 
+        Juego juego1 = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
+        Juego juego2 = Juego.builder().nombre("Juego 2").descripcion("Descripción 2").videoUrl("Url 2").precio(200d).build();
+        Juego juego3 = Juego.builder().nombre("Juego 3").descripcion("Descripción 3").videoUrl("Url 3").precio(300d).build();
 
-        usuarioRepository.saveAll(List.of(
-                Usuario.builder().id(1L).nombre("Usuario 1").password("Password 1").nombreUsuario("Nombre 1").direccion("Dirección 1").CP(11111).DNI("11111111A").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(2L).nombre("Usuario 2").password("Password 2").nombreUsuario("Nombre 2").direccion("Dirección 2").CP(22222).DNI("22222222A").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(3L).nombre("Usuario 3").password("Password 3").nombreUsuario("Nombre 3").direccion("Dirección 3").CP(33333).DNI("33333333A").fechaCreacion(Date.from(Instant.now())).build()
-        ));
+        juegoRepository.saveAll(List.of(juego1,juego2,juego3));
 
-        juegoRepository.saveAll(List.of(
-                Juego.builder().id(1L).nombre("Juego 1").descripcion("Descripción de juego 1").videoUrl("Url 1").precio(100d).build(),
-                Juego.builder().id(2L).nombre("Juego 2").descripcion("Descripción de juego 2").videoUrl("Url 2").precio(100d).build(),
-                Juego.builder().id(3L).nombre("Juego 3").descripcion("Descripción de juego 3").videoUrl("Url 3").precio(100d).build()
-        ));
+        Usuario usuario1 = Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
+        Usuario usuario2 = Usuario.builder().nombreUsuario("Jose").password("4321").nombre("José López").direccion("Calle 2").CP(15100).DNI("12345673Y").fechaCreacion(Date.from(Instant.now())).build();
+        Usuario usuario3 = Usuario.builder().nombreUsuario("María").password("1221").nombre("María Pérez").direccion("Calle 3").CP(13400).DNI("12345679L").fechaCreacion(Date.from(Instant.now())).build();
 
-        compraRepository.saveAll(List.of(
-                Compra.builder().usuario(usuarioRepository.findById(1L).orElseThrow()).juego(juegoRepository.findById(1L).orElseThrow()).build(),
-                Compra.builder().usuario(usuarioRepository.findById(2L).orElseThrow()).juego(juegoRepository.findById(2L).orElseThrow()).build(),
-                Compra.builder().usuario(usuarioRepository.findById(3L).orElseThrow()).juego(juegoRepository.findById(3L).orElseThrow()).build()
-        ));
+        usuarioRepository.saveAll(List.of(usuario1,usuario2,usuario3));
 
-        mockMvc.perform(get("/compras/crear"))
+        Compra compra1 = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(juego1).build();
+        Compra compra2 = Compra.builder().id(2L).fechaCompra(Instant.ofEpochSecond(2000000000L)).juego(juego2).build();
+        Compra compra3 = Compra.builder().id(3L).fechaCompra(Instant.ofEpochSecond(3000000000L)).juego(juego3).build();
+
+        compraRepository.saveAll(List.of(compra1,compra2,compra3));
+
+        mockMvc.perform(get("/compras/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("compra-form"))
                 .andExpect(model().attributeExists("compra", "usuario", "juego"));
@@ -167,11 +150,11 @@ public class CompraControllerIntegrationTest {
     @Test
     void formularioParaEditarCompraSiExiste() throws Exception {
 
-        Compra compra = Compra.builder().id(1L).usuario(Usuario.builder().id(1L).build()).juego(Juego.builder().id(1L).build()).build();
+        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build()).juego(Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build()).build();
 
         compraRepository.save(compra);
 
-        mockMvc.perform(get("compras/editar/" + compra.getId()))
+        mockMvc.perform(get("/compras/update" + compra.getId()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("compra-form"))
                 .andExpect(model().attributeExists("compra"));
@@ -191,7 +174,7 @@ public class CompraControllerIntegrationTest {
     @Test
     void guardarCompra_Nueva() throws Exception {
 
-        Compra compra = Compra.builder().id(1L).usuario(Usuario.builder().id(1L).build()).juego(Juego.builder().id(1L).build()).build();
+        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build()).juego(Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build()).build();
         compraRepository.save(compra);
 
         mockMvc.perform
@@ -204,14 +187,14 @@ public class CompraControllerIntegrationTest {
     @Test
     void guardarCompra_Existente() throws Exception {
 
-        Compra compra = Compra.builder().id(1L).usuario(Usuario.builder().id(1L).build()).juego(Juego.builder().id(1L).build()).build();
+        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000)).usuario(Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build()).juego(Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build()).build();
         compraRepository.save(compra);
 
         mockMvc.perform
                 (post("/compras")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("id", String.valueOf(compra.getId()))
-                        .param("idUsuario", "2L")
+                        .param("usuario", "2L")
                 ).andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/compras"));
 
@@ -227,7 +210,7 @@ public class CompraControllerIntegrationTest {
     @Test
     void borrarCompraPorId() throws Exception{
 
-        mockMvc.perform(get("/compras/borrar/{id}", 1L))
+        mockMvc.perform(get("/compras/delete/{id}", 1L))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/compras"));
 

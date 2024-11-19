@@ -25,6 +25,7 @@ public class UsuarioController {
     //http://localhost:8080/usuarios
     @GetMapping("usuarios")
     public String encontrarTodos(Model model) {
+        model.addAttribute("titulo", "Lista de usuarios");
         model.addAttribute("usuarios", usuarioRepository.findAll());
         return "usuario-list";
     }
@@ -57,7 +58,7 @@ public class UsuarioController {
         return "usuario-form";
     }
 
-    //http://localhost:8080/usuarios/edit/3
+    //http://localhost:8080/usuarios/update/3
     @GetMapping("usuarios/update/{id}")
     public String formularioParaActualizar(@PathVariable Long id, Model model) {
         usuarioRepository.findById(id).

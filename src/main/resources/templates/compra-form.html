@@ -23,26 +23,22 @@
             <input type="datetime-local" id="fechaCompra" th:field="*{fechaCompra}" class="form-control"/>
         </div>
         <div class="mb-3">
-            <label for="idUsuario" class="form-label">Selecciona un usuario</label>
-            <select id="idUsuario" th:field="*{idUsuario.id}" class="form-select">
-                <option th:selected="${compra.idUsuario == null}" value=""></option>
+            <label for="usuario" class="form-label">Selecciona un usuario</label>
+            <select id="usuario" th:field="*{usuario.id}" class="form-select">
+                <option th:selected="${compra.usuario == null}" value=""></option>
                 <option
-                        th:each="idUsuario: ${usuarios}"
-                        th:text="${idUsuario.nombreUsuario}"
-                        th:value="${idUsuario.id}"
-                        th:selected="${compra.idUsuario.id == idUsuario.id}">
+                        th:each="usuario: ${usuarios}"
+                        th:value="${usuario.id}">
                 </option>
             </select>
         </div>
         <div class="mb-3">
-            <label for="idJuego" class="form-label">Selecciona un juego</label>
-            <select id="idJuego" th:field="*{idJuego.id}" class="form-select">
-                <option th:selected="${compra.idJuego == null}" value=""></option>
+            <label for="juego" class="form-label">Selecciona un juego</label>
+            <select id="juego" th:field="*{juego.id}" class="form-select">
+                <option th:selected="${compra.juego == null}" value=""></option>
                 <option
-                        th:each="idJuego: ${juegos}"
-                        th:text="${idJuego.nombreJuego}"
-                        th:value="${idJuego.id}"
-                        th:selected="${compra.idJuego.id == idJuego.id}">
+                        th:each="juego: ${juegos}"
+                        th:value="${juego.id}">
                 </option>
             </select>
         </div>

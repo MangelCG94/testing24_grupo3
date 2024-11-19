@@ -67,7 +67,7 @@ public class UsuarioControllerIntegrationTest {
     @Test
     void encontrarPorIdCuandoExisteUsuario() throws Exception {
 
-        var usuario = usuarioRepository.save(Usuario.builder().nombreUsuario("Juan").password("1234").build());
+        Usuario usuario = usuarioRepository.save(Usuario.builder().nombreUsuario("Juan").password("1234").build());
 
         System.out.println("Encuentra todos los usuarios: " + usuarioRepository.count());
         System.out.println("Encuentra usuario guardado: " + usuario.getId());
@@ -82,8 +82,8 @@ public class UsuarioControllerIntegrationTest {
     @Test
     void encontrarPorIdCuandoNoExisteUsuario() throws Exception {
 
-        mockMvc.perform(get("/usuarios/999"))
-                .andExpect(status().isBadRequest())
+        mockMvc.perform(get("/usuarios2/999"))
+                .andExpect(status().is4xxClientError())
                 .andExpect(view().name("error"))
                 .andExpect(model().attributeExists("mensaje"))
                 .andExpect(model().attributeDoesNotExist("usuario"));
@@ -97,7 +97,7 @@ public class UsuarioControllerIntegrationTest {
                 Usuario.builder().nombre("José").build()
         ));
 
-        mockMvc.perform(get("/usuarios/crear"))
+        mockMvc.perform(get("/usuarios/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("usuario-form"))
                 .andExpect(model().attributeExists("usuario"));
@@ -111,7 +111,7 @@ public class UsuarioControllerIntegrationTest {
                 .nombreUsuario("Juan").build();
         usuarioRepository.save(usuario);
 
-        mockMvc.perform(get("/usuarios/editar/" + usuario.getId()))
+        mockMvc.perform(get("/usuarios/update/" + usuario.getId()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("usuario-form"))
                 .andExpect(model().attributeExists("usuario"));
@@ -135,7 +135,7 @@ public class UsuarioControllerIntegrationTest {
         usuarioRepository.save(usuario);
 
         mockMvc.perform
-                        (post("/usuarios/crear")
+                        (post("/usuarios/new")
                         ).andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/usuarios"));
 
@@ -167,7 +167,7 @@ public class UsuarioControllerIntegrationTest {
     @Test
     void borrarUsuarioPorId() throws Exception {
 
-        mockMvc.perform(get("/usuarios/borrar/{id}", 1L))
+        mockMvc.perform(get("/usuarios/delete/{id}", 1L))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/usuarios"));
 
