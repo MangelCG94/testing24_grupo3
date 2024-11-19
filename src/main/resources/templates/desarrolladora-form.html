@@ -11,9 +11,7 @@
 <div th:replace="~{navbar :: nav1}"></div>
 
 <div class="container mt-4">
-    <!--<h1 th:if="${manufacturer.id}">Editar manufacturer <span th:text="${manufacturer.id}"></span></h1>
-<h1 th:unless="${manufacturer.id}">Crear nuevo manufacturer</h1>-->
-    <h1 th:text="${manufacturer.id != null} ? 'Editar fabricante' : 'Crear nuevo fabricante'"></h1>
+    <h1 th:text="${desarrolladora.id != null} ? 'Editar desarrolladora' : 'Crear nueva desarrolladora'"></h1>
 
     <!-- Ver Sintaxis Thymeleaf:
     https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html#standard-expression-syntax
