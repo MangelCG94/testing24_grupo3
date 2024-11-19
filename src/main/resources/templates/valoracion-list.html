@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de valoraciones</title>
+</head>
+<body>
+<h1>Lista de valoraciones</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Fecha de valoracion</th>
+        <th>ID usuario</th>
+        <th>Nombre de usuario</th>
+        <th>ID juego</th>
+        <th>Nombre de juego</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="valoracion : ${valoraciones}">
+        <td th:text="${valoracion.id}"></td>
+        <td th:text="${valoracion.fechaValoracion}"></td>
+        <td th:text="${valoracion.usuario.id}"></td>
+        <td th:text="${valoracion.usuario.nombre}"></td>
+        <td th:text="${valoracion.juego.id}"></td>
+        <td th:text="${valoracion.juego.nombre}"></td>
+        <td>
+            <a th:href="@{/valoraciones/{id}(id=${valoracion.id})}">Ver</a>
+            <a th:href="@{/valoraciones/update/{id}(id=${valoracion.id})}">Editar</a>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/valoraciones/new}">Crear nueva valoracion</a>
+</body>
+</html>

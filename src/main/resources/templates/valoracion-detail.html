@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles de valoracion</title>
+</head>
+<body>
+<h1>Detalles de valoracion</h1>
+<div th:if="${valoracion != null}">
+    <p>ID: <span th:text="${valoracion.id}"></span></p>
+    <p>Fecha de valoracion: <span th:text="${valoracion.fechaValoracion}"></span></p>
+    <p>ID de usuario: <span th:text="${valoracion.usuario.id}"></span></p>
+    <p>Nombre de usuario: <span th:text="${valoracion.usuario.nombre}"></span></p>
+    <p>ID del juego: <span th:text="${valoracion.juego.id}"></span></p>
+    <p>Nombre del juego: <span th:text="${valoracion.juego.nombre}"></span></p>
+</div>
+<div th:if="${valoracion == null}">
+    <p>Valoracion no encontrada.</p>
+</div>
+<a th:href="@{/valoraciones}">Volver a la lista</a>
+</body>
+</html>
