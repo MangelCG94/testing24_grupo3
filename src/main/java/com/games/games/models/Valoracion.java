@@ -13,7 +13,7 @@ import lombok.*;
 public class Valoracion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer valoracion;
+    private Long id;
     private Integer fechaValoracion;
     @ManyToOne
     @JoinColumn(name = "id_usuario")
