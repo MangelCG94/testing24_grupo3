@@ -35,6 +35,7 @@ class CompraControllerUTest {
     @Test
     void encontrarTodasCompras() {
 
+
         when(compraRepository.findAll()).thenReturn(List.of(
                 Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build(),
                 Compra.builder().id(2L).fechaCompra(Instant.ofEpochSecond(2000000000L)).juego(Juego.builder().id(2L).build()).usuario(Usuario.builder().id(1L).build()).build(),
@@ -49,15 +50,15 @@ class CompraControllerUTest {
     @Test
     void encontrarPorIdCuandoExisteCompra() {
 
-        Compra compra1 = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
-        when(compraRepository.findById(1L)).thenReturn(Optional.of(compra1));
+        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build()).juego(Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build()).build();
+        when(compraRepository.findById(1L)).thenReturn(Optional.of(compra));
 
         String view = compraController.encontrarPorId(1L, model);
 
-        assertEquals("compra-form", view);
+        assertEquals("compra-detail", view);
         verify(compraRepository).findById(1L);
         verify(compraRepository, never()).findAll();
-        verify(model).addAttribute("compra", compra1);
+        verify(model).addAttribute("compra", compra);
     }
 
     @Test
@@ -82,7 +83,7 @@ class CompraControllerUTest {
         assertEquals("error", view);
         verify(compraRepository).findById(1L);
         verify(model, never()).addAttribute(eq("compra"), any());
-        verify(model).addAttribute("message", "Compra no encontrada");
+        verify(model).addAttribute("mensaje", "Compra no encontrada");
     }
 
 
@@ -92,20 +93,20 @@ class CompraControllerUTest {
         String view = compraController.formularioParaCrearCompra(model);
 
         assertEquals("compra-form", view);
-        verify(model).addAttribute("compra", any(Compra.class));
+        verify(model).addAttribute(eq("compra"), any(Compra.class));
     }
 
     @Test
     void formularioParaActualizarCompraSiExiste() {
 
-        Compra compra1 = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
-        when(compraRepository.findById(1L)).thenReturn(Optional.of(compra1));
+        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build()).juego(Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build()).build();
+        when(compraRepository.findById(1L)).thenReturn(Optional.of(compra));
 
         String view = compraController.formularioParaActualizarCompra(1L, model);
 
         assertEquals("compra-form", view);
         verify(compraRepository).findById(1L);
-        verify(model).addAttribute("compra", compra1);
+        verify(model).addAttribute("compra", compra);
     }
 
     @Test
@@ -117,35 +118,38 @@ class CompraControllerUTest {
 
         assertEquals("compra-form", view);
         verify(compraRepository).findById(1L);
-        verify(model).addAttribute(anyString(), any());
+        verify(model, never()).addAttribute(anyString(), any());
     }
 
 
     @Test
     void guardarCompraNueva() {
 
-        Compra compra1 = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
+        Compra compra = new Compra();
 
-        String view = compraController.guardarCompra(compra1);
+        String view = compraController.guardarCompra(compra);
 
         assertEquals("redirect:/compras", view);
-        verify(compraRepository).save(compra1);
+        verify(compraRepository).save(compra);
     }
 
     @Test
     void guardarCompraExistente() {
 
-        Compra compra1 = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
+        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
 
-        Compra compraActualizada = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
+        Compra compraActualizada = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(2000000000L)).juego(Juego.builder().id(2L).build()).usuario(Usuario.builder().id(2L).build()).build();
+
+        when(compraRepository.findById(1L)).thenReturn(Optional.of(compra));
+
 
         String view = compraController.guardarCompra(compraActualizada);
 
         assertEquals("redirect:/compras", view);
         verify(compraRepository).findById(1L);
-        verify(compraRepository).save(compra1);
-        assertEquals(compraActualizada.getJuego(), compra1.getJuego());
-        assertEquals(compraActualizada.getUsuario(), compra1.getUsuario());
+        verify(compraRepository).save(compra);
+        assertEquals(compraActualizada.getJuego(), compra.getJuego());
+        assertEquals(compraActualizada.getUsuario(), compra.getUsuario());
     }
 
     @Test
