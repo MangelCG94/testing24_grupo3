@@ -49,10 +49,13 @@ public class CompraController {
                     model.addAttribute("compra", compra);
                     return "compra-detail";
                 })
-                .orElseGet(() -> {
-                    model.addAttribute("mensaje", "Compra no encontrada");
-                    return "error";
-                });
+//                .orElseGet(() -> {
+//                    model.addAttribute("mensaje", "Compra no encontrada");
+//                    return "error";
+//                });
+                .orElseThrow(() ->
+                        new NoSuchElementException("Usuario no encontrado"));
+
     }
 
     //http://localhost:8080/compras/new
