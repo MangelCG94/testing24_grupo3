@@ -43,8 +43,21 @@ public class DesarolladoraController {
 
     @GetMapping("desarrolladoras/update/{id}")
     public String formularioParaActualizar(@PathVariable Long id, Model model) {
-        desarrolladoraRepo.findById(id).
-                ifPresent(desarrolladora -> model.addAttribute("desarrolladora", desarrolladora));
+        desarrolladoraRepo.findById(id).ifPresent(desarrolladora -> model.addAttribute("desarrolladora", desarrolladora));
         return "desarrolladora-form";
+    }
+    @PostMapping("desarrolladoras")
+    public String save(@ModelAttribute Desarrolladora desarrolladora) {
+        if (desarrolladora.getId() == null || !desarrolladoraRepo.existsById(desarrolladora.getId())) {
+            desarrolladoraRepo.save(desarrolladora);
+        } else {// else updates
+            desarrolladoraRepo.findById(desarrolladora.getId())
+                    .ifPresent(oldJuego -> {
+                        BeanUtils.copyProperties(desarrolladora,oldJuego);
+                        desarrolladoraRepo.save(oldJuego);
+                    });
+        }
+
+        return "redirect:/desarrolladoras";
     }
 }

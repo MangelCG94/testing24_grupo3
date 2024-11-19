@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+// Al ser integración la base de datos genera los ids por tanto no hace falta asignarlos manualmente
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
@@ -45,15 +46,12 @@ public class CompraControllerIntegrationTest {
     @Autowired
     private JuegoRepository juegoRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp(){
         compraRepository.deleteAll();
         usuarioRepository.deleteAll();
         juegoRepository.deleteAll();
-
     }
 
     @Test
@@ -90,15 +88,15 @@ public class CompraControllerIntegrationTest {
     @Test
     void encontrarPorIdCuandoExisteCompra() throws Exception {
 
-        Juego juego = Juego.builder().id(1L).nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
+        Juego juego = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
 
         juegoRepository.save(juego);
 
-        Usuario usuario = Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
+        Usuario usuario = Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
 
         usuarioRepository.save(usuario);
 
-        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(juego).usuario(usuario).build();
+        Compra compra = Compra.builder().fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(juego).usuario(usuario).build();
 
         compraRepository.save(compra);
 
@@ -154,11 +152,11 @@ public class CompraControllerIntegrationTest {
     @Test
     void formularioParaEditarCompraSiExiste() throws Exception {
 
-        Usuario usuario1 = Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
+        Usuario usuario1 = Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
         usuarioRepository.save(usuario1);
-        Juego juego1 = Juego.builder().id(1L).nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
+        Juego juego1 = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
         juegoRepository.save(juego1);
-        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(usuario1).juego(juego1).build();
+        Compra compra = Compra.builder().fechaCompra(Instant.ofEpochSecond(100000000)).usuario(usuario1).juego(juego1).build();
         compraRepository.save(compra);
 
         mockMvc.perform(get("/compras/update/" + compra.getId()))
@@ -201,10 +199,10 @@ public class CompraControllerIntegrationTest {
 
         Juego juego1 = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
         juegoRepository.save(juego1);
-        Usuario usuario1 = Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
+        Usuario usuario1 = Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
         usuarioRepository.save(usuario1);
 
-        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(usuario1).juego(juego1).build();
+        Compra compra = Compra.builder().fechaCompra(Instant.ofEpochSecond(100000000)).usuario(usuario1).juego(juego1).build();
         compraRepository.save(compra);
 
 
