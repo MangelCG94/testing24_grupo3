@@ -23,7 +23,7 @@
     <div class="col" th:each="juego : ${juegos}">
       <div class="card h-100">
         <div class="card-body">
-          <h5 class="card-title" th:text="${juego.nombreJuego}"></h5>
+          <h5 class="card-title" th:text="${juego.nombre}"></h5>
           <p class="card-text" th:text="${juego.descripcion}"></p>
         </div>
         <div class="card-footer">
