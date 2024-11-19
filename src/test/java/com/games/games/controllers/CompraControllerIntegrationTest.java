@@ -113,7 +113,7 @@ public class CompraControllerIntegrationTest {
 
 
 
-        mockMvc.perform(get("/compras2/1"))
+        mockMvc.perform(get("/compras2/9999"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(view().name("error"))
                 .andExpect(model().attributeExists("mensaje"))
@@ -150,14 +150,17 @@ public class CompraControllerIntegrationTest {
     @Test
     void formularioParaEditarCompraSiExiste() throws Exception {
 
-        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build()).juego(Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build()).build();
-
+        Usuario usuario1 = Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
+        usuarioRepository.save(usuario1);
+        Juego juego1 = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
+        juegoRepository.save(juego1);
+        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(usuario1).juego(juego1).build();
         compraRepository.save(compra);
 
-        mockMvc.perform(get("/compras/update" + compra.getId()))
+        mockMvc.perform(get("/compras/update/" + compra.getId()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("compra-form"))
-                .andExpect(model().attributeExists("compra"));
+                .andExpect(model().attributeExists("compra", "juegos", "usuarios"));
 
     }
 
@@ -174,37 +177,64 @@ public class CompraControllerIntegrationTest {
     @Test
     void guardarCompra_Nueva() throws Exception {
 
-        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build()).juego(Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build()).build();
-        compraRepository.save(compra);
+        Juego juego1 = Juego.builder().id(1L).nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
+        Usuario usuario1 = Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
+
+//        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build()).juego(Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build()).build();
+//        compraRepository.save(compra);
+
+
 
         mockMvc.perform
-                (post("/compras/crear")
+                (post("/compras")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("fechaCompra", "2023-01-01T12:34:56Z")
+                        .param("juego", String.valueOf(juego1.getId()))
+                        .param("usuario", String.valueOf(usuario1.getId()))
                 ).andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/compras"));
+
+        List<Compra> compras = compraRepository.findAll();
+        assertEquals(1, compras.size());
+
+        assertEquals("2023-01-01T12:34:56Z", compras.get(0).getFechaCompra().toString());
 
     }
 
     @Test
     void guardarCompra_Existente() throws Exception {
 
-        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000)).usuario(Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build()).juego(Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build()).build();
+        Juego juego1 = Juego.builder().id(1L).nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
+        juegoRepository.save(juego1);
+        Usuario usuario1 = Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build();
+        usuarioRepository.save(usuario1);
+
+        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(usuario1).juego(juego1).build();
         compraRepository.save(compra);
 
+
+
         mockMvc.perform
-                (post("/compras")
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("id", String.valueOf(compra.getId()))
-                        .param("usuario", "2L")
-                ).andExpect(status().is3xxRedirection())
+                        (post("/compras")
+                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                .param("id", String.valueOf(compra.getId()))
+                                .param("fechaCompra", "2023-01-01T12:34:56Z")
+                                .param("juego", String.valueOf(juego1.getId()))
+                                .param("usuario", String.valueOf(usuario1.getId()))
+                        ).andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/compras"));
 
-        Optional<Compra> OpcionalDeCompraGuardada = compraRepository.findById(compra.getId());
-        assertTrue(OpcionalDeCompraGuardada.isPresent());
+        Optional<Compra> compraOpcionalGuardada = compraRepository.findById(compra.getId());
+        assertTrue(compraOpcionalGuardada.isPresent());
 
-        Compra compraGuardada = OpcionalDeCompraGuardada.get();
+        Compra compraGuardada = compraOpcionalGuardada.get();
 
         assertEquals(compra.getId(), compraGuardada.getId());
-        assertEquals(2L, compraGuardada.getJuego().getId(), compraGuardada.getUsuario().getId());
+        assertEquals("2023-01-01T12:34:56Z", compraGuardada.getFechaCompra().toString());
+        assertEquals(juego1.getId(), compraGuardada.getJuego().getId());
+        assertEquals(usuario1.getId(), compraGuardada.getUsuario().getId());
+
+
     }
 
     @Test
