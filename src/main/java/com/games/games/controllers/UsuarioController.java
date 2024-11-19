@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @AllArgsConstructor
@@ -45,10 +46,12 @@ public class UsuarioController {
                     model.addAttribute("usuario", usuario);
                     return "usuario-detail";
                 })
-                .orElseGet(() -> {
-                    model.addAttribute("mensaje", "Usuario no encontrado");
-                    return "error";
-                });
+//                .orElseGet(() -> {
+//                    model.addAttribute("mensaje", "Usuario no encontrado");
+//                    return "error";
+//                });
+                .orElseThrow(() ->
+                        new NoSuchElementException("Usuario no encontrado"));
     }
 
     //http://localhost:8080/usuarios/new
