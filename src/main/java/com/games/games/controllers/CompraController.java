@@ -9,11 +9,13 @@ import com.games.games.repositories.JuegoRepository;
 import com.games.games.repositories.JuegosUsuarioRepository;
 import com.games.games.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @AllArgsConstructor
@@ -59,6 +61,14 @@ public class CompraController {
         model.addAttribute("compra", new Compra());
         model.addAttribute("juego", new Juego());
         model.addAttribute("usuario", new Usuario());
+
+        List<Juego> juegos = juegoRepository.findAll().stream()
+                .map(m -> {
+                    m.setNombre(m.getNombre().toUpperCase()); // CAMBIA EL NOMBRE DEL MANUFACTURER A MAYÚSCULAS
+                    return m;
+                }).toList();
+
+        model.addAttribute("juegos",juegos);
         return "compra-form";
     }
 
@@ -67,18 +77,25 @@ public class CompraController {
     public String formularioParaActualizarCompra(@PathVariable Long id, Model model) {
         compraRepository.findById(id).
                 ifPresent(compra -> model.addAttribute("compra", compra));
+        model.addAttribute("juegos", juegoRepository.findAll());
+        model.addAttribute("usuarios", usuarioRepository.findAll());
         return "compra-form";
     }
 
     @PostMapping("compras")
     public String guardarCompra(@ModelAttribute Compra compra) {
-        if (compra.getId() == null) {
+        boolean exists = false;
+        if (compra.getId() != null) {
+            exists = compraRepository.existsById(compra.getId());
+        }
+        if (! exists) {
             compraRepository.save(compra);
         } else {
             compraRepository.findById(compra.getId()).ifPresent(compraDB -> {
-                compraDB.setFechaCompra(compra.getFechaCompra());
-                compraDB.setUsuario(compra.getUsuario());
-                compraDB.setJuego(compra.getJuego());
+//                compraDB.setFechaCompra(compra.getFechaCompra());
+//                compraDB.setUsuario(compra.getUsuario());
+//                compraDB.setJuego(compra.getJuego());
+                BeanUtils.copyProperties(compra, compraDB);
                 compraRepository.save(compraDB);
             });
         }
