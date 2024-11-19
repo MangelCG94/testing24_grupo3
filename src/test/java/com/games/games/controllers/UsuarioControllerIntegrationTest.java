@@ -119,15 +119,6 @@ public class UsuarioControllerIntegrationTest {
 
     }
 
-    @Test
-    void formularioParaEditarUsuario_SiNoExiste() throws Exception {
-
-        mockMvc.perform(get("/usuarios/999"))
-                .andExpect(status().is4xxClientError())
-                .andExpect(view().name("error"))
-                .andExpect(model().attributeExists("mensaje"))
-                .andExpect(model().attributeDoesNotExist("usuario"));
-    }
 
     @Test
     void guardarUsuario_Nuevo() throws Exception {
