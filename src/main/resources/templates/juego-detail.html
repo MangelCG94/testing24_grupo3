@@ -18,7 +18,7 @@
     <h2 th:text="${juego.nombre}">Nombre del Juego</h2>
     <p><strong>Descripción:</strong> <span th:text="${juego.descripcion}"></span></p>
     <p><strong>Fecha de lanzamiento:</strong> <span th:text="${juego.fechaLanzamiento}"></span></p>
-    <p><strong>Precio:</strong> <span th:text="${juego.precio}"></span></p>
+    <p><strong>Precio:</strong> <span th:text="${#numbers.formatDecimal(juego.precio, 1, 2, 'COMMA')}"></span></p>
   </div>
 
   <div th:unless="${juego}">

@@ -1,6 +1,7 @@
 package com.games.games.controllers;
 
 import com.games.games.models.Juego;
+import com.games.games.repositories.DesarrolladoraRepository;
 import com.games.games.repositories.JuegoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -17,6 +18,7 @@ import java.util.NoSuchElementException;
 @Controller
 public class JuegoController {
     private final JuegoRepository repository;
+    private final DesarrolladoraRepository desarrolladoraRepository;
 
     @GetMapping("juegos")
     public String findAll(Model model) {
@@ -68,7 +70,7 @@ public class JuegoController {
     @GetMapping("juegos/new")
     public String formCreate(Model model) {
         model.addAttribute("juego",new Juego());
-
+        model.addAttribute("desarrolladoras", desarrolladoraRepository.findAll());
         return "juego-form";
     }
 
@@ -76,6 +78,7 @@ public class JuegoController {
     public String formUpdate(Model model, @PathVariable Long id) {
         repository.findById(id).ifPresent(juego -> {
             model.addAttribute("juego", juego);
+            model.addAttribute("desarrolladoras", desarrolladoraRepository.findAll());
         });
 
         return "juego-form";
