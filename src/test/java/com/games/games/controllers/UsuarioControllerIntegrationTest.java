@@ -1,6 +1,7 @@
 package com.games.games.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.games.games.models.Compra;
 import com.games.games.models.Usuario;
 import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -131,13 +132,22 @@ public class UsuarioControllerIntegrationTest {
     @Test
     void guardarUsuario_Nuevo() throws Exception {
 
-        Usuario usuario = Usuario.builder().nombreUsuario("Juan").build();
-        usuarioRepository.save(usuario);
+//        Usuario usuario = Usuario.builder().nombreUsuario("Juan").build();
+//        usuarioRepository.save(usuario);
 
         mockMvc.perform
-                        (post("/usuarios/new")
+                        (post("/usuarios")
+                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                .param("nombreUsuario", "Javi82")
+                                .param("password", "1234")
+                                .param("nombre", "Javier Pérez")
                         ).andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/usuarios"));
+
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        assertEquals(1, usuarios.size());
+
+        assertEquals("Javi82", usuarios.get(0).getNombreUsuario());
 
     }
 
