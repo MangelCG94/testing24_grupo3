@@ -21,7 +21,7 @@ public class DesarolladoraController {
 
     @GetMapping("desarrolladoras")
     public String findAll(Model model){
-        model.addAttribute("desarolladoras",
+        model.addAttribute("desarrolladoras",
                 desarrolladoraRepo.findAll());
         return "desarrolladora-list";
     }
