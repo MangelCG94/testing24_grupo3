@@ -1,7 +1,9 @@
 package com.games.games.controllers;
 
 import com.games.games.models.Compra;
+import com.games.games.models.Juego;
 import com.games.games.models.JuegosUsuario;
+import com.games.games.models.Usuario;
 import com.games.games.repositories.CompraRepository;
 import com.games.games.repositories.JuegoRepository;
 import com.games.games.repositories.JuegosUsuarioRepository;
@@ -25,6 +27,7 @@ public class CompraController {
     //http://localhost:8080/compras
     @GetMapping("compras")
     public String encontrarTodasCompras(Model model) {
+        model.addAttribute("titulo", "Lista de compras");
         model.addAttribute("compras", compraRepository.findAll());
         return "compra-list";
     }
@@ -44,25 +47,26 @@ public class CompraController {
                     model.addAttribute("compra", compra);
                     return "compra-detail";
                 })
-                .orElseThrow(() -> new NoSuchElementException("Compra no encontrado"));
+                .orElseGet(() -> {
+                    model.addAttribute("mensaje", "Compra no encontrada");
+                    return "error";
+                });
     }
 
     //http://localhost:8080/compras/new
-    @GetMapping("compras/crear")
+    @GetMapping("compras/new")
     public String formularioParaCrearCompra(Model model) {
         model.addAttribute("compra", new Compra());
-        model.addAttribute("juego", juegoRepository.findAll());
-        model.addAttribute("usuario", usuarioRepository.findAll());
+        model.addAttribute("juego", new Juego());
+        model.addAttribute("usuario", new Usuario());
         return "compra-form";
     }
 
-    //http://localhost:8080/compras/edit/1
-    @GetMapping("compras/editar/{id}")
+    //http://localhost:8080/compras/update/1
+    @GetMapping("compras/update/{id}")
     public String formularioParaActualizarCompra(@PathVariable Long id, Model model) {
         compraRepository.findById(id).
                 ifPresent(compra -> model.addAttribute("compra", compra));
-        model.addAttribute("juego", juegoRepository.findAll());
-        model.addAttribute("usuario", usuarioRepository.findAll());
         return "compra-form";
     }
 
@@ -83,7 +87,7 @@ public class CompraController {
     }
 
     //http://localhost:8080/compras/borrar/1
-    @GetMapping("compras/borrar/{id}")
+    @GetMapping("compras/delete/{id}")
     public String borrarPorId(@PathVariable Long id) {
         try {
             compraRepository.deleteById(id);
