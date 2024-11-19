@@ -23,7 +23,7 @@ public class DesarolladoraController {
     public String findAll(Model model){
         model.addAttribute("desarolladoras",
                 desarrolladoraRepo.findAll());
-        return "desarolladora-list";
+        return "desarrolladora-list";
     }
 
     @GetMapping("desarrolladoras/{id}")
