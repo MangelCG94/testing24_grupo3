@@ -15,9 +15,8 @@
   <h1>Detalle de Juego</h1>
 
   <div th:if="${juego}">
-    <h2 th:text="${juego.nombreJuego}">Nombre del Juego</h2>
+    <h2 th:text="${juego.nombre}">Nombre del Juego</h2>
     <p><strong>Descripción:</strong> <span th:text="${juego.descripcion}"></span></p>
-    <p><strong>Género:</strong> <span th:text="${juego.genero}"></span></p>
     <p><strong>Fecha de lanzamiento:</strong> <span th:text="${juego.fechaLanzamiento}"></span></p>
     <p><strong>Precio:</strong> <span th:text="${juego.precio}"></span></p>
   </div>
