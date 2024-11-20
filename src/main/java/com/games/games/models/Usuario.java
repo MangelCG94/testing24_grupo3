@@ -2,7 +2,11 @@ package com.games.games.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Entity
@@ -13,6 +17,7 @@ import java.util.Date;
 @ToString
 @Builder
 @Table(name = "usuarios")
+@EntityListeners(AuditingEntityListener.class)
 public class Usuario {
 
     @Id
@@ -25,5 +30,6 @@ public class Usuario {
     private String direccion;
     private Integer CP;
     private String DNI;
-    private Date fechaCreacion;
+    @CreatedDate
+    private Instant fechaCreacion;
 }
