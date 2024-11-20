@@ -77,9 +77,9 @@ public class UsuarioListTest {
     @Test
     void tablaConUsuarios(){
         usuarioRepository.saveAll(List.of(
-                Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(2L).nombreUsuario("Pedro").password("1331").nombre("Pedro").direccion("Calle 2").CP(12334).DNI("19797477M").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(3L).nombreUsuario("Carlos").password("1223").nombre("Carlos").direccion("Calle 3").CP(44147).DNI("13464497M").fechaCreacion(Date.from(Instant.now())).build()
+                Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build(),
+                Usuario.builder().id(2L).nombreUsuario("Pedro").password("1331").nombre("Pedro").direccion("Calle 2").CP(12334).DNI("19797477M").fechaCreacion(Instant.now()).build(),
+                Usuario.builder().id(3L).nombreUsuario("Carlos").password("1223").nombre("Carlos").direccion("Calle 3").CP(44147).DNI("13464497M").fechaCreacion(Instant.now()).build()
         ));
 
         assertEquals(3, usuarioRepository.count());
@@ -94,9 +94,9 @@ public class UsuarioListTest {
     @Test
     void tablaConUsuarios_Columnas(){
         usuarioRepository.saveAll(List.of(
-                Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(2L).nombreUsuario("Pedro").password("1234").nombre("Pedro").direccion("Calle 2").CP(12334).DNI("19797477M").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(3L).nombreUsuario("Carlos").password("1234").nombre("Carlos").direccion("Calle 3").CP(44147).DNI("13464497M").fechaCreacion(Date.from(Instant.now())).build()
+                Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build(),
+                Usuario.builder().id(2L).nombreUsuario("Pedro").password("1234").nombre("Pedro").direccion("Calle 2").CP(12334).DNI("19797477M").fechaCreacion(Instant.now()).build(),
+                Usuario.builder().id(3L).nombreUsuario("Carlos").password("1234").nombre("Carlos").direccion("Calle 3").CP(44147).DNI("13464497M").fechaCreacion(Instant.now()).build()
         ));
 
         driver.navigate().refresh();
@@ -120,9 +120,9 @@ public class UsuarioListTest {
     @Test
     void tablaConUsuarios_Filas(){
         usuarioRepository.saveAll(List.of(
-                Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(2L).nombreUsuario("Pedro").password("1234").nombre("Pedro").direccion("Calle 2").CP(12334).DNI("19797477M").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(3L).nombreUsuario("Carlos").password("1234").nombre("Carlos").direccion("Calle 3").CP(44147).DNI("13464497M").fechaCreacion(Date.from(Instant.now())).build()
+                Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build(),
+                Usuario.builder().id(2L).nombreUsuario("Pedro").password("1234").nombre("Pedro").direccion("Calle 2").CP(12334).DNI("19797477M").fechaCreacion(Instant.now()).build(),
+                Usuario.builder().id(3L).nombreUsuario("Carlos").password("1234").nombre("Carlos").direccion("Calle 3").CP(44147).DNI("13464497M").fechaCreacion(Instant.now()).build()
         ));
 
         assertEquals(3, usuarioRepository.count());
@@ -145,7 +145,7 @@ public class UsuarioListTest {
 
     @Test
     void tablaConUsuarios_Filas_Ids(){
-        Usuario usuario = usuarioRepository.save(Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Date.from(Instant.now())).build());
+        Usuario usuario = usuarioRepository.save(Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build());
 
         driver.navigate().refresh();
 
@@ -169,7 +169,7 @@ public class UsuarioListTest {
 
     @Test
     void tablaConUsuarios_accionBotonVer() {
-        Usuario usuario = usuarioRepository.save(Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Date.from(Instant.now())).build());
+        Usuario usuario = usuarioRepository.save(Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build());
 
         driver.navigate().refresh();
 
@@ -183,7 +183,7 @@ public class UsuarioListTest {
 
     @Test
     void tablaConUsuarios_accionBotonEditar() {
-        Usuario usuario = usuarioRepository.save(Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Date.from(Instant.now())).build());
+        Usuario usuario = usuarioRepository.save(Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build());
 
         driver.navigate().refresh();
 
@@ -196,7 +196,7 @@ public class UsuarioListTest {
     }
     @Test
     void tablaConUsuarios_accionBotonBorrar() {
-        Usuario usuario = usuarioRepository.save(Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Date.from(Instant.now())).build());
+        Usuario usuario = usuarioRepository.save(Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build());
 
         driver.navigate().refresh();
 
