@@ -1,5 +1,6 @@
 package com.games.games.controllers;
 
+import com.games.games.dtos.DetalleUsuario;
 import com.games.games.models.Usuario;
 import com.games.games.repositories.UsuarioRepository;
 import lombok.AllArgsConstructor;
@@ -35,7 +36,7 @@ public class UsuarioController {
     @GetMapping("usuarios/{id}")
     public String encontrarPorId(@PathVariable Long id, Model model) {
         usuarioRepository.findById(id).
-                ifPresent(usuario -> model.addAttribute("usuario", usuario));
+                ifPresent(usuario -> model.addAttribute("usuario", new DetalleUsuario(usuario)));
         return "usuario-detail";
     }
 
@@ -46,12 +47,12 @@ public class UsuarioController {
                     model.addAttribute("usuario", usuario);
                     return "usuario-detail";
                 })
-//                .orElseGet(() -> {
-//                    model.addAttribute("mensaje", "Usuario no encontrado");
-//                    return "error";
-//                });
-                .orElseThrow(() ->
-                        new NoSuchElementException("Usuario no encontrado"));
+                .orElseGet(() -> {
+                    model.addAttribute("mensaje", "Usuario no encontrado");
+                    return "error";
+                });
+//                .orElseThrow(() ->
+//                        new NoSuchElementException("Usuario no encontrado"));
     }
 
     //http://localhost:8080/usuarios/new
