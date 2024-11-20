@@ -1,5 +1,6 @@
 package com.games.games.controllers;
 
+import com.games.games.dtos.DetalleUsuario;
 import com.games.games.models.Usuario;
 import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.Test;
@@ -34,9 +35,9 @@ class UsuarioControllerUTest {
 
         when(usuarioRepository.findAll()).thenReturn(List.of(
 
-                Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(2L).nombreUsuario("Pedro").password("1234").nombre("Pedro").direccion("Calle 2").CP(12334).DNI("19797477M").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(3L).nombreUsuario("Carlos").password("1234").nombre("Carlos").direccion("Calle 3").CP(44147).DNI("13464497M").fechaCreacion(Date.from(Instant.now())).build()
+                Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build(),
+                Usuario.builder().id(2L).nombreUsuario("Pedro").password("1234").nombre("Pedro").direccion("Calle 2").CP(12334).DNI("19797477M").fechaCreacion(Instant.now()).build(),
+                Usuario.builder().id(3L).nombreUsuario("Carlos").password("1234").nombre("Carlos").direccion("Calle 3").CP(44147).DNI("13464497M").fechaCreacion(Instant.now()).build()
         ));
 
         String view = usuarioController.encontrarTodos(model);
@@ -57,7 +58,9 @@ class UsuarioControllerUTest {
         assertEquals("usuario-detail", view);
         verify(usuarioRepository).findById(1L);
         verify(usuarioRepository, never()).findAll();
-        verify(model).addAttribute("usuario", juan);
+        DetalleUsuario detalleUsuario = new DetalleUsuario(juan);
+        model.addAttribute("usuario", detalleUsuario);
+        verify(model, times(2)).addAttribute("usuario", new DetalleUsuario(juan));
     }
 
     @Test
