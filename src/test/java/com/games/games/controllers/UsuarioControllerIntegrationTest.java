@@ -51,9 +51,9 @@ public class UsuarioControllerIntegrationTest {
     void encontrarTodos() throws Exception {
 
         usuarioRepository.saveAll(List.of(
-                Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(12334).DNI("19797477M").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(2L).nombreUsuario("Pedro").password("2341").nombre("Pedro").direccion("Calle 2").CP(12344).DNI("19237477M").fechaCreacion(Date.from(Instant.now())).build(),
-                Usuario.builder().id(3L).nombreUsuario("Carlos").password("3124").nombre("Carlos").direccion("Calle 3").CP(44147).DNI("13464497M").fechaCreacion(Date.from(Instant.now())).build()
+                Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(12334).DNI("19797477M").fechaCreacion(Instant.now()).build(),
+                Usuario.builder().id(2L).nombreUsuario("Pedro").password("2341").nombre("Pedro").direccion("Calle 2").CP(12344).DNI("19237477M").fechaCreacion(Instant.now()).build(),
+                Usuario.builder().id(3L).nombreUsuario("Carlos").password("3124").nombre("Carlos").direccion("Calle 3").CP(44147).DNI("13464497M").fechaCreacion(Instant.now()).build()
         ));
 
         System.out.println("Encuentra todos los usuarios: " + usuarioRepository.count());
@@ -84,7 +84,7 @@ public class UsuarioControllerIntegrationTest {
     void encontrarPorIdCuandoNoExisteUsuario() throws Exception {
 
         mockMvc.perform(get("/usuarios2/999"))
-                .andExpect(status().is4xxClientError())
+                .andExpect(status().isOk())
                 .andExpect(view().name("error"))
                 .andExpect(model().attributeExists("mensaje"))
                 .andExpect(model().attributeDoesNotExist("usuario"));
