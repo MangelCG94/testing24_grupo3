@@ -1,6 +1,7 @@
 package com.games.games.dtos;
 
 import com.games.games.models.Usuario;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import java.time.ZoneId;
@@ -8,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 
 @Getter
 @ToString
+@EqualsAndHashCode
 public class DetalleUsuario {
     private Long id;
     private String nombreUsuario;
