@@ -50,8 +50,9 @@ class UsuarioControllerUTest {
     @Test
     void encontrarPorIdCuandoExisteUsuario() {
 
-        Usuario juan = Usuario.builder().id(1L).nombreUsuario("Juan").build();
+        Usuario juan = Usuario.builder().id(1L).nombreUsuario("Juan").fechaCreacion(Instant.now()).build();
         when(usuarioRepository.findById(1L)).thenReturn(Optional.of(juan));
+
 
         String view = usuarioController.encontrarPorId((1L), model);
 
