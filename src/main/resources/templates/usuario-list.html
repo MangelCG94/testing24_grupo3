@@ -38,23 +38,23 @@
             </thead>
             <tbody>
                 <tr th:each="usuario: ${usuarios}">
-                    <td th:text="${usuario.id}"></td>
-                    <td th:text="${usuario.nombreUsuario}"></td>
-                    <td th:text="${usuario.password}"></td>
-                    <td th:text="${usuario.nombre}"></td>
-                    <td th:text="${usuario.direccion}"></td>
-                    <td th:text="${usuario.id}"></td>
-                    <td th:text="${usuario.DNI}"></td>
+                    <td th:id="'usuarioId_' + ${usuario.id}" th:text="${usuario.id}"></td>
+                    <td th:id="'usuarioNombreUsuario_' + ${usuario.id}"th:text="${usuario.nombreUsuario}"></td>
+                    <td th:id="'usuarioPassword_' + ${usuario.id}"th:text="${usuario.password}"></td>
+                    <td th:id="'usuarioNombre_' + ${usuario.id}"th:text="${usuario.nombre}"></td>
+                    <td th:id="'usuarioDireccion_' + ${usuario.id}"th:text="${usuario.direccion}"></td>
+                    <td th:id="'usuarioCP_' + ${usuario.id}"th:text="${usuario.CP}"></td>
+                    <td th:id="'usuarioDNI_' + ${usuario.id}"th:text="${usuario.DNI}"></td>
                     <div class="card-footer">
-                        <small class="text-muted">Fecha de creación: <span th:text="${usuario.fechaCreacion}"></span></small>
+                        <small class="text-muted">Fecha de creación: <span th:id="'usuarioFechaDeCreacion_' + ${usuario.id}" th:text="${usuario.fechaCreacion}"></span></small>
                     </div>
-                        <a th:href="@{/usuarios/{id}(id=${usuario.id})}" class="btn btn-sm btn-info">
+                        <a th:id="'usuarioActionView_' + ${usuario.id}" th:href="@{/usuarios/{id}(id=${usuario.id})}" class="btn btn-sm btn-info">
                             <i class="fas fa-eye"></i>
                             Ver</a>
-                        <a th:href="@{/usuarios/update/{id}(id=${usuario.id})}" class="btn btn-sm btn-warning">
+                        <a th:id="'usuarioActionEdit_' + ${usuario.id}" th:href="@{/usuarios/update/{id}(id=${usuario.id})}" class="btn btn-sm btn-warning">
                             <i class="fas fa-edit"></i>
                             Editar</a>
-                        <a th:href="@{/usuarios/delete/{id}(id=${usuario.id})}" class="btn btn-sm btn-danger">
+                        <a th:id="'usuarioActionDelete_' + ${usuario.id}" th:href="@{/usuarios/delete/{id}(id=${usuario.id})}" class="btn btn-sm btn-danger">
                             <i class="fas fa-trash"></i>
                             Borrar</a>
 

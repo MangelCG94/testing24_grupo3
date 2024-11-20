@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de valoracion</title>
+</head>
+<body>
+<h1 th:text="${valoracion.id != null} ? 'Editar valoracion' : 'Crear valoracion'"></h1>
+<form th:action="@{/valoraciones}" th:object="${valoracion}" method="post">
+  <input type="hidden" th:field="*{id}" />
+  <div>
+    <label for="fechaValoracion">Fecha de valoracion</label>
+    <input type="number" id="fechaValoracion" th:field="*{fechaValoracion}" />
+  </div>
+  <div>
+    <button type="submit">Guardar</button>
+  </div>
+</form>
+<a th:href="@{/valoraciones}">Volver a la lista de valoraciones</a>
+</body>
+</html>

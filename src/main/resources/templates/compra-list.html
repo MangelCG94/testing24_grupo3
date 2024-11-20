@@ -33,24 +33,24 @@
             </thead>
             <tbody>
             <tr th:each="compra: ${compras}">
-                <td th:text="${compra.id}"></td>
-                <td th:text="${compra.fechaCompra}"></td>
+                <td th:id="'compraId_' + ${compra.id}" th:text="${compra.id}"></td>
+                <td th:id="'compraFechaCompra_' + ${compra.id}"  th:text="${compra.fechaCompra}"></td>
                 <td>
-                    <span th:if="${compra.usuario}" th:text="${compra.usuario.id}"></span>
-                    <span th:unless="${compra.usuario}" class="text-danger">Sin usuario</span>
+                    <span th:id="'compraIdUsuario_' + ${compra.id}"  th:if="${compra.usuario}" th:text="${compra.usuario.id}"></span>
+                    <span th:id="'compraIdUsuarioFalse_' + ${compra.id}" th:unless="${compra.usuario}" class="text-danger">Sin usuario</span>
                 </td>
                 <td>
-                    <span th:if="${compra.juego}" th:text="${compra.juego.id}"></span>
-                    <span th:unless="${compra.juego}" class="text-danger">Sin usuario</span>
+                    <span th:id="'compraIdJuego_' + ${compra.id}" th:if="${compra.juego}" th:text="${compra.juego.id}"></span>
+                    <span th:id="'compraIdJuegoFalse_' + ${compra.id}"  th:unless="${compra.juego}" class="text-danger">Sin juego</span>
                 </td>
                 <td>
-                        <a th:href="@{/compras/{id}(id=${compra.id})}" class="btn btn-sm btn-info">
+                        <a th:id="'compraActionView_' + ${compra.id}"  th:href="@{/compras/{id}(id=${compra.id})}" class="btn btn-sm btn-info">
                             <i class="fas fa-eye"></i>
                             Ver</a>
-                        <a th:href="@{/compras/update/{id}(id=${compra.id})}" class="btn btn-sm btn-warning">
+                        <a th:id="'compraActionEdit_' + ${compra.id}" th:href="@{/compras/update/{id}(id=${compra.id})}" class="btn btn-sm btn-warning">
                             <i class="fas fa-edit"></i>
                             Editar</a>
-                        <a th:href="@{/compras/delete/{id}(id=${compra.id})}" class="btn btn-sm btn-danger">
+                        <a th:id="'compraActionDelete_' + ${compra.id}"  th:href="@{/compras/delete/{id}(id=${compra.id})}" class="btn btn-sm btn-danger">
                             <i class="fas fa-trash"></i>
                             Borrar</a>
                 </td>
