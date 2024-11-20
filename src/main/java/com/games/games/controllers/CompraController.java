@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Controller
@@ -49,12 +50,12 @@ public class CompraController {
                     model.addAttribute("compra", compra);
                     return "compra-detail";
                 })
-//                .orElseGet(() -> {
-//                    model.addAttribute("mensaje", "Compra no encontrada");
-//                    return "error";
-//                });
-                .orElseThrow(() ->
-                        new NoSuchElementException("Usuario no encontrado"));
+                .orElseGet(() -> {
+                    model.addAttribute("mensaje", "Compra no encontrada");
+                    return "error";
+                });
+//                .orElseThrow(() ->
+//                        new NoSuchElementException("Usuario no encontrado"));
 
     }
 
@@ -78,11 +79,18 @@ public class CompraController {
     //http://localhost:8080/compras/update/1
     @GetMapping("compras/update/{id}")
     public String formularioParaActualizarCompra(@PathVariable Long id, Model model) {
-        compraRepository.findById(id).
-                ifPresent(compra -> model.addAttribute("compra", compra));
-        model.addAttribute("juegos", juegoRepository.findAll());
-        model.addAttribute("usuarios", usuarioRepository.findAll());
-        return "compra-form";
+        Optional<Compra> compraOpt = compraRepository.findById(id);
+
+        if (compraOpt.isPresent()) {
+            Compra compra = compraOpt.get();
+            model.addAttribute("compra", compra);
+            model.addAttribute("juegos", juegoRepository.findAll());
+            model.addAttribute("usuarios", usuarioRepository.findAll());
+            return "compra-form";
+        } else {
+            model.addAttribute("mensaje", "Compra no encontrada");
+            return "error"; // Si la compra no existe, se debe devolver "error"
+        }
     }
 
     @PostMapping("compras")
