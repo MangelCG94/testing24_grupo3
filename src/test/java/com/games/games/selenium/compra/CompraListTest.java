@@ -26,21 +26,21 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class CompraListTest {
     @Autowired
-    CompraRepository compraRepository;
+    private CompraRepository compraRepository;
 
     @Autowired
-    UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
-    JuegoRepository juegoRepository;
+    private JuegoRepository juegoRepository;
 
     WebDriver driver;
 
     @BeforeEach
     void setUp(){
-        compraRepository.deleteAll();
-        usuarioRepository.deleteAll();
-        juegoRepository.deleteAll();
+        compraRepository.deleteAllInBatch();
+        usuarioRepository.deleteAllInBatch();
+        juegoRepository.deleteAllInBatch();
 
         driver = new ChromeDriver();
         driver.get("http://localhost:8080/compras");
@@ -272,6 +272,14 @@ public class CompraListTest {
         botonBorrar.click();
 
         assertEquals("http://localhost:8080/compras", driver.getCurrentUrl());
+
+        WebElement mensajeNoCompras = driver.findElement(By.id("compraVacia"));
+        assertEquals("No hay compras.", mensajeNoCompras.getText());
+
+        assertThrows(
+                NoSuchElementException.class,
+                () -> driver.findElement(By.id("compraList"))
+        );
     }
 
 }
