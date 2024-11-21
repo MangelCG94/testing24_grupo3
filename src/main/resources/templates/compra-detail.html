@@ -12,30 +12,31 @@
 
 <div th:replace="~{navbar :: nav1}"></div>
 <div class="container">
-    <h1>Detalle de compra</h1>
+    <h1 th:if="${compra}">Detalle de compra <span th:text="${compra.id}"></span></h1>
+    <h1 th:unless="${compra}">Compra no encontrada</h1>
 
     <div th:if="${compra}">
         <div class="card" style="width: 18rem;">
             <div class="card-body">
-                <h5 class="card-title" th:text="${compra.fechaCompra}"></h5>
+                <h5 id="compra-fecha" class="card-title" th:text="${compra.fechaCompra}"></h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary">
                     ID: <span id="compra-id" th:text="${compra.id}"></span>
                     <br>
                 </h6>
                 <p class="card-text">
                     <span th:if="${compra.usuario}">
-                        <a th:href="@{/usuarios/{id}(id=${compra.usuario.id})}" th:text="${compra.usuario.nombre}"></a>
+                        <a id="usuarioLink" th:href="@{/usuarios/{id}(id=${compra.usuario.id})}" th:text="${compra.usuario.nombre}"></a>
                     </span>
-                    <span th:unless="${compra.usuario}" class="text-danger">Sin usuario</span>
+                    <span id="usuarioVacio" th:unless="${compra.usuario}" class="text-danger">Sin usuario</span>
                     <span th:if="${compra.juego}">
-                        <a th:href="@{/juegos/{id}(id=${compra.juego.id})}" th:text="${compra.juego.nombre}"></a>
+                        <a id="juegoLink" th:href="@{/juegos/{id}(id=${compra.juego.id})}" th:text="${compra.juego.nombre}"></a>
                     </span>
-                    <span th:unless="${compra.juego}" class="text-danger">Sin fabricante</span>
+                    <span id="juegoVacio" th:unless="${compra.juego}" class="text-danger">Sin fabricante</span>
                 </p>
-                        <a th:href="@{/compras/update/{id}(id=${compra.id})}" class="btn btn-primary">
+                        <a id="editButton" th:href="@{/compras/update/{id}(id=${compra.id})}" class="btn btn-primary">
                             <i class="fas fa-edit"></i>
                             Editar</a>
-                        <a th:href="@{/compras/delete/{id}(id=${compra.id})}" class="btn btn-danger">
+                        <a id="deleteButton" th:href="@{/compras/delete/{id}(id=${compra.id})}" class="btn btn-danger">
                             <i class="fas fa-trash"></i>
                             Borrar</a>
                     </div>
@@ -43,11 +44,11 @@
             </div>
 
     <div th:unless="${compra}">
-        <p>No existe la compra</p>
+        <p id="compraVacia">No existe la compra</p>
     </div>
 
     <div class="mt-3">
-        <a th:href="@{/compras}" class="btn btn-secondary">
+        <a id="backButton" th:href="@{/compras}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i>
             Volver a la lista</a>
     </div>

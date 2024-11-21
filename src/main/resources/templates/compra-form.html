@@ -28,7 +28,8 @@
                 <option th:selected="${compra.usuario == null}" value=""></option>
                 <option
                         th:each="usuario: ${usuarios}"
-                        th:value="${usuario.id}">
+                        th:value="${usuario.id}"
+                        th:text="${usuario.nombreUsuario}">
                 </option>
             </select>
         </div>
@@ -38,7 +39,8 @@
                 <option th:selected="${compra.juego == null}" value=""></option>
                 <option
                         th:each="juego: ${juegos}"
-                        th:value="${juego.id}">
+                        th:value="${juego.id}"
+                        th:text="${juego.nombre}">
                 </option>
             </select>
         </div>
