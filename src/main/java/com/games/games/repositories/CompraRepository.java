@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.Instant;
 import java.util.List;
 
+
 public interface CompraRepository extends JpaRepository<Compra, Long> {
 
     List<Compra> findByFechaCompra(Instant fechaCompra);
