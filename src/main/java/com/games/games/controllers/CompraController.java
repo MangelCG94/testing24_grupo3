@@ -65,14 +65,8 @@ public class CompraController {
         model.addAttribute("compra", new Compra());
         model.addAttribute("juego", new Juego());
         model.addAttribute("usuario", new Usuario());
-
-        List<Juego> juegos = juegoRepository.findAll().stream()
-                .map(m -> {
-                    m.setNombre(m.getNombre().toUpperCase()); // CAMBIA EL NOMBRE DEL MANUFACTURER A MAYÚSCULAS
-                    return m;
-                }).toList();
-
-        model.addAttribute("juegos",juegos);
+        model.addAttribute("juegos", juegoRepository.findAll());
+        model.addAttribute("usuarios", usuarioRepository.findAll());
         return "compra-form";
     }
 
