@@ -1,5 +1,6 @@
 package com.games.games.selenium.compra;
 
+import com.games.games.models.Compra;
 import com.games.games.models.Juego;
 import com.games.games.models.Usuario;
 import com.games.games.repositories.CompraRepository;
@@ -15,8 +16,14 @@ import org.openqa.selenium.support.ui.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
-
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -86,6 +93,55 @@ public class CompraFormTest {
         assertEquals("", juegoSelect.getOptions().get(0).getText());
         assertEquals("The Legend of Zelda", juegoSelect.getOptions().get(1).getText());
         assertEquals("Age of Empires", juegoSelect.getOptions().get(2).getText());
+
+    }
+    @Test
+    void verQueEnCampoCreadoHayCamposLlenos() {
+
+        Usuario usuario = usuarioRepository.save(Usuario.builder()
+                .nombreUsuario("Javi82")
+                .password("javito")
+                .nombre("Javier García")
+                .direccion("Acacias 38")
+                .CP(28036)
+                .DNI("47282382L")
+                .fechaCreacion(Instant.now())
+                .build());
+
+        usuarioRepository.save(usuario);
+
+        Juego juego = juegoRepository.save(Juego.builder()
+                .nombre("The Legend of Zelda")
+                .descripcion("Juego RPG")
+                .precio(29.95)
+                .videoUrl("URL Zelda")
+                .fechaLanzamiento(Date.from(Instant.now()))
+                .build());
+
+        juegoRepository.save(juego);
+
+        Compra compra = compraRepository.save(Compra.builder()
+                .fechaCompra(Instant.now())
+                .usuario(usuario)
+                .juego(juego)
+                .build());
+
+        compraRepository.save(compra);
+
+        driver.get("http://localhost:8080/compras/update/" + compra.getId());
+
+        Select usuarioSelect = new Select(driver.findElement(By.id("usuario")));
+        assertFalse(usuarioSelect.isMultiple());
+        assertEquals(4,usuarioSelect.getOptions().size());
+        assertEquals(String.valueOf(usuario.getId()), usuarioSelect.getFirstSelectedOption().getAttribute("value"));
+        assertEquals(usuario.getNombreUsuario(), usuarioSelect.getFirstSelectedOption().getText());
+
+        Select juegoSelect = new Select(driver.findElement(By.id("juego")));
+        assertFalse(juegoSelect.isMultiple());
+        assertEquals(4,juegoSelect.getOptions().size());
+        assertEquals(String.valueOf(juego.getId()), juegoSelect.getFirstSelectedOption().getAttribute("value"));
+        assertEquals(juego.getNombre(), juegoSelect.getFirstSelectedOption().getText());
+
 
     }
 
