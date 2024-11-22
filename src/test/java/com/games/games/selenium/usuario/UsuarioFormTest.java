@@ -11,6 +11,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.Instant;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,4 +68,33 @@ public class UsuarioFormTest {
         assertTrue(inputDNI.getAttribute("value").isEmpty());
 
     }
+
+    @Test
+    void verQueEnCampoCreadoHayCamposLlenos(){
+        Usuario usuario = Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan López").direccion("Gran Vía, 7").CP(28100).DNI("12345678D").build();
+
+        usuarioRepository.save(usuario);
+
+        driver.get("http://localhost:8080/usuarios/update/" + usuario.getId());
+
+        var inputNombreUsuario = driver.findElement(By.id("nombreUsuario"));
+        assertEquals("Juan", inputNombreUsuario.getAttribute("value"));
+
+        var inputPassword = driver.findElement(By.id("password"));
+        assertEquals("1234",inputPassword.getAttribute("value"));
+
+        var inputNombre = driver.findElement(By.id("nombre"));
+        assertEquals("Juan López", inputNombre.getAttribute("value"));
+
+        var inputDireccion = driver.findElement(By.id("direccion"));
+        assertEquals("Gran Vía, 7", inputDireccion.getAttribute("value"));
+
+        var inputCP = driver.findElement(By.id("CP"));
+        assertEquals("28100", inputCP.getAttribute("value"));
+
+        var inputDNI = driver.findElement(By.id("DNI"));
+        assertEquals("12345678D", inputDNI.getAttribute("value"));
+
+    }
+
 }
