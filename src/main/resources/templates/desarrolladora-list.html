@@ -27,7 +27,8 @@
           <div class="card-body">
             <h5 class="card-title" th:text="${desarrolladora.nombreCom}"></h5>
             <p class="card-text" th:text="${desarrolladora.pais}"></p>
-            <p class="card-text" th:text="${desarrolladora.imagenLogo}"></p>
+          <!--  <p class="card-text" th:text="${desarrolladora.imagenLogo}"></p>-->
+            <img src="${desarrolladora.imagenLogo}" alt="logo" height="10" width="10">
             <p class="card-text" th:text="${desarrolladora.anyoFundacion}"></p>
           </div>
 <!--          <div class="card-footer">-->

@@ -39,10 +39,10 @@
 
         <button type="submit" th:if="${desarrolladora.id}" class="btn btn-primary">
             <i class="fas fa-save"></i>
-            CREAR</button>
+            EDITAR</button>
         <button type="submit" th:unless="${desarrolladora.id}" class="btn btn-primary">
             <i class="fas fa-save"></i>
-            EDITAR</button>
+            CREAR</button>
         <a th:href="@{/desarrolladoras}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i>
             Cancelar

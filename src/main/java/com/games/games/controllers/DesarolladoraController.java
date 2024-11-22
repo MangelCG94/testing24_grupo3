@@ -60,4 +60,15 @@ public class DesarolladoraController {
 
         return "redirect:/desarrolladoras";
     }
+
+    @GetMapping("desarrolladoras/delete/{id}")
+    public String borrarPorId(@PathVariable Long id) {
+        try {
+            desarrolladoraRepo.deleteById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+        return "redirect:/desarrolladoras";
+    }
 }
