@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.NoSuchElementException;
+
 @AllArgsConstructor
 @Controller
 public class DesarolladoraController {
@@ -28,9 +30,12 @@ public class DesarolladoraController {
 
     @GetMapping("desarrolladoras/{id}")
     public String findById(@PathVariable Long id, Model model) {
-        desarrolladoraRepo.findById(id)
-                .ifPresent(manufacturer -> model.addAttribute("manufacturer", manufacturer));
-        return "desarrolladora-detail";
+        return desarrolladoraRepo.findById(id)
+                .map(desarrolladora -> {
+                    model.addAttribute("desarrolladora", desarrolladora);
+                    return "desarrolladora-detail";
+                }).orElseThrow(() ->
+                        new NoSuchElementException("Desarrolladora no encontrada"));
     }
 
 

@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
   <meta charset="UTF-8">
-  <title>Detalle de desarrolladora</title>
+  <title>Detalle de Desarrolladora</title>
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
   <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}">
   <link rel="shortcut icon" href="#" />
@@ -11,44 +10,26 @@
 <body>
 
 <div th:replace="~{navbar :: nav1}"></div>
-<div class="container">
-  <h1>Detalle de desarrolladora</h1>
+
+<div class="container mt-4">
+  <h1>Detalle de Desarrolladora</h1>
 
   <div th:if="${desarrolladora}">
-    <div class="card mb-3">
-      <div class="row g-0">
-        <div class="col-md-4 mt-3">
-          <h5 class="card-title" th:text="${Desarrolladora.nombreCom}"></h5>
-          <p class="card-text" th:text="${Desarrolladora.pais}"></p>
-          <p class="card-text" th:text="${Desarrolladora.anyoFundacion}"></p>
+    <h2 th:text="${desarrolladora.nombreCom}">Nombre del Juego</h2>
+    <p><strong>País:</strong> <span th:text="${desarrolladora.pais}"></span></p>
+    <p><strong>Año de fundación:</strong> <span th:text="${desarrolladora.anyoFundacion}"></span></p>
 
-          <p class="card-text"><small class text-muted>
-          <div>
-            <a th:href="@{/desarrolladoras/update/{id}(id=${Desarrolladora.id})}" class="btn btn-primary">
-              <i class="fas fa-edit"></i>
-              Editar</a>
-            <a th:href="@{/desarrolladoras/delete/{id}(id=${Desarrolladora.id})}" class="btn btn-danger">
-              <i class="fas fa-trash"></i>
-              Borrar</a>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <div th:unless="${desarrolladora}">
-    <p>Desarrolladora no encontrada :(</p>
+    <p>Desarrolladora no encontrada.</p>
   </div>
 
-  <div class="mt-3">
-    <a th:href="@{/desarrolladoras}" class="btn btn-secondary">
-      <i class="fas fa-arrow-left"></i>
-      Volver al listado</a>
-  </div>
+  <a th:href="@{/desarrolladoras}" class="btn btn-secondary mt-3">
+    <i class="fas fa-arrow-left"></i> Volver a la lista</a>
 </div>
 
 <div th:replace="~{footer :: footer1}"></div>
-
 
 <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 <script th:src="@{/webjars/font-awesome/js/all.min.js}"></script>
