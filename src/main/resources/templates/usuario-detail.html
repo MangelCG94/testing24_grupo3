@@ -12,25 +12,26 @@
 
 <div th:replace="~{navbar :: nav1}"></div>
 <div class="container">
-    <h1>Detalle de usuario</h1>
+    <h1 th:if="${usuario}">Detalle de usuario <span th:text="${usuario.id}"></span></h1>
+    <h1 th:unless="${usuario}">Usuario no encontrado</h1>
 
     <div th:if="${usuario}">
         <div class="card mb-3">
             <div class="row g-0">
                 <div class="col-md-4 mt-3">
-                    <h5 class="card-title" th:text="${usuario.nombreUsuario}"></h5>
-                    <p class="card-text" th:text="${usuario.password}"></p>
-                    <p class="card-text" th:text="${usuario.nombre}"></p>
-                    <p class="card-text" th:text="${usuario.direccion}"></p>
-                    <p class="card-text" th:text="${usuario.CP}"></p>
-                    <p class="card-text" th:text="${usuario.DNI}"></p>
-                    <p class="card-text"><small class text-muted>
+                    <h5 id="usuario-nickname" class="card-title" th:text="${usuario.nombreUsuario}"></h5>
+                    <p id="usuario-password" class="card-text" th:text="${usuario.password}"></p>
+                    <p id="usuario-nombre" class="card-text" th:text="${usuario.nombre}"></p>
+                    <p id="usuario-direccion" class="card-text" th:text="${usuario.direccion}"></p>
+                    <p id="usuario-CP" class="card-text" th:text="${usuario.CP}"></p>
+                    <p id="usuario-DNI" class="card-text" th:text="${usuario.DNI}"></p>
+                    <p id="usuario-fechaCreacion" class="card-text"><small class text-muted>
                         Fecha de creación: <span th:text="${usuario.fechaCreacion}"></span></small></p>
                     <div>
-                        <a th:href="@{/usuarios/update/{id}(id=${usuario.id})}" class="btn btn-primary">
+                        <a id="editButton" th:href="@{/usuarios/update/{id}(id=${usuario.id})}" class="btn btn-primary">
                             <i class="fas fa-edit"></i>
                             Editar</a>
-                        <a th:href="@{/usuarios/delete/{id}(id=${usuario.id})}" class="btn btn-danger">
+                        <a id="deleteButton" th:href="@{/usuarios/delete/{id}(id=${usuario.id})}" class="btn btn-danger">
                             <i class="fas fa-trash"></i>
                             Borrar</a>
                     </div>
@@ -40,11 +41,11 @@
     </div>
 
     <div th:unless="${usuario}">
-        <p>No existe el usuario</p>
+        <p id="usuarioVacio">No existe el usuario</p>
     </div>
 
     <div class="mt-3">
-        <a th:href="@{/usuarios}" class="btn btn-secondary">
+        <a id="backButton" th:href="@{/usuarios}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i>
             Volver al listado</a>
     </div>

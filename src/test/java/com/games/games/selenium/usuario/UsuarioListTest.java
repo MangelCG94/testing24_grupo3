@@ -23,13 +23,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UsuarioListTest {
 
     @Autowired
-    UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
     WebDriver driver;
 
     @BeforeEach
     void setUp(){
-        usuarioRepository.deleteAll();
+        usuarioRepository.deleteAllInBatch();
 
         driver = new ChromeDriver();
         driver.get("http://localhost:8080/usuarios");
@@ -206,5 +206,13 @@ public class UsuarioListTest {
         botonBorrar.click();
 
         assertEquals("http://localhost:8080/usuarios", driver.getCurrentUrl());
+
+        WebElement mensajeNoUsuarios = driver.findElement(By.id("usuariosVacio"));
+        assertEquals("No hay usuarios.", mensajeNoUsuarios.getText());
+
+        assertThrows(
+                NoSuchElementException.class,
+                () -> driver.findElement(By.id("usuarioList"))
+        );
     }
 }
