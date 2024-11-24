@@ -16,6 +16,8 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import java.util.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 @SpringBootTest
@@ -56,14 +58,14 @@ void findAll() throws Exception{
             .descripcion("descripcion1")
             .videoUrl("www.video1.com")
             .precio(38.45)
-            .fechaLanzamiento(new Date())
+            .fechaLanzamiento(LocalDate.ofInstant(new Date().toInstant(), ZoneId.systemDefault()))
             .build();
     Juego juego2 = Juego.builder()
             .nombre("juego2")
             .descripcion("descripcion2")
             .videoUrl("www.video2.com")
             .precio(47.45)
-            .fechaLanzamiento(new Date())
+            .fechaLanzamiento(LocalDate.ofInstant(new Date().toInstant(), ZoneId.systemDefault()))
             .build();
     juegoRepository.saveAll(List.of(juego1, juego2));
     Valoracion valoracion1 = Valoracion.builder()
@@ -76,12 +78,12 @@ void findAll() throws Exception{
             .usuario(usuario2)
             .juego(juego2)
             .build();
-    valoracionRepository.saveAll(List.of(valoracion1, valoracion2));
-    mockMvc.perform(get("/valoraciones"))
-            .andExpect(status().isOk())
-            .andExpect(view().name("valoracion-list"))
-            .andExpect(model().attributeExists("valoraciones"))
-            .andExpect(model().attribute("valoraciones", hasSize(2)));
-
-}
+    }
+    private void performGetValoracionesAndExpect() throws Exception {
+        mockMvc.perform(get("/valoraciones"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("valoracion-list"))
+                .andExpect(model().attributeExists("valoraciones"))
+                .andExpect(model().attribute("valoraciones", hasSize(2)));
+    }
 }
