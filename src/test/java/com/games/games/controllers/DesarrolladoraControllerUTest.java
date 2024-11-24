@@ -1,6 +1,5 @@
 package com.games.games.controllers;
 
-import com.games.games.dtos.DetalleDesarrolladora;
 import com.games.games.models.Desarrolladora;
 import com.games.games.repositories.DesarrolladoraRepository;
 import org.junit.jupiter.api.Test;
@@ -10,20 +9,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.Model;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class DesarolladoraControllerUTest {
+class DesarrolladoraControllerUTest {
 
     @InjectMocks
-    private DesarolladoraController desarolladoraController;
+    private DesarrolladoraController desarolladoraController;
     @Mock
     private DesarrolladoraRepository desarrolladoraRepository;
     @Mock
