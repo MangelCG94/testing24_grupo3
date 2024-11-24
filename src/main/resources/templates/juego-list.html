@@ -25,6 +25,7 @@
         <div class="card-body">
           <h5 class="card-title" th:text="${juego.nombre}"></h5>
           <p class="card-text" th:text="${juego.descripcion}"></p>
+          <p class="card-text" th:text="${juego.fechaLanzamiento}"></p>
         </div>
         <div class="card-footer">
           <a th:href="@{/juegos/{id}(id=${juego.id})}" class="btn btn-info btn-sm">
