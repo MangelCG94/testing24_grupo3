@@ -16,13 +16,10 @@ import org.openqa.selenium.support.ui.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -115,7 +112,7 @@ public class CompraFormTest {
                 .descripcion("Juego RPG")
                 .precio(29.95)
                 .videoUrl("URL Zelda")
-                .fechaLanzamiento(Date.from(Instant.now()))
+                .fechaLanzamiento(LocalDate.now())
                 .build());
 
         juegoRepository.save(juego);
