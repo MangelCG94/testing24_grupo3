@@ -72,7 +72,7 @@ public class CompraDetailTest {
                 .descripcion("Juego RPG")
                 .precio(29.95)
                 .videoUrl("URL Zelda")
-                .fechaLanzamiento(LocalDate.from(Instant.now()))
+                .fechaLanzamiento((LocalDate.now()))
                 .build());
 
         Compra compra = compraRepository.save(Compra.builder()
@@ -130,7 +130,7 @@ public class CompraDetailTest {
                 .descripcion("Juego RPG")
                 .precio(29.95)
                 .videoUrl("URL Zelda")
-                .fechaLanzamiento(LocalDate.from(Instant.now()))
+                .fechaLanzamiento(LocalDate.now())
                 .build());
 
         Compra compra = compraRepository.save(Compra.builder()
@@ -160,7 +160,7 @@ public class CompraDetailTest {
                 .descripcion("Juego RPG")
                 .precio(29.95)
                 .videoUrl("URL Zelda")
-                .fechaLanzamiento(LocalDate.from(Instant.now()))
+                .fechaLanzamiento((LocalDate.now()))
                 .build());
 
         Compra compra = compraRepository.save(Compra.builder()
