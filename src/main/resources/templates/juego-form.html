@@ -24,7 +24,7 @@
 
     <div class="mb-3">
       <label for="descripcion" class="form-label">Descripción</label>
-      <textarea id="descripcion" th:field="*{descripcion}" class="form-control" rows="3" required></textarea>
+      <textarea id="descripcion" th:field="*{descripcion}" class="form-control" rows="3"></textarea>
     </div>
 
     <div class="mb-3">
@@ -37,6 +37,11 @@
       <select id="desarrolladora" th:field="*{desarrolladora.id}" class="form-select">
         <option th:each="desarrolladora : ${desarrolladoras}" th:value="${desarrolladora.id}" th:text="${desarrolladora.nombreCom}"></option>
       </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="fechaLanzamiento" class="form-label">Fecha de creación</label>
+      <input type="date" min="1960-01-01" id="fechaLanzamiento" th:field="*{fechaLanzamiento}" class="form-control" required/>
     </div>
 
     <button type="submit" class="btn btn-primary">

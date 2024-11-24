@@ -16,6 +16,8 @@
 
   <div th:if="${desarrolladora}">
     <h2 th:text="${desarrolladora.nombreCom}">Nombre del Juego</h2>
+    <p><strong>Logo:</strong></p>
+    <p><img width="500" th:src="${desarrolladora.imagenLogo}"></p>
     <p><strong>País:</strong> <span th:text="${desarrolladora.pais}"></span></p>
     <p><strong>Año de fundación:</strong> <span th:text="${desarrolladora.anyoFundacion}"></span></p>
 

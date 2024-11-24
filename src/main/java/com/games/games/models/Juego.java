@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -19,12 +19,13 @@ public class Juego {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
+    @Column(nullable = true)
     private String descripcion;
     private String videoUrl;
     private Double precio;
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(name = "date")
-    private Date fechaLanzamiento;
+    private LocalDate fechaLanzamiento;
 
 
     @ManyToOne
