@@ -3,6 +3,7 @@ package com.games.games.controllers;
 import com.games.games.dtos.DetalleUsuario;
 import com.games.games.models.Usuario;
 import com.games.games.repositories.UsuarioRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,6 +32,7 @@ class UsuarioControllerUTest {
 
 
     @Test
+    @DisplayName("Encontrar todos los usuarios")
     void encontrarTodos() {
 
         when(usuarioRepository.findAll()).thenReturn(List.of(
@@ -48,6 +50,7 @@ class UsuarioControllerUTest {
     }
 
     @Test
+    @DisplayName("Encontrar un usuario por su ID")
     void encontrarPorIdCuandoExisteUsuario() {
 
         Usuario juan = Usuario.builder().id(1L).nombreUsuario("Juan").fechaCreacion(Instant.now()).build();
@@ -65,6 +68,7 @@ class UsuarioControllerUTest {
     }
 
     @Test
+    @DisplayName("Qué pasa si no existe un usuario")
     void encontrarPorIdCuandoNoExisteUsuario() {
 
         when(usuarioRepository.findById(1L)).thenReturn(Optional.empty());
@@ -77,6 +81,7 @@ class UsuarioControllerUTest {
     }
 
     @Test
+    @DisplayName("Otra manera de ver qué pasa si no existe un usuario")
     void encontrarPorId2_siNoExisteUsuario() {
 
         when(usuarioRepository.findById(1L)).thenReturn(Optional.empty());
@@ -91,6 +96,7 @@ class UsuarioControllerUTest {
 
 
     @Test
+    @DisplayName("Formulario para crear un usuario")
     void formularioParaCrear() {
 
         String view = usuarioController.formularioParaCrear(model);
@@ -103,6 +109,7 @@ class UsuarioControllerUTest {
     }
 
     @Test
+    @DisplayName("Formulario para actualizar un usuario si éste existe")
     void formularioParaActualizarSiExiste() {
 
         Usuario juan = Usuario.builder().id(1L).nombreUsuario("Juan").build();
@@ -117,6 +124,7 @@ class UsuarioControllerUTest {
     }
 
     @Test
+    @DisplayName("Formulario para actualizar un usuario si éste no existe")
     void formularioParaActualizarSiNoExiste() {
 
         when(usuarioRepository.findById(1L)).thenReturn(Optional.empty());
@@ -129,6 +137,7 @@ class UsuarioControllerUTest {
     }
 
     @Test
+    @DisplayName("Guardar un usuario nuevo")
     void guardarUsuarioNuevo() {
 
         Usuario usuario = new Usuario();
@@ -140,6 +149,7 @@ class UsuarioControllerUTest {
     }
 
     @Test
+    @DisplayName("Cambiar un usuario y guardarlo")
     void guardarUsuarioExistente() {
 
         Usuario usuario = Usuario.builder().id(1L).nombre("Juan").build();
@@ -158,6 +168,7 @@ class UsuarioControllerUTest {
 
 
     @Test
+    @DisplayName("Borrar un usuario")
     void borrarPorId() {
 
         String view = usuarioController.borrarPorId(1L);
@@ -167,6 +178,7 @@ class UsuarioControllerUTest {
     }
 
     @Test
+    @DisplayName("Ver si hay un error al borrar todos un usuario")
     void borrarPorId_ErrorCapturado() {
 
         doThrow(new RuntimeException("Error al borrar"))
@@ -179,6 +191,7 @@ class UsuarioControllerUTest {
     }
 
     @Test
+    @DisplayName("Borrar todos los usuarios")
     void borrarTodo() {
 
         String view = usuarioController.borrarTodo();
@@ -188,6 +201,7 @@ class UsuarioControllerUTest {
     }
 
     @Test
+    @DisplayName("Ver si hay un error al borrar todos los usuarios")
     void borrarTodo_ErrorCapturado() {
 
         doThrow(new RuntimeException("Error al borrar"))
