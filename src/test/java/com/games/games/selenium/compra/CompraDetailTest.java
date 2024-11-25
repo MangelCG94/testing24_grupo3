@@ -15,6 +15,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -54,10 +55,6 @@ public class CompraDetailTest {
     @Test
     @DisplayName("Ver que una compra existe y los detalles de la misma")
     void compraExisteConTodosLosDetalles() {
-//        Instant fechaCompra = Instant.now();
-
-//        Instant fechaCreacion = Instant.ofEpochSecond(600);
-
         Usuario usuario = usuarioRepository.save(Usuario.builder()
                 .nombreUsuario("Javi82")
                 .password("javito")
@@ -65,7 +62,6 @@ public class CompraDetailTest {
                 .direccion("Acacias 38")
                 .CP(28036)
                 .DNI("47282382L")
-                // .fechaCreacion(fechaCreacion)
                 .build());
 
         Juego juego = juegoRepository.save(Juego.builder()
@@ -80,14 +76,10 @@ public class CompraDetailTest {
         compra.setJuego(juego);
         compra.setUsuario(usuario);
         compraRepository.save(compra);
-//        compra = compraRepository.findById(compra.getId()).orElseThrow();
+
         assertNotNull(compra.getId());
         assertNotNull(compra.getFechaCompra());
-//        Compra compra = compraRepository.save(Compra.builder()
-////                .fechaCompra(fechaCompra)
-//                .usuario(usuario)
-//                .juego(juego)
-//                .build());
+
 
         driver.get("http://localhost:8080/compras/" + compra.getId());
 
@@ -102,35 +94,6 @@ public class CompraDetailTest {
                 .withZone(ZoneId.systemDefault());
         assertEquals(formatter.format(compra.getFechaCompra()), fechaCompra);
 
-
-        // 2024-11-25T09:25:32.757240Z
-
-//
-//        String fechaCompraStr = driver.findElement(By.id("compra-fecha"))
-//                .getText()
-//                .replace("Fecha de compra: ", "")
-//                .trim();
-//
-//        // Formatear con el formato ISO_DATE_TIME
-//        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-//
-//        // Parsear la fecha desde la página
-//        ZonedDateTime fechaCompraZoned = ZonedDateTime.parse(fechaCompraStr, formatter);
-//
-//        // Convertir la fecha a la zona horaria local (Europe/Madrid)
-//        ZonedDateTime fechaCompraLocalZoned = fechaCompraZoned.withZoneSameInstant(ZoneId.of("Europe/Madrid"))
-//                .withMinute(0)
-//                .withSecond(0)
-//                .withNano(0);
-//
-//        // Convertir la fecha de compra a ZonedDateTime y redondear a la hora en la zona horaria local
-//        ZonedDateTime fechaCompraRedondeada = ZonedDateTime.ofInstant(fechaCompra, ZoneId.of("Europe/Madrid"))
-//                .withMinute(0)
-//                .withSecond(0)
-//                .withNano(0);
-//
-//        // Comparar ambas fechas redondeadas (hasta la hora)
-//        assertEquals(fechaCompraLocalZoned, fechaCompraRedondeada, "Las fechas deberían coincidir hasta la hora");
 
         WebElement usuarioLink = driver.findElement(By.id("usuarioLink"));
         assertEquals("http://localhost:8080/usuarios/" + usuario.getId(), usuarioLink.getAttribute("href"));
@@ -163,6 +126,48 @@ public class CompraDetailTest {
         WebElement usuarioVacio = driver.findElement(By.id("usuarioVacio"));
         assertEquals("Sin usuario", usuarioVacio.getText());
     }
+
+    @Test
+    @DisplayName("Comprobar que el formulario aparece relleno al editar una compra")
+    void comprobarCamposLlenosAlEditarCompra() {
+        Usuario usuario = usuarioRepository.save(Usuario.builder()
+                .nombreUsuario("Javi82")
+                .password("javito")
+                .nombre("Javier García")
+                .direccion("Acacias 38")
+                .CP(28036)
+                .DNI("47282382L")
+                .build());
+
+        Juego juego = juegoRepository.save(Juego.builder()
+                .nombre("The Legend of Zelda")
+                .descripcion("Juego RPG")
+                .precio(29.95)
+                .videoUrl("URL Zelda")
+                .fechaLanzamiento((LocalDate.now()))
+                .build());
+
+        Compra compra = compraRepository.save(Compra.builder()
+                .usuario(usuario)
+                .juego(juego)
+                .build());
+
+        driver.get("http://localhost:8080/compras/update/" + compra.getId());
+
+        Select usuarioSelect = new Select(driver.findElement(By.id("usuario")));
+        assertFalse(usuarioSelect.isMultiple());
+        assertEquals(2, usuarioSelect.getOptions().size());
+        assertEquals("1", usuarioSelect.getFirstSelectedOption().getAttribute("value"));
+        assertEquals("Javi82", usuarioSelect.getFirstSelectedOption().getText());
+
+        Select juegoSelect = new Select(driver.findElement(By.id("juego")));
+        assertFalse(juegoSelect.isMultiple());
+        assertEquals(2, juegoSelect.getOptions().size());
+        assertEquals("1", juegoSelect.getFirstSelectedOption().getAttribute("value"));
+        assertEquals("The Legend of Zelda", juegoSelect.getFirstSelectedOption().getText());
+
+    }
+
     @Test
     @DisplayName("Comprobar que funcionan los botones de la aplicación")
     void comprobarBotones(){
