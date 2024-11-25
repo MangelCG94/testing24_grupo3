@@ -9,6 +9,7 @@ import com.games.games.repositories.JuegoRepository;
 import com.games.games.repositories.JuegosUsuarioRepository;
 import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -65,6 +66,7 @@ class CompraServiceTest {
 
 
     @Test
+    @DisplayName("Encontrar una compra a partir de un ID encontrado")
     void getCompraByIdEncontrada() {
         when(compraRepository.findById(1L)).thenReturn(Optional.of(compra));
 
@@ -80,6 +82,7 @@ class CompraServiceTest {
     }
 
     @Test
+    @DisplayName("Comprobar que no hay una compra al no encontrase un ID")
     void getCompraByIdNoEncontrada() {
         when(compraRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -93,6 +96,7 @@ class CompraServiceTest {
     }
 
     @Test
+    @DisplayName("Encontrar todas las compras")
     void getAllCompras() {
         when(compraRepository.findAll()).thenReturn(Arrays.asList(compra));
 
@@ -106,6 +110,7 @@ class CompraServiceTest {
     }
 
     @Test
+    @DisplayName("Encontrar las compras por fecha")
     void getComprasByFecha() {
         when(compraRepository.findByUsuario(usuario)).thenReturn(Arrays.asList(compra));
 
@@ -119,6 +124,7 @@ class CompraServiceTest {
     }
 
     @Test
+    @DisplayName("Encontrar las compras hechas durante un período de tiempo")
     void findByFechaCompraEntreFechas() {
 
         Instant startDate = Instant.now().plusSeconds(10000);
@@ -136,6 +142,7 @@ class CompraServiceTest {
     }
 
     @Test
+    @DisplayName("Comprobar que se hace una compra")
     void hazCompra() {
         when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuario));
         when(juegoRepository.findById(1L)).thenReturn(Optional.of(juego));
@@ -151,6 +158,7 @@ class CompraServiceTest {
     }
 
     @Test
+    @DisplayName("Comprobar que se cancela una compra")
     void cancelaCompra() {
 
         when(compraRepository.findById(1L)).thenReturn(Optional.of(compra));
