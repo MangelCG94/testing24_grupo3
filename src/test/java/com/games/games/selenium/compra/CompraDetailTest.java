@@ -23,8 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class CompraDetailTest {
@@ -55,9 +54,9 @@ public class CompraDetailTest {
     @Test
     @DisplayName("Ver que una compra existe y los detalles de la misma")
     void compraExisteConTodosLosDetalles() {
-        Instant fechaCompra = Instant.now();
+//        Instant fechaCompra = Instant.now();
 
-        Instant fechaCreacion = Instant.ofEpochSecond(600);
+//        Instant fechaCreacion = Instant.ofEpochSecond(600);
 
         Usuario usuario = usuarioRepository.save(Usuario.builder()
                 .nombreUsuario("Javi82")
@@ -66,7 +65,7 @@ public class CompraDetailTest {
                 .direccion("Acacias 38")
                 .CP(28036)
                 .DNI("47282382L")
-                .fechaCreacion(fechaCreacion)
+                // .fechaCreacion(fechaCreacion)
                 .build());
 
         Juego juego = juegoRepository.save(Juego.builder()
@@ -77,11 +76,18 @@ public class CompraDetailTest {
                 .fechaLanzamiento((LocalDate.now()))
                 .build());
 
-        Compra compra = compraRepository.save(Compra.builder()
-                .fechaCompra(fechaCompra)
-                .usuario(usuario)
-                .juego(juego)
-                .build());
+        Compra compra = new Compra();
+        compra.setJuego(juego);
+        compra.setUsuario(usuario);
+        compraRepository.save(compra);
+//        compra = compraRepository.findById(compra.getId()).orElseThrow();
+        assertNotNull(compra.getId());
+        assertNotNull(compra.getFechaCompra());
+//        Compra compra = compraRepository.save(Compra.builder()
+////                .fechaCompra(fechaCompra)
+//                .usuario(usuario)
+//                .juego(juego)
+//                .build());
 
         driver.get("http://localhost:8080/compras/" + compra.getId());
 
@@ -89,31 +95,42 @@ public class CompraDetailTest {
         assertEquals("Detalle de compra " + compra.getId(), h1.getText());
 
         // Obtener la fecha de compra desde la página y eliminar texto adicional
-        String fechaCompraStr = driver.findElement(By.id("compra-fecha"))
-                .getText()
-                .replace("Fecha de compra: ", "")
-                .trim();
+        String fechaCompra = driver.findElement(By.id("compra-fecha")).getText();
 
-        // Formatear con el formato ISO_DATE_TIME
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 
-        // Parsear la fecha desde la página
-        ZonedDateTime fechaCompraZoned = ZonedDateTime.parse(fechaCompraStr, formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+                .withZone(ZoneId.systemDefault());
+        assertEquals(formatter.format(compra.getFechaCompra()), fechaCompra);
 
-        // Convertir la fecha a la zona horaria local (Europe/Madrid)
-        ZonedDateTime fechaCompraLocalZoned = fechaCompraZoned.withZoneSameInstant(ZoneId.of("Europe/Madrid"))
-                .withMinute(0)
-                .withSecond(0)
-                .withNano(0);
 
-        // Convertir la fecha de compra a ZonedDateTime y redondear a la hora en la zona horaria local
-        ZonedDateTime fechaCompraRedondeada = ZonedDateTime.ofInstant(fechaCompra, ZoneId.of("Europe/Madrid"))
-                .withMinute(0)
-                .withSecond(0)
-                .withNano(0);
+        // 2024-11-25T09:25:32.757240Z
 
-        // Comparar ambas fechas redondeadas (hasta la hora)
-        assertEquals(fechaCompraLocalZoned, fechaCompraRedondeada, "Las fechas deberían coincidir hasta la hora");
+//
+//        String fechaCompraStr = driver.findElement(By.id("compra-fecha"))
+//                .getText()
+//                .replace("Fecha de compra: ", "")
+//                .trim();
+//
+//        // Formatear con el formato ISO_DATE_TIME
+//        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+//
+//        // Parsear la fecha desde la página
+//        ZonedDateTime fechaCompraZoned = ZonedDateTime.parse(fechaCompraStr, formatter);
+//
+//        // Convertir la fecha a la zona horaria local (Europe/Madrid)
+//        ZonedDateTime fechaCompraLocalZoned = fechaCompraZoned.withZoneSameInstant(ZoneId.of("Europe/Madrid"))
+//                .withMinute(0)
+//                .withSecond(0)
+//                .withNano(0);
+//
+//        // Convertir la fecha de compra a ZonedDateTime y redondear a la hora en la zona horaria local
+//        ZonedDateTime fechaCompraRedondeada = ZonedDateTime.ofInstant(fechaCompra, ZoneId.of("Europe/Madrid"))
+//                .withMinute(0)
+//                .withSecond(0)
+//                .withNano(0);
+//
+//        // Comparar ambas fechas redondeadas (hasta la hora)
+//        assertEquals(fechaCompraLocalZoned, fechaCompraRedondeada, "Las fechas deberían coincidir hasta la hora");
 
         WebElement usuarioLink = driver.findElement(By.id("usuarioLink"));
         assertEquals("http://localhost:8080/usuarios/" + usuario.getId(), usuarioLink.getAttribute("href"));
