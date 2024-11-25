@@ -4,6 +4,7 @@ import com.games.games.models.Usuario;
 import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -39,6 +40,7 @@ public class UsuarioDetailTest {
 
 
     @Test
+    @DisplayName("Ver que un usuario existe y los detalles del mismo")
     void usuarioExisteConTodosLosDetalles() {
         // Crear y guardar usuario con la fecha actual
         Instant fechaActual = Instant.now();
@@ -93,6 +95,7 @@ public class UsuarioDetailTest {
     }
 
     @Test
+    @DisplayName("Comprobar que funcionan los botones de la aplicación")
     void comprobarBotones(){
         Usuario usuario = usuarioRepository.save(Usuario.builder()
                 .nombreUsuario("Javi82")
@@ -150,8 +153,8 @@ public class UsuarioDetailTest {
     }
 
     @Test
+    @DisplayName("Ver que un usuario no existe")
     void comprobarUsuarioNoExiste(){
-
         driver.get("http://localhost:8080/usuarios/999");
 
         assertEquals("Usuario no encontrado", driver.findElement(By.tagName("h1")).getText());
