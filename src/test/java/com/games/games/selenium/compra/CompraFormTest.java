@@ -8,6 +8,7 @@ import com.games.games.repositories.JuegoRepository;
 import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -66,6 +67,7 @@ public class CompraFormTest {
     }
 
     @Test
+    @DisplayName("Comprobar que al crear una compra los campos están vacíos")
     void comprobarInputsVacios_Creacion() {
 
 
@@ -93,6 +95,7 @@ public class CompraFormTest {
 
     }
     @Test
+    @DisplayName("Comprobar que al crear una compra los campos están llenos")
     void verQueEnCampoCreadoHayCamposLlenos() {
 
         Usuario usuario = usuarioRepository.save(Usuario.builder()
