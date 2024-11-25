@@ -4,6 +4,7 @@ import com.games.games.models.Usuario;
 import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -37,6 +38,7 @@ public class UsuarioFormTest {
     }
 
     @Test
+    @DisplayName("Comprobar que al crear un usuario los campos están vacíos")
     void verInputsVacios_enCreacion() {
 
         usuarioRepository.saveAll(List.of(
@@ -70,6 +72,7 @@ public class UsuarioFormTest {
     }
 
     @Test
+    @DisplayName("Comprobar que al crear un usuario los campos están llenos")
     void verQueEnCampoCreadoHayCamposLlenos(){
         Usuario usuario = Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan López").direccion("Gran Vía, 7").CP(28100).DNI("12345678D").build();
 
