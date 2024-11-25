@@ -15,6 +15,7 @@ public class Valoracion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Integer fechaValoracion;
+    private String nombre;
     @ManyToOne
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
@@ -22,3 +23,4 @@ public class Valoracion {
     @JoinColumn(name = "id_juego")
     private Juego juego;
 }
+
