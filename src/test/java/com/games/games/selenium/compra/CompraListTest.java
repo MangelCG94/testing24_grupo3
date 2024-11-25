@@ -8,6 +8,7 @@ import com.games.games.repositories.JuegoRepository;
 import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -52,6 +53,7 @@ public class CompraListTest {
     }
 
     @Test
+    @DisplayName("Comprobar el título de la página")
     void title(){
         String title = driver.getTitle();
         System.out.println(title);
@@ -59,12 +61,14 @@ public class CompraListTest {
     }
 
     @Test
+    @DisplayName("Ver los elementos h1 (los más grandes a la vista) de la página")
     void h1(){
         WebElement h1 = driver.findElement(By.tagName("h1"));
         assertEquals("Lista de compras", h1.getText());
     }
 
     @Test
+    @DisplayName("Comprobar que funciona el botón de crear compra")
     void botonCrearCompra(){
         WebElement crearBoton = driver.findElement(By.id("btnCrearCompra"));
         assertEquals("Crear nueva compra", crearBoton.getText());
@@ -75,6 +79,7 @@ public class CompraListTest {
     }
 
     @Test
+    @DisplayName("Comprobar que una tabla de compras está vacía")
     void tablaVacia(){
         WebElement mensajeNoCompras = driver.findElement(By.id("compraVacia"));
         assertEquals("No hay compras.", mensajeNoCompras.getText());
@@ -86,6 +91,7 @@ public class CompraListTest {
     }
 
     @Test
+    @DisplayName("Comprobar que una tabla tiene compras")
     void tablaConCompras(){
         Juego juego1 = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
         Juego juego2 = Juego.builder().nombre("Juego 2").descripcion("Descripción 2").videoUrl("Url 2").precio(200d).build();
@@ -114,6 +120,7 @@ public class CompraListTest {
     }
 
     @Test
+    @DisplayName("Comprobar las columnas y los datos de una tabla de compras")
     void tablaConCompras_Columnas(){
         Juego juego1 = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
         Juego juego2 = Juego.builder().nombre("Juego 2").descripcion("Descripción 2").videoUrl("Url 2").precio(200d).build();
@@ -148,6 +155,7 @@ public class CompraListTest {
     }
 
     @Test
+    @DisplayName("Comprobar las filas y los datos de una tabla de compras")
     void tablaConCompras_Filas(){
         Juego juego1 = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
         Juego juego2 = Juego.builder().nombre("Juego 2").descripcion("Descripción 2").videoUrl("Url 2").precio(200d).build();
@@ -184,6 +192,7 @@ public class CompraListTest {
         assertEquals("2001-09-09T01:46:40Z", datosPrimeraFila.get(1).getText());
     }
     @Test
+    @DisplayName("Comprobar las filas y sus datos con IDs dinámicos")
     void tablaConCompras_Filas_IDs(){
         Juego juego = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
         juegoRepository.save(juego);
@@ -211,6 +220,7 @@ public class CompraListTest {
     }
 
     @Test
+    @DisplayName("Comprobar que funciona el botón de ver compra")
     void tablaConCompras_accionBotonVer() {
         Juego juego = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
         juegoRepository.save(juego);
@@ -232,6 +242,7 @@ public class CompraListTest {
     }
 
     @Test
+    @DisplayName("Comprobar que funciona el botón de editar compra")
     void tablaConCompras_accionBotonEditar() {
         Juego juego = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
         juegoRepository.save(juego);
@@ -254,6 +265,7 @@ public class CompraListTest {
 
 
     @Test
+    @DisplayName("Comprobar que funciona el botón de borrar compra")
     void tablaConCompras_accionBotonBorrar() {
         Juego juego = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
         juegoRepository.save(juego);
