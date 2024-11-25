@@ -7,6 +7,7 @@ import com.games.games.models.Usuario;
 import com.games.games.repositories.CompraRepository;
 import com.games.games.repositories.JuegoRepository;
 import com.games.games.repositories.UsuarioRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,6 +42,7 @@ class CompraControllerUTest {
     private Model model;
 
     @Test
+    @DisplayName("Encontrar todas las compras")
     void encontrarTodasCompras() {
 
 
@@ -56,6 +58,7 @@ class CompraControllerUTest {
     }
 
     @Test
+    @DisplayName("Encontrar una compra a partir de un ID encontrado")
     void encontrarPorIdCuandoExisteCompra() {
 
         Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Instant.now()).build()).juego(Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build()).build();
@@ -70,6 +73,7 @@ class CompraControllerUTest {
     }
 
     @Test
+    @DisplayName("Comprobar que cuando no se encuentra un ID la compra no existe")
     void encontrarPorIdCuandoNoExisteCompra() {
 
         when(compraRepository.findById(1L)).thenReturn(Optional.empty());
@@ -82,6 +86,7 @@ class CompraControllerUTest {
     }
 
     @Test
+    @DisplayName("Otra forma de comprobar que cuando no se encuentra un ID la compra no existe")
     void encontrarPorId2_SiNoExisteCompra() {
 
         when(compraRepository.findById(1L)).thenReturn(Optional.empty());
@@ -96,6 +101,7 @@ class CompraControllerUTest {
 
 
     @Test
+    @DisplayName("Formulario para crear una compra")
     void formularioParaCrearCompra() {
 
         String view = compraController.formularioParaCrearCompra(model);
@@ -105,6 +111,7 @@ class CompraControllerUTest {
     }
 
     @Test
+    @DisplayName("Formulario para actualizar una compra si ésta existe")
     void formularioParaActualizarCompraSiExiste() {
 
         Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Instant.now()).build()).juego(Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build()).build();
@@ -118,6 +125,7 @@ class CompraControllerUTest {
     }
 
     @Test
+    @DisplayName("Formulario para actualizar una compra si ésta no existe")
     void formularioParaActualizarCompraSiNoExiste() {
 
         when(compraRepository.findById(1L)).thenReturn(Optional.empty());
@@ -136,6 +144,7 @@ class CompraControllerUTest {
 
 
     @Test
+    @DisplayName("Guardar una compra nueva")
     void guardarCompraNueva() {
 
         Compra compra = new Compra();
@@ -147,6 +156,7 @@ class CompraControllerUTest {
     }
 
     @Test
+    @DisplayName("Actualizar una compra y guardarla")
     void guardarCompraExistente() {
 
         Compra compra = Compra.builder().fechaCompra(Instant.ofEpochSecond(1000000000L)).juego(Juego.builder().id(1L).build()).usuario(Usuario.builder().id(1L).build()).build();
@@ -170,6 +180,7 @@ class CompraControllerUTest {
     }
 
     @Test
+    @DisplayName("Borrar una compra por ID")
     void borrarPorid() {
 
         String view = compraController.borrarPorId(1L);
@@ -179,6 +190,7 @@ class CompraControllerUTest {
     }
 
     @Test
+    @DisplayName("Ver si hay un error al borrar")
     void borrarPorId_ErrorCapturado() {
 
         doThrow(new RuntimeException("Error al borrar"))
