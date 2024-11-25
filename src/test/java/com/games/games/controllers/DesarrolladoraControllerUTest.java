@@ -46,7 +46,7 @@ class DesarrolladoraControllerUTest {
 
     @Test
     void encontrarPorIdCuandoExisteDesarrolladora(){
-        Desarrolladora nintendo = Desarrolladora.builder().id(1L).nombreCom("Nintendo").pais("Japón").imagenLogo("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Nintendo.svg/900px-Nintendo.svg.png").anyoFundacion(1900).build();
+        Desarrolladora nintendo = Desarrolladora.builder().id(1L).nombreCom("Nitendo").pais("Japón").imagenLogo("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Nintendo.svg/900px-Nintendo.svg.png").anyoFundacion(1900).build();
         when(desarrolladoraRepository.findById(1L)).thenReturn(Optional.of(nintendo));
 
         String view = desarrolladoraController.findById((1L),model);
