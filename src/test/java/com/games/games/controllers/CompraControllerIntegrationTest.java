@@ -8,6 +8,7 @@ import com.games.games.repositories.CompraRepository;
 import com.games.games.repositories.JuegoRepository;
 import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -55,6 +56,7 @@ public class CompraControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Encontrar todas las compras")
     void encontrarTodasCompras() throws Exception {
 
         Juego juego1 = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
@@ -86,6 +88,7 @@ public class CompraControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Encontrar una compra por ID si es que éste existe")
     void encontrarPorIdCuandoExisteCompra() throws Exception {
 
         Juego juego = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
@@ -111,6 +114,7 @@ public class CompraControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Comprobar que al no haber un ID no existe compra")
     void encontrarPorIdCuandoNoExisteCompra() throws Exception {
 
 
@@ -123,6 +127,7 @@ public class CompraControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Crear una compra")
     void formularioParaCrearCompra() throws Exception {
 
         Juego juego1 = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
@@ -150,6 +155,7 @@ public class CompraControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Editar compra si es que su ID existe")
     void formularioParaEditarCompraSiExiste() throws Exception {
 
         Usuario usuario1 = Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Instant.now()).build();
@@ -168,6 +174,7 @@ public class CompraControllerIntegrationTest {
 
 
     @Test
+    @DisplayName("Guardar una compra nueva")
     void guardarCompra_Nueva() throws Exception {
 
         Juego juego1 = Juego.builder().id(1L).nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
@@ -195,6 +202,7 @@ public class CompraControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Modificar una compra y guardarla")
     void guardarCompra_Existente() throws Exception {
 
         Juego juego1 = Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
@@ -231,6 +239,7 @@ public class CompraControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Borrar una compra por ID")
     void borrarCompraPorId() throws Exception{
 
         mockMvc.perform(get("/compras/delete/{id}", 1L))
