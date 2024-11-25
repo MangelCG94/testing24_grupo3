@@ -5,6 +5,7 @@ import com.games.games.models.Compra;
 import com.games.games.models.Juego;
 import com.games.games.models.Usuario;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ class CompraRepositoryTest {
 
 
     @Test
+    @DisplayName("Encontrar una compra por fecha de compra")
     void findByFechaCompra() {
 
         Instant fechaActual = Instant.now(); // Almacena el valor fijo de fecha
@@ -58,6 +60,7 @@ class CompraRepositoryTest {
     }
 
     @Test
+    @DisplayName("Encontrar una compra por usuarios")
     void findByUsuarios() {
 
         Usuario usuario1 = Usuario.builder().build();
@@ -78,6 +81,7 @@ class CompraRepositoryTest {
     }
 
     @Test
+    @DisplayName("Encontrar una compra por juego")
     void findByJuego() {
 
         Juego juego1 = Juego.builder().build();
@@ -98,6 +102,7 @@ class CompraRepositoryTest {
     }
 
     @Test
+    @DisplayName("Encontrar una compra durante un período de tiempo")
     void finByFechaCompraEntre() {
         Instant fechaCompra1 = Instant.now().minusSeconds(10000); // compra1 ocurre hace 10000 segundos
         Instant fechaCompra2 = Instant.now().minusSeconds(5000);  // compra2 ocurre hace 5000 segundos
