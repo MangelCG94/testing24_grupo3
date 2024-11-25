@@ -4,6 +4,7 @@ import com.games.games.models.Usuario;
 import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -41,6 +42,7 @@ public class UsuarioListTest {
     }
 
     @Test
+    @DisplayName("Comprobar el título de la página")
     void title(){
         String title = driver.getTitle();
         System.out.println(title);
@@ -48,12 +50,14 @@ public class UsuarioListTest {
     }
 
     @Test
+    @DisplayName("Comprobar los elementos h1 del HTML")
     void h1(){
         WebElement h1 = driver.findElement(By.tagName("h1"));
         assertEquals("Lista de usuarios", h1.getText());
     }
 
     @Test
+    @DisplayName("Comprobar que funciona el botón de crear usuario")
     void botonCrearUsuario(){
         WebElement crearBoton = driver.findElement(By.id("btnCrearUsuario"));
         assertEquals("Crear nuevo usuario", crearBoton.getText());
@@ -64,6 +68,7 @@ public class UsuarioListTest {
     }
 
     @Test
+    @DisplayName("Comprobar que una tabla de usuarios está vacía")
     void tablaVacia(){
         WebElement mensajeNoProductos = driver.findElement(By.id("usuariosVacio"));
         assertEquals("No hay usuarios.", mensajeNoProductos.getText());
@@ -75,6 +80,7 @@ public class UsuarioListTest {
     }
 
     @Test
+    @DisplayName("Comprobar que una tabla tiene usuarios")
     void tablaConUsuarios(){
         usuarioRepository.saveAll(List.of(
                 Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build(),
@@ -92,6 +98,7 @@ public class UsuarioListTest {
 
 
     @Test
+    @DisplayName("Comprobar que una tabla de usuarios tiene columnas y sus datos")
     void tablaConUsuarios_Columnas(){
         usuarioRepository.saveAll(List.of(
                 Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build(),
@@ -118,6 +125,7 @@ public class UsuarioListTest {
     }
 
     @Test
+    @DisplayName("Comprobar una tabla tiene usuarios y sus filas")
     void tablaConUsuarios_Filas(){
         usuarioRepository.saveAll(List.of(
                 Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build(),
@@ -144,6 +152,7 @@ public class UsuarioListTest {
     }
 
     @Test
+    @DisplayName("Comprobar una tabla tiene usuarios y sus filas, a partir de los IDs dinámicos del HTML")
     void tablaConUsuarios_Filas_Ids(){
         Usuario usuario = usuarioRepository.save(Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build());
 
@@ -168,6 +177,7 @@ public class UsuarioListTest {
     }
 
     @Test
+    @DisplayName("Comprobar que funciona el botón de ver usuario")
     void tablaConUsuarios_accionBotonVer() {
         Usuario usuario = usuarioRepository.save(Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build());
 
@@ -182,6 +192,7 @@ public class UsuarioListTest {
     }
 
     @Test
+    @DisplayName("Comprobar que funciona el botón de editar usuario")
     void tablaConUsuarios_accionBotonEditar() {
         Usuario usuario = usuarioRepository.save(Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build());
 
@@ -195,6 +206,7 @@ public class UsuarioListTest {
         assertEquals("http://localhost:8080/usuarios/update/" + usuario.getId(), driver.getCurrentUrl());
     }
     @Test
+    @DisplayName("Comprobar que funciona el botón de borrar usuario")
     void tablaConUsuarios_accionBotonBorrar() {
         Usuario usuario = usuarioRepository.save(Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678O").fechaCreacion(Instant.now()).build());
 
