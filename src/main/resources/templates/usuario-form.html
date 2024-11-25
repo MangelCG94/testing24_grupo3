@@ -40,7 +40,11 @@
         </div>
         <div class="mb-3">
             <label for="dni" class="form-label">DNI</label>
-            <input type="text" id="DNI" th:field="*{DNI}" class="form-control"/>
+            <input type="text" id="dni" th:field="*{DNI}" class="form-control"/>
+        </div>
+        <div class="mb-3">
+            <label for="fechaCreacion" class="form-label">fechaCreacion</label>
+            <input type="text" id="fechaCreacion" th:field="*{fechaCreacion}" class="form-control" readonly/>
         </div>
 
         <button type="submit" class="btn btn-primary me-2">

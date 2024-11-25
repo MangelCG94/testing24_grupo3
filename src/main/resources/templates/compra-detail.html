@@ -18,7 +18,7 @@
     <div th:if="${compra}">
         <div class="card" style="width: 18rem;">
             <div class="card-body">
-                <h5 id="compra-fecha" class="card-title" th:text="${compra.fechaCompra}"></h5>
+                <h5 id="compra-fecha" class="card-title" th:text="${#dates.format(compra.fechaCompra, 'dd/MM/yyyy HH:mm:ss')}"></h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary">
                     ID: <span id="compra-id" th:text="${compra.id}"></span>
                     <br>
