@@ -48,6 +48,7 @@ public class UsuarioControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Encontrar todos los usuarios")
     void encontrarTodos() throws Exception {
 
         usuarioRepository.saveAll(List.of(
@@ -66,6 +67,7 @@ public class UsuarioControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Encontrar un usuario a partir de un ID encontrado")
     void encontrarPorIdCuandoExisteUsuario() throws Exception {
 
         Usuario usuario = usuarioRepository.save(Usuario.builder().nombreUsuario("Juan").password("1234").build());
@@ -81,6 +83,7 @@ public class UsuarioControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Comprobar que al no encontrarse un ID no existe usuario")
     void encontrarPorIdCuandoNoExisteUsuario() throws Exception {
 
         mockMvc.perform(get("/usuarios2/999"))
@@ -91,6 +94,7 @@ public class UsuarioControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Formulario para crear un usuario")
     void formularioParaCrearUsuario() throws Exception {
 
         usuarioRepository.saveAll(List.of(
@@ -106,6 +110,7 @@ public class UsuarioControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Editar un usuario si existe")
     void formularioParaEditarUsuarioSiExiste() throws Exception {
 
         Usuario usuario = Usuario.builder()
@@ -121,6 +126,7 @@ public class UsuarioControllerIntegrationTest {
 
 
     @Test
+    @DisplayName("Guardar un nuevo usuario")
     void guardarUsuario_Nuevo() throws Exception {
 
 //        Usuario usuario = Usuario.builder().nombreUsuario("Juan").build();
@@ -143,6 +149,7 @@ public class UsuarioControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Editar un usuario y guardarlo")
     void guardarUsuario_Existente() throws Exception {
 
         Usuario usuario = Usuario.builder().nombreUsuario("Juan").build();
@@ -166,6 +173,7 @@ public class UsuarioControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Borrar un usuario")
     void borrarUsuarioPorId() throws Exception {
 
         mockMvc.perform(get("/usuarios/delete/{id}", 1L))
