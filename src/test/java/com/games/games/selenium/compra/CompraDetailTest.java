@@ -8,6 +8,7 @@ import com.games.games.repositories.JuegoRepository;
 import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -52,6 +53,7 @@ public class CompraDetailTest {
     }
 
     @Test
+    @DisplayName("Ver que una compra existe y los detalles de la misma")
     void compraExisteConTodosLosDetalles() {
         Instant fechaCompra = Instant.now();
 
@@ -123,6 +125,7 @@ public class CompraDetailTest {
     }
 
     @Test
+    @DisplayName("Comprobar que un usuario no existe")
     void comprobarUsuarioNulo(){
 
         Juego juego = juegoRepository.save(Juego.builder()
@@ -144,6 +147,7 @@ public class CompraDetailTest {
         assertEquals("Sin usuario", usuarioVacio.getText());
     }
     @Test
+    @DisplayName("Comprobar que funcionan los botones de la aplicación")
     void comprobarBotones(){
         Usuario usuario = usuarioRepository.save(Usuario.builder()
                 .nombreUsuario("Javi82")
@@ -215,6 +219,7 @@ public class CompraDetailTest {
     }
 
     @Test
+    @DisplayName("Comprobar que una compra no existe")
     void comprobarCompraNoExiste(){
 
         driver.get("http://localhost:8080/compras/999");
