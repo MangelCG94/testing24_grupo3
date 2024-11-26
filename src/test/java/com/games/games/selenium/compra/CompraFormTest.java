@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class CompraFormTest {
     WebDriver driver;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         compraRepository.deleteAllInBatch();
         usuarioRepository.deleteAllInBatch();
         juegoRepository.deleteAllInBatch();
@@ -62,7 +63,7 @@ public class CompraFormTest {
     }
 
     @AfterEach
-    void tearDown(){
+    void tearDown() {
         driver.quit();
     }
 
@@ -94,6 +95,7 @@ public class CompraFormTest {
         assertEquals("Age of Empires", juegoSelect.getOptions().get(2).getText());
 
     }
+
     @Test
     @DisplayName("Comprobar que al crear una compra los campos están llenos")
     void verQueEnCampoCreadoHayCamposLlenos() {
@@ -132,16 +134,117 @@ public class CompraFormTest {
 
         Select usuarioSelect = new Select(driver.findElement(By.id("usuario")));
         assertFalse(usuarioSelect.isMultiple());
-        assertEquals(4,usuarioSelect.getOptions().size());
+        assertEquals(4, usuarioSelect.getOptions().size());
         assertEquals(String.valueOf(usuario.getId()), usuarioSelect.getFirstSelectedOption().getAttribute("value"));
         assertEquals(usuario.getNombreUsuario(), usuarioSelect.getFirstSelectedOption().getText());
 
         Select juegoSelect = new Select(driver.findElement(By.id("juego")));
         assertFalse(juegoSelect.isMultiple());
-        assertEquals(4,juegoSelect.getOptions().size());
+        assertEquals(4, juegoSelect.getOptions().size());
         assertEquals(String.valueOf(juego.getId()), juegoSelect.getFirstSelectedOption().getAttribute("value"));
         assertEquals(juego.getNombre(), juegoSelect.getFirstSelectedOption().getText());
 
+
+    }
+
+    @Test
+    @DisplayName("Entrar en el formulario, crear una nueva compra y enviar")
+    void crearNuevaCompraYEnviar() {
+
+        usuarioRepository.save(Usuario.builder()
+                .nombreUsuario("Javi82")
+                .password("javito")
+                .nombre("Javier García")
+                .direccion("Acacias 38")
+                .CP(28036)
+                .DNI("47282382L")
+                .fechaCreacion(Instant.now())
+                .build());
+
+        Juego juego = juegoRepository.save(Juego.builder()
+                .nombre("The Legend of Zelda")
+                .descripcion("Juego RPG")
+                .precio(29.95)
+                .videoUrl("URL Zelda")
+                .fechaLanzamiento(LocalDate.now())
+                .build());
+
+        driver.get("http://localhost:8080/compras/new");
+
+        var inputFechaCompra = driver.findElement(By.id("fechaCompra"));
+        inputFechaCompra.sendKeys(Instant.now().toString());
+
+        Select usuarioSelect = new Select(driver.findElement(By.id("usuario")));
+        usuarioSelect.selectByVisibleText("Javi82");
+
+        Select juegoSelect = new Select(driver.findElement(By.id("juego")));
+        juegoSelect.selectByVisibleText("The Legend of Zelda");
+
+        driver.findElement(By.id("btnSend")).click();
+
+        assertEquals("http://localhost:8080/compras", driver.getCurrentUrl());
+
+        List<WebElement> tableRows = driver.findElements(By.cssSelector("#compraList tbody tr"));
+        assertEquals(1, tableRows.size()); // COMPROBAR QUE SE HA CREADO UNA COMPRA
+    }
+
+    @Test
+    @DisplayName("Entrar en el formulario, editar una compra existente y enviar")
+    void editarCompraYEnviar() {
+        var usuarios = usuarioRepository.saveAll(List.of(
+                Usuario.builder().nombreUsuario("javi82").build(), // 0
+                Usuario.builder().nombreUsuario("pepe78").build() // 1
+        ));
+        Usuario usuario2 = usuarios.getLast();
+
+        var juegos = juegoRepository.saveAll(List.of(
+                Juego.builder().nombre("The Legend of Zelda").build(), // 0
+                Juego.builder().nombre("Age of Empires").build() // 1
+        ));
+        Juego juego2 = juegos.getLast();
+
+        Compra compra = compraRepository.save(Compra.builder()
+            .fechaCompra(Instant.now())
+            .usuario(usuario2)
+            .juego(juego2)
+            .build());
+
+        driver.get("http://localhost:8080/compras/update/" + compra.getId());
+
+        var inputFechaCompra = driver.findElement(By.id("fechaCompra"));
+        inputFechaCompra.sendKeys(Instant.ofEpochSecond(1000).toString());
+
+        Select usuarioSelect = new Select(driver.findElement(By.id("usuario")));
+        usuarioSelect.selectByVisibleText("javi82");
+
+        Select juegoSelect = new Select(driver.findElement(By.id("juego")));
+        juegoSelect.selectByVisibleText("The Legend of Zelda");
+
+        driver.findElement(By.id("btnSend")).click();
+
+        assertEquals("http://localhost:8080/compras", driver.getCurrentUrl());
+
+        var compraSaved = compraRepository.findAll().getFirst();
+        assertEquals("javi82", compraSaved.getUsuario().getNombreUsuario());
+        assertEquals("The Legend of Zelda", compraSaved.getJuego().getNombre());
+
+    }
+
+    @Test
+    @DisplayName("Comprobar que read only no deja editar")
+    void checkIdReadOnly(){
+        Compra compra = compraRepository.save(Compra.builder()
+                .fechaCompra(Instant.now())
+                .build());
+
+        compraRepository.save(compra);
+        driver.get("http://localhost:8080/compras/update/" + compra.getId());
+
+        var inputId = driver.findElement(By.id("id"));
+        assertEquals(String.valueOf(compra.getId()), inputId.getAttribute("value"));
+
+        inputId.sendKeys("3");
+        assertEquals(String.valueOf(compra.getId()), inputId.getAttribute("value"));
 
     }
 
