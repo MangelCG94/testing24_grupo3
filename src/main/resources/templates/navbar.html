@@ -4,7 +4,7 @@
 <body>
 <nav th:fragment="nav1" class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a id="homeLink" class="navbar-brand" href="/compras">
             <img src="https://placehold.co/200x200" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
             App
         </a>
@@ -15,37 +15,37 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <!-- Enlaces de navegación -->
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/usuarios}">
+                    <a id="usuariosLink" class="nav-link" th:href="@{/usuarios}">
                         <i class="fa-solid fa-user"></i>
                         Usuarios
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/juegos}">
+                    <a id="juegosLink" class="nav-link" th:href="@{/juegos}">
                         <i class="fa-solid fa-gamepad"></i>
                         Juegos
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/desarrolladoras}">
+                    <a id="desarrolladorasLink" class="nav-link" th:href="@{/desarrolladoras}">
                         <i class="fa-solid fa-industry"></i>
                         Desarrolladoras
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/valoraciones}">
+                    <a id="valoracionesLink" class="nav-link" th:href="@{/valoraciones}">
                         <i class="fa-solid fa-heart"></i>
                         Valoraciones
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" disable aria-disabled="true" th:href="@{/compras}">
+                    <a id="comprasLink" class="nav-link" disable aria-disabled="true" th:href="@{/compras}">
                         <i class="fa-solid fa-shopping-cart"></i>
                         Compras
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" disable aria-disabled="true" th:href="@{/juegosUsuario}">
+                    <a id="juegosUsuarioLink" class="nav-link" disable aria-disabled="true" th:href="@{/juegosUsuario}">
                         <i class="fa-solid fa-gamepad"></i>
                         Juegos de usuario
                     </a>
