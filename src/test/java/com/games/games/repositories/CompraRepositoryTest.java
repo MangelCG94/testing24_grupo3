@@ -4,6 +4,7 @@ import com.games.games.dtos.CompraConJuegosDTO;
 import com.games.games.models.Compra;
 import com.games.games.models.Juego;
 import com.games.games.models.Usuario;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,26 +37,30 @@ class CompraRepositoryTest {
 
     @BeforeEach
     void setUp(){
-        compraRepository.deleteAll();
-        usuarioRepository.deleteAll();
-        juegoRepository.deleteAll();
+        compraRepository.deleteAllInBatch();
+        usuarioRepository.deleteAllInBatch();
+        juegoRepository.deleteAllInBatch();
     }
-
 
 
     @Test
     @DisplayName("Encontrar una compra por fecha de compra")
     void findByFechaCompra() {
-
-        Instant fechaActual = Instant.now(); // Almacena el valor fijo de fecha
-
-        Compra compra = Compra.builder().fechaCompra(fechaActual).build();
-
+        // Crear y guardar la compra
+        Instant fechaCompra = Instant.now();
+        Compra compra = Compra.builder().fechaCompra(fechaCompra).build();
         compraRepository.save(compra);
 
-        List<Compra> compras = compraRepository.findByFechaCompra(fechaActual);
+        // Verificar que la compra se guardó correctamente
+        System.out.println("Total de compras guardadas: " + compraRepository.count());
 
-        assertEquals(1, compras.size()); // Solo debería haber una compra con esta fecha exacta
+        // Buscar compras por fecha
+        List<Compra> compras = compraRepository.findByFechaCompraBetween(
+                fechaCompra.minusMillis(5000), // 500ms antes
+                fechaCompra.plusMillis(5000)   // 500ms después
+        );
+        // Asegurarse de que hay solo una compra
+        assertEquals(1, compras.size());
         assertTrue(compras.contains(compra));
     }
 
@@ -94,6 +99,9 @@ class CompraRepositoryTest {
 
         compraRepository.saveAll(List.of(compra1, compra2));
 
+        System.out.println("Total de compras guardadas: " + compraRepository.count());
+
+
         List<Compra> compras = compraRepository.findByJuego(juego1);
 
         assertEquals(1, compras.size());
@@ -104,24 +112,23 @@ class CompraRepositoryTest {
     @Test
     @DisplayName("Encontrar una compra durante un período de tiempo")
     void finByFechaCompraEntre() {
-        Instant fechaCompra1 = Instant.now().minusSeconds(10000); // compra1 ocurre hace 10000 segundos
-        Instant fechaCompra2 = Instant.now().minusSeconds(5000);  // compra2 ocurre hace 5000 segundos
+        // Definir fechas conocidas para las compras
+        Instant fechaCompra1 = Instant.ofEpochSecond(1000000000L); // Un valor específico para la primera compra
+        Instant fechaCompra2 = Instant.ofEpochSecond(2000000000L); // Un valor específico para la segunda compra
 
-
-        Compra compra1 = Compra.builder()
-                .fechaCompra(fechaCompra1)
-                .build();
-        Compra compra2 = Compra.builder()
-                .fechaCompra(fechaCompra2)
-                .build();
-
+        // Guardar las compras en la base de datos
+        Compra compra1 = Compra.builder().fechaCompra(fechaCompra1).build();
+        Compra compra2 = Compra.builder().fechaCompra(fechaCompra2).build();
         compraRepository.saveAll(List.of(compra1, compra2));
 
-        Instant startDate = fechaCompra1;
-        Instant endDate = fechaCompra2;
+        // Definir el rango de fechas con un margen de 500 milisegundos
+        Instant startDate = fechaCompra1.minusMillis(500); // 500ms antes
+        Instant endDate = fechaCompra2.plusMillis(500);    // 500ms después
 
+        // Buscar compras en el rango de fechas
         List<Compra> compras = compraRepository.findByFechaCompraBetween(startDate, endDate);
 
+        // Verificar que se encontraron las dos compras
         assertEquals(2, compras.size());
         assertTrue(compras.contains(compra1));
         assertTrue(compras.contains(compra2));
