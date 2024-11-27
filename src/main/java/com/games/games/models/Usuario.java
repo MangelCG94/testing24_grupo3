@@ -31,5 +31,7 @@ public class Usuario {
     private Integer CP;
     private String DNI;
     @CreatedDate
+    @Column(name = "fecha_creacion", updatable = false)
+
     private Instant fechaCreacion;
 }

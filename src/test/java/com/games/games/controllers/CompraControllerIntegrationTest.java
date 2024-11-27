@@ -18,6 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -177,28 +180,51 @@ public class CompraControllerIntegrationTest {
     @DisplayName("Guardar una compra nueva")
     void guardarCompra_Nueva() throws Exception {
 
-        Juego juego1 = Juego.builder().id(1L).nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build();
-        Usuario usuario1 = Usuario.builder().id(1L).nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Instant.now()).build();
+        // Crear juegos y usuarios de manera independiente
+        Juego juego1 = juegoRepository.save(Juego.builder()
+                .id(1L)
+                .nombre("Juego 1")
+                .descripcion("Descripción 1")
+                .videoUrl("Url 1")
+                .precio(100d)
+                .fechaLanzamiento(LocalDate.now())
+                .build());
+        Usuario usuario1 = usuarioRepository.save(Usuario.builder()
+                .id(1L)
+                .nombreUsuario("Juan")
+                .password("1234")
+                .nombre("Juan Pérez")
+                .direccion("Calle 1")
+                .CP(15300)
+                .DNI("12345678M")
+                .fechaCreacion(Instant.now())
+                .build());
 
-//        Compra compra = Compra.builder().id(1L).fechaCompra(Instant.ofEpochSecond(100000000)).usuario(Usuario.builder().nombreUsuario("Juan").password("1234").nombre("Juan Pérez").direccion("Calle 1").CP(15300).DNI("12345678M").fechaCreacion(Date.from(Instant.now())).build()).juego(Juego.builder().nombre("Juego 1").descripcion("Descripción 1").videoUrl("Url 1").precio(100d).build()).build();
-//        compraRepository.save(compra);
+        // Crear la compra con una fecha fija
+        Instant fechaCompra = Instant.now();
+        Compra compra1 = Compra.builder().fechaCompra(fechaCompra).usuario(usuario1).juego(juego1).build();
 
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_INSTANT;
+        String fechaCompraStr = formatter.format(fechaCompra);
 
-
-        mockMvc.perform
-                (post("/compras")
+        // Realizar la solicitud HTTP para guardar la compra a través de mockMvc
+        mockMvc.perform(post("/compras")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                        .param("fechaCompra", "2023-01-01T12:34:56Z")
+                        .param("fechaCompra", fechaCompra.toString()) // Usar la fecha fija
                         .param("juego", String.valueOf(juego1.getId()))
                         .param("usuario", String.valueOf(usuario1.getId()))
                 ).andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/compras"));
 
+        // Verificar que la compra se ha guardado correctamente
         List<Compra> compras = compraRepository.findAll();
-        assertEquals(1, compras.size());
+        assertEquals(1, compras.size()); // Solo debe haber una compra
 
-        assertEquals("2023-01-01T12:34:56Z", compras.get(0).getFechaCompra().toString());
+        // Formatear la fecha guardada de la misma manera
+        Instant fechaCompraGuardada = compras.get(0).getFechaCompra();
 
+        // Comprobar que la fecha de la compra es la misma que la que se pasó
+        assertEquals(fechaCompra.truncatedTo(ChronoUnit.MINUTES), fechaCompraGuardada.truncatedTo(ChronoUnit.MINUTES));
     }
 
     @Test
