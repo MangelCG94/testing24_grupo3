@@ -31,8 +31,13 @@ public class DesarrolladoraController {
                 .map(desarrolladora -> {
                     model.addAttribute("desarrolladora", desarrolladora);
                     return "desarrolladora-detail";
-                }).orElseThrow(() ->
-                        new NoSuchElementException("Desarrolladora no encontrada"));
+                })
+                .orElseGet(() -> {
+                    model.addAttribute("mensaje", "Desarrolladora no encontrada");
+                    return "error";
+                });
+//                .orElseThrow(() ->
+//                        new NoSuchElementException("Desarrolladora no encontrada"));
     }
 
 
@@ -45,9 +50,11 @@ public class DesarrolladoraController {
 
     @GetMapping("desarrolladoras/update/{id}")
     public String formularioParaActualizar(@PathVariable Long id, Model model) {
-        desarrolladoraRepo.findById(id).ifPresent(desarrolladora -> model.addAttribute("desarrolladora", desarrolladora));
+        desarrolladoraRepo.findById(id).
+                ifPresent(desarrolladora -> model.addAttribute("desarrolladora", desarrolladora));
         return "desarrolladora-form";
     }
+
     @PostMapping("desarrolladoras")
     public String save(@ModelAttribute Desarrolladora desarrolladora) {
         if (desarrolladora.getId() == null || !desarrolladoraRepo.existsById(desarrolladora.getId())) {

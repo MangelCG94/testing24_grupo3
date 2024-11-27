@@ -62,9 +62,10 @@ class DesarrolladoraControllerUTest {
 
         String view = desarrolladoraController.findById(1L, model);
 
-        assertEquals("desarrolladora-detail", view);
+        assertEquals("error", view);
         verify(desarrolladoraRepository).findById(1L);
-        verify(model, never()).addAttribute(anyString(), any());
+        verify(model, never()).addAttribute(eq("usuario"), any());
+        verify(model).addAttribute("mensaje", "Desarrolladora no encontrada");
     }
 
     @Test
