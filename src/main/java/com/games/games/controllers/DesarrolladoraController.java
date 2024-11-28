@@ -80,4 +80,15 @@ public class DesarrolladoraController {
         }
         return "redirect:/desarrolladoras";
     }
+
+    @GetMapping("desarrolladoras/delete/all")
+    public String borrarTodo(){
+        try{
+            desarrolladoraRepo.deleteAll();
+        } catch (Exception e){
+            e.printStackTrace();
+            return"error";
+        }
+        return "redirect:/desarrolladoras";
+    }
 }

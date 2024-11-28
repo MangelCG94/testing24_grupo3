@@ -136,6 +136,14 @@ class DesarrolladoraControllerUTest {
     }
 
     @Test
+    void borrarTodo(){
+        String view = desarrolladoraController.borrarTodo();
+
+        assertEquals("redirect:/desarrolladoras", view);
+        verify(desarrolladoraRepository).deleteAll();
+    }
+
+    @Test
     void borrarPorId_ErrorCapturado(){
         doThrow(new RuntimeException("Error al borrar")).when(desarrolladoraRepository).deleteById(1L);
 

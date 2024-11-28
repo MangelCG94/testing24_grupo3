@@ -2,11 +2,8 @@ package com.games.games.controllers;
 
 import static org.junit.jupiter.api.Assertions.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.games.games.models.Compra;
 import com.games.games.models.Desarrolladora;
-import com.games.games.models.Usuario;
 import com.games.games.repositories.DesarrolladoraRepository;
-import com.games.games.repositories.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +38,9 @@ class DesarrolladoraControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setUp() {desarrolladoraRepository.deleteAll();}
+    void setUp() {
+        desarrolladoraRepository.deleteAll();
+    }
 
     @Test
     void encontrarTodos() throws Exception{
@@ -58,5 +57,27 @@ class DesarrolladoraControllerIntegrationTest {
                 .andExpect(view().name("desarrolladora-list"))
                 .andExpect(model().attributeExists("desarrolladoras"))
                 .andExpect(model().attribute("desarrolladoras", hasSize(3)));
+    }
+
+    @Test
+    void encontrarPorIdCuandoExisteDesarrolladora() throws Exception{
+        Desarrolladora desarrolladora = desarrolladoraRepository.save(Desarrolladora.builder().id(1L).nombreCom("Ubisoft").pais("Francia").imagenLogo("logo.png").anyoFundacion(1988).build());
+
+        System.out.println("Ecuentra todos las desarrolladoras: " + desarrolladoraRepository.count());
+        System.out.println("Encuentra desarrolladora guardada: " + desarrolladora.getId());
+
+        mockMvc.perform(get("/desarrolladoras" + desarrolladora.getId()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("desarrolladora-detail"))
+                .andExpect(model().attributeExists("desarrolladora"));
+    }
+
+    @Test
+    void encontrarPorIdCuandoNoExisteDesarrolladora() throws Exception{
+        mockMvc.perform(get("/desarrolladoras/999"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"))
+                .andExpect(model().attributeExists("mensaje"))
+                .andExpect(model().attributeExists("desarrolladora"));
     }
 }
