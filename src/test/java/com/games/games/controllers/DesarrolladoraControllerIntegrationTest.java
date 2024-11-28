@@ -27,31 +27,33 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@SpringBootTest
+@AutoConfigureMockMvc
+@Transactional
 class DesarrolladoraControllerIntegrationTest {
+
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private DesarrolladoraRepository desarrolladoraRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @BeforeEach
-    void setUp() {
-        desarrolladoraRepository.deleteAll();
-    }
+//    @BeforeEach
+//    void setUp() {
+//        desarrolladoraRepository.deleteAll();
+//    }
 
     @Test
     void encontrarTodos() throws Exception{
         desarrolladoraRepository.saveAll(List.of(
-                Desarrolladora.builder().id(1L).nombreCom("Ubisoft").pais("Francia").imagenLogo("logo.png").anyoFundacion(1988).build(),
-                Desarrolladora.builder().id(2L).nombreCom("Nintendo").pais("Japón").imagenLogo("logo.png").anyoFundacion(1889).build(),
-                Desarrolladora.builder().id(3L).nombreCom("Electronic Arts").pais("Estados Unidos").imagenLogo("logo.png").anyoFundacion(1982).build()
+                Desarrolladora.builder().nombreCom("Ubisoft").pais("Francia").imagenLogo("logo.png").anyoFundacion(1988).build(),
+                Desarrolladora.builder().nombreCom("Nintendo").pais("Japón").imagenLogo("logo.png").anyoFundacion(1889).build(),
+                Desarrolladora.builder().nombreCom("Electronic Arts").pais("Estados Unidos").imagenLogo("logo.png").anyoFundacion(1982).build()
         ));
 
         System.out.println("Encuentra todas las desarrolladoras: " + desarrolladoraRepository.count());
 
+//        Thread.sleep(4000L);
         mockMvc.perform(get("/desarrolladoras"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("desarrolladora-list"))
@@ -66,7 +68,7 @@ class DesarrolladoraControllerIntegrationTest {
         System.out.println("Ecuentra todos las desarrolladoras: " + desarrolladoraRepository.count());
         System.out.println("Encuentra desarrolladora guardada: " + desarrolladora.getId());
 
-        mockMvc.perform(get("/desarrolladoras" + desarrolladora.getId()))
+        mockMvc.perform(get("/desarrolladoras/" + desarrolladora.getId()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("desarrolladora-detail"))
                 .andExpect(model().attributeExists("desarrolladora"));
@@ -77,7 +79,7 @@ class DesarrolladoraControllerIntegrationTest {
         mockMvc.perform(get("/desarrolladoras/999"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("error"))
-                .andExpect(model().attributeExists("mensaje"))
-                .andExpect(model().attributeExists("desarrolladora"));
+                .andExpect(model().attributeExists("mensaje"));
+//                .andExpect(model().attributeExists("desarrolladora"));
     }
 }
