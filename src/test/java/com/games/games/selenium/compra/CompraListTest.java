@@ -211,10 +211,10 @@ public class CompraListTest {
         assertEquals(compra.getId(), Long.valueOf(id.getText()));
 
         WebElement idUsuario = driver.findElement(By.id("compraIdUsuario_" + compra.getId()));
-        assertEquals("13", idUsuario.getText());
+        assertEquals(String.valueOf(usuario.getId()), idUsuario.getText());
 
         WebElement idJuego = driver.findElement(By.id("compraIdJuego_" + compra.getId()));
-        assertEquals("13", idJuego.getText());
+        assertEquals(juego.getId(), Long.valueOf(idJuego.getText()));
 
     }
 

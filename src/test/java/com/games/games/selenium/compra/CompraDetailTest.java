@@ -157,14 +157,14 @@ public class CompraDetailTest {
         Select usuarioSelect = new Select(driver.findElement(By.id("usuario")));
         assertFalse(usuarioSelect.isMultiple());
         assertEquals(2, usuarioSelect.getOptions().size());
-        assertEquals("1", usuarioSelect.getFirstSelectedOption().getAttribute("value"));
+        assertEquals(String.valueOf(usuario.getId()), usuarioSelect.getFirstSelectedOption().getAttribute("value"));
         assertEquals("Javi82", usuarioSelect.getFirstSelectedOption().getText());
 
         Select juegoSelect = new Select(driver.findElement(By.id("juego")));
         assertFalse(juegoSelect.isMultiple());
         assertEquals(2, juegoSelect.getOptions().size());
-        assertEquals("1", juegoSelect.getFirstSelectedOption().getAttribute("value"));
-        assertEquals("The Legend of Zelda", juegoSelect.getFirstSelectedOption().getText());
+        assertEquals(String.valueOf(juego.getId()), juegoSelect.getFirstSelectedOption().getAttribute("value"));
+        assertEquals(juego.getNombre(), juegoSelect.getFirstSelectedOption().getText());
 
     }
 
