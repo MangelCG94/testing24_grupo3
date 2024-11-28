@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
+import javax.swing.text.html.Option;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -81,5 +82,83 @@ class DesarrolladoraControllerIntegrationTest {
                 .andExpect(view().name("error"))
                 .andExpect(model().attributeExists("mensaje"));
 //                .andExpect(model().attributeExists("desarrolladora"));
+    }
+
+    @Test
+    void formularioParaCrearDesarrolladora() throws Exception{
+        desarrolladoraRepository.saveAll(List.of(
+                Desarrolladora.builder().nombreCom("Ubisoft").pais("Francia").imagenLogo("logo.png").anyoFundacion(1988).build(),
+                Desarrolladora.builder().nombreCom("Nintendo").pais("Japón").imagenLogo("logo.png").anyoFundacion(1889).build()
+        ));
+
+        mockMvc.perform(get("/desarrolladoras/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("desarrolladora-form"))
+                .andExpect(model().attributeExists("desarrolladora"));
+    }
+
+    @Test
+    void formularioParaEditarDesarrolladoraSiExiste() throws Exception{
+        Desarrolladora desarrolladora = Desarrolladora.builder().nombreCom("Ubisoft").pais("Francia").imagenLogo("logo.png").anyoFundacion(1988).build();
+
+        desarrolladoraRepository.save(desarrolladora);
+
+        mockMvc.perform(get("/desarrolladoras/update/" + desarrolladora.getId()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("desarrolladora-form"))
+                .andExpect(model().attributeExists("desarrolladora"));
+    }
+
+    @Test
+    void guardarDesarrolladoraNueva() throws Exception{
+        mockMvc.perform
+                    (post("/desarrolladoras")
+                            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                            .param("nombreCom", "Nintendo")
+                            .param("pais", "Japón")
+                            .param("imagenLogo", "logo.png")
+                            .param("anyoFundacion", "1889")
+                    ).andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/desarrolladoras"));
+
+        List<Desarrolladora> desarrolladoras = desarrolladoraRepository.findAll();
+        assertEquals(1, desarrolladoras.size());
+
+        assertEquals("Nintendo", desarrolladoras.get(0).getNombreCom());
+    }
+
+    @Test
+    void guardarDesarrolladoraExistente() throws Exception{
+        Desarrolladora desarrolladora = Desarrolladora.builder().nombreCom("Ubisoft").pais("Francia").imagenLogo("logo.png").anyoFundacion(1988).build();
+        desarrolladoraRepository.save(desarrolladora);
+
+        mockMvc.perform
+                        (post("/desarrolladoras")
+                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                                .param("id", String.valueOf(desarrolladora.getId()))
+                                .param("nombreCom", "Ubisoft")
+                                .param("pais", "Francia")
+                                .param("imagenLogo", "logo.png")
+                                .param("anyoFundacion", "1988")
+                        ).andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/desarrolladoras"));
+
+        Optional<Desarrolladora> OpcionalDeDesarrollaGuardada = desarrolladoraRepository.findById(desarrolladora.getId());
+        assertTrue(OpcionalDeDesarrollaGuardada.isPresent());
+
+        Desarrolladora desarrolladoraGuardada = OpcionalDeDesarrollaGuardada.get();
+
+        assertEquals(desarrolladora.getId(), desarrolladoraGuardada.getId());
+        assertEquals("Ubisoft", desarrolladoraGuardada.getNombreCom());
+        assertEquals("Francia", desarrolladoraGuardada.getPais());
+        assertEquals("logo.png", desarrolladoraGuardada.getImagenLogo());
+        assertEquals("1988", desarrolladoraGuardada.getAnyoFundacion());
+    }
+
+    @Test
+    void borrarDesarrolladoraPorId() throws Exception{
+        mockMvc.perform(get("/desarrolladoras/delete/{id}", 1L))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/desarrolladoras"));
     }
 }
