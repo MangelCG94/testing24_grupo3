@@ -152,7 +152,7 @@ class DesarrolladoraControllerIntegrationTest {
         assertEquals("Ubisoft", desarrolladoraGuardada.getNombreCom());
         assertEquals("Francia", desarrolladoraGuardada.getPais());
         assertEquals("logo.png", desarrolladoraGuardada.getImagenLogo());
-        assertEquals("1988", desarrolladoraGuardada.getAnyoFundacion());
+        assertEquals("1988", String.valueOf(desarrolladoraGuardada.getAnyoFundacion()));
     }
 
     @Test
