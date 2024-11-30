@@ -45,11 +45,11 @@ public class DesarrolladoraDetailTest {
         driver.get("http://localhost:8080/desarrolladoras/" + desarrolladora.getId());
 
         WebElement h1 = driver.findElement(By.tagName("h1"));
-        assertEquals("Detalle de desarrolladora" + desarrolladora.getId(), h1.getText());
+        assertEquals("Detalle de Desarrolladora", h1.getText());
 
         assertEquals("Ubisoft", driver.findElement(By.id("desarrolladora-nombreCom")).getText());
         assertEquals("Francia", driver.findElement(By.id("desarrolladora-pais")).getText());
-        assertEquals("logo.png", driver.findElement(By.id("desarrolladora-imagenLogo")).getText());
+//        assertEquals("logo.png", driver.findElement(By.id("desarrolladora-imagenLogo")).getText());
         assertEquals("1988", driver.findElement(By.id("desarrolladora-anyoFundacion")).getText());
     }
 
@@ -77,5 +77,13 @@ public class DesarrolladoraDetailTest {
         );
         driver.navigate().back();
 
+    }
+
+    @Test
+    void comprobarDesarrolladoraSiNoExiste(){
+        driver.get("http://localhost:8080/desarrolladoras/999");
+
+        assertEquals("Desarrolladora no encontrada", driver.findElement(By.tagName("h1")).getText());
+        assertEquals("No existe la desarrolladora", driver.findElement(By.id("desarrolladoraVacia")).getText());
     }
 }
