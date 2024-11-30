@@ -44,6 +44,7 @@ class DesarrolladoraControllerUTest {
         verify(desarrolladoraRepository).findAll();
     }
 
+
     @Test
     void encontrarPorIdCuandoExisteDesarrolladora(){
         Desarrolladora nintendo = Desarrolladora.builder().id(1L).nombreCom("Nitendo").pais("Japón").imagenLogo("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Nintendo.svg/900px-Nintendo.svg.png").anyoFundacion(1900).build();
@@ -57,15 +58,14 @@ class DesarrolladoraControllerUTest {
     }
 
     @Test
-    void encontrarPorIdCuandoNoExisteDesarrolladora(){
+    void encontrarPorId_siNoExiste(){
         when(desarrolladoraRepository.findById(1L)).thenReturn(Optional.empty());
 
         String view = desarrolladoraController.findById(1L, model);
 
-        assertEquals("error", view);
+        assertEquals("desarrolladora-detail", view);
         verify(desarrolladoraRepository).findById(1L);
-        verify(model, never()).addAttribute(eq("usuario"), any());
-        verify(model).addAttribute("mensaje", "Desarrolladora no encontrada");
+        verify(model, never()).addAttribute(anyString(),any());
     }
 
     @Test

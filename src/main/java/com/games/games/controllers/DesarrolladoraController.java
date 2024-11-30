@@ -1,5 +1,6 @@
 package com.games.games.controllers;
 
+import com.games.games.dtos.DetalleDesarrolladora;
 import com.games.games.models.Desarrolladora;
 import com.games.games.repositories.DesarrolladoraRepository;
 import lombok.AllArgsConstructor;
@@ -26,20 +27,11 @@ public class DesarrolladoraController {
     }
 
     @GetMapping("desarrolladoras/{id}")
-    public String findById(@PathVariable Long id, Model model) {
-        return desarrolladoraRepo.findById(id)
-                .map(desarrolladora -> {
-                    model.addAttribute("desarrolladora", desarrolladora);
-                    return "desarrolladora-detail";
-                })
-                .orElseGet(() -> {
-                    model.addAttribute("mensaje", "Desarrolladora no encontrada");
-                    return "error";
-                });
-//                .orElseThrow(() ->
-//                        new NoSuchElementException("Desarrolladora no encontrada"));
+    public String findById(@PathVariable Long id, Model model){
+        desarrolladoraRepo.findById(id).
+                ifPresent(desarrolladora -> model.addAttribute("desarrolladora", desarrolladora));
+        return "desarrolladora-detail";
     }
-
 
     @GetMapping("desarrolladoras/new")
     public String getFormToCreate(Model model) {

@@ -65,7 +65,7 @@ public class DesarrolladoraDetailTest {
         driver.get("http://localhost:8080/desarrolladoras/" + desarrolladora.getId());
 
         var backBtn = driver.findElement(By.id("backButton"));
-        assertEquals("Volver al listado", backBtn.getText());
+        assertEquals("Volver a la lista", backBtn.getText());
         assertEquals(
                 "http://localhost:8080/desarrolladoras",
                 backBtn.getAttribute("href")
@@ -83,7 +83,7 @@ public class DesarrolladoraDetailTest {
     void comprobarDesarrolladoraSiNoExiste(){
         driver.get("http://localhost:8080/desarrolladoras/999");
 
-        assertEquals("Desarrolladora no encontrada", driver.findElement(By.tagName("h1")).getText());
-        assertEquals("No existe la desarrolladora", driver.findElement(By.id("desarrolladoraVacia")).getText());
+        assertEquals("Detalle de Desarrolladora", driver.findElement(By.tagName("h1")).getText());
+        assertEquals("Desarrolladora no encontrada.", driver.findElement(By.id("desarrolladoraVacia")).getText());
     }
 }
