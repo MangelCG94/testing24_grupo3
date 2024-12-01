@@ -181,6 +181,15 @@ public class UsuarioControllerIntegrationTest {
                 .andExpect(redirectedUrl("/usuarios"));
 
     }
+    @Test
+    @DisplayName("Borrar todos usuarios")
+    void borrarTodosUsuarios() throws Exception {
+
+        mockMvc.perform(get("/usuarios/delete/all"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/usuarios"));
+
+    }
 
 
 }
