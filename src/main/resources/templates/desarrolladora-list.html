@@ -21,7 +21,7 @@
 
       </i> Crear nueva desarrolladora</a>
 
-    <div id="listaDesarrolladoras" th:if="${desarrolladoras.size() > 0}" class="row row-cols-1 row-cols-md-3 g-4">
+    <div th:if="${desarrolladoras.size() > 0}" class="row row-cols-1 row-cols-md-3 g-4">
       <div class="col" th:each="desarrolladora: ${desarrolladoras}">
         <div class="card h-100">
           <div class="card-body">
