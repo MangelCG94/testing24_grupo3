@@ -35,6 +35,7 @@
     <div class="mb-3">
       <label for="desarrolladora" class="form-label">Desarrolladora</label>
       <select id="desarrolladora" th:field="*{desarrolladora.id}" class="form-select">
+        <option th:selected="${juego.desarrolladora == null}" value=""></option>
         <option th:each="desarrolladora : ${desarrolladoras}" th:value="${desarrolladora.id}" th:text="${desarrolladora.nombreCom}"></option>
       </select>
     </div>

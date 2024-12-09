@@ -29,12 +29,10 @@ public class JuegoController {
 
     @GetMapping("juegos/{id}")
     public String findById(@PathVariable Long id, Model model) {
-        return repository.findById(id)
-                .map(juego -> {
-                    model.addAttribute("juego", juego);
-                    return "juego-detail";
-                }).orElseThrow(() ->
-                        new NoSuchElementException("Juego no encontrado"));
+        repository.findById(id)
+                .ifPresent(juego ->
+                        model.addAttribute("juego", juego));
+        return "juego-detail";
     }
 
     @PostMapping("juegos")
