@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Lista de compras</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.min.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Freckle+Face&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="#" />
 </head>
-<body>
+<body style="font-family: 'Freckle Face', sans-serif;">
 
 <div th:replace="~{navbar :: nav1}"></div>
 
-<div class="container mt-4"></div>
+<div class="container mt-4">
     <h1 th:text="${titulo}"></h1>
-
-    <div class="mt-3 mb-3">
 
         <div class="mt-3 mb-3">
             <a id="btnCrearCompra" href="/compras/new" class="btn btn-primary">
-                <i class="fas fa-plus"></i>
-                Crear nueva compra
+                <i class="fas fa-plus">
+
+                </i>Crear nueva compra
             </a>
         </div>
         <table class="table table-striped" id="compraList" th:if="${compras.size() > 0}">
