@@ -2,6 +2,7 @@ package com.games.games.controllers;
 
 import com.games.games.models.Desarrolladora;
 import com.games.games.models.Juego;
+import com.games.games.repositories.DesarrolladoraRepository;
 import com.games.games.repositories.JuegoRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,8 @@ public class JuegoControllerUTest {
     private JuegoController controller;
     @Mock
     private JuegoRepository repository;
+    @Mock
+    private DesarrolladoraRepository desarrolladoraRepository;
     @Mock
     private Model model;
 
@@ -68,12 +71,13 @@ public class JuegoControllerUTest {
         String view = controller.formCreate(model);
 
         assertEquals("juego-form", view);
-        verify(model).addAttribute(eq("juego"), Juego.class);
+        verify(model).addAttribute(eq("juego"), any(Juego.class));
+        verify(model).addAttribute(eq("desarrolladoras"), any(List.class));
     }
 
     @Test
-    @DisplayName("Formulario para actualizar una compra si ésta existe")
-    void formularioParaActualizarCompraSiExiste() {
+    @DisplayName("Formulario para actualizar un juego si este existe")
+    void updateJuegoFormIfExists() {
         Juego juego = Juego.builder().id(1L).desarrolladora(Desarrolladora.builder().build()).build();
         when(repository.findById(1L)).thenReturn(Optional.of(juego));
 
@@ -85,19 +89,14 @@ public class JuegoControllerUTest {
     }
 
     @Test
-    @DisplayName("Formulario para actualizar una compra si ésta no existe")
-    void formularioParaActualizarCompraSiNoExiste() {
+    @DisplayName("Formulario para actualizar un juego si este no existe")
+    void updateJuegoFormIfNotExists() {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
         String view = controller.formUpdate(model, 1L);
 
-        assertEquals("error", view);
+        assertEquals("juego-form", view);
         verify(repository).findById(1L);
-        verify(model).addAttribute(eq("mensaje"), eq("Compra no encontrada"));
-
-        verify(model, never()).addAttribute(eq("compra"), any());
-        verify(model, never()).addAttribute(eq("juegos"), any());
-        verify(model, never()).addAttribute(eq("usuarios"), any());
-
+        verify(model, never()).addAttribute(anyString(), any());
     }
 }
