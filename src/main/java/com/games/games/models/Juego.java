@@ -28,7 +28,7 @@ public class Juego {
     private LocalDate fechaLanzamiento;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "desarrolladora_id")
     private Desarrolladora desarrolladora;
 }
