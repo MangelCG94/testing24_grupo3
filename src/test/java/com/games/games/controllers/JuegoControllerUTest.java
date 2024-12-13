@@ -43,6 +43,7 @@ public class JuegoControllerUTest {
     }
 
     @Test
+    @DisplayName("Encontrar una id de juego que exista")
     void findByIdWhenJuegoExists() {
         Juego juego = Juego.builder().id(1L).desarrolladora(Desarrolladora.builder().nombreCom("empresa").build()).build();
         when(repository.findById(1L)).thenReturn(Optional.of(juego));
@@ -56,6 +57,7 @@ public class JuegoControllerUTest {
     }
 
     @Test
+    @DisplayName("Encontrar una id de juego que no exista")
     void findByIdWhenJuegoNotExists() {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
@@ -66,7 +68,42 @@ public class JuegoControllerUTest {
         verify(model,never()).addAttribute(anyString(), any());
     }
 
+
     @Test
+    @DisplayName("Guardar juego nuevo")
+    void saveJuego() {
+        Juego juego = Juego.builder().build();
+
+        String view = controller.saveJuego(juego);
+
+        assertEquals("redirect:/juegos", view);
+        verify(repository).save(juego);
+    }
+
+
+    @Test
+    @DisplayName("Guardar juego nuevo")
+    void updateJuego() {
+        Juego existingJuego = Juego.builder().id(1L).nombre("Mario").build();
+        Juego updatedJuego = Juego.builder().id(1L).nombre("Sonic").build();
+
+        when(repository.existsById(1L)).thenReturn(true);
+        when(repository.findById(1L)).thenReturn(Optional.of(existingJuego));
+
+        String view = controller.saveJuego(updatedJuego);
+
+        verify(repository).existsById(1L); // Check existence was verified
+        verify(repository).findById(1L);  // Ensure it fetched the existing entity
+        verify(repository).save(existingJuego); // Save is called with the modified existingJuego
+
+        assertEquals("Sonic", existingJuego.getNombre());
+
+        assertEquals("redirect:/juegos", view);
+    }
+
+
+    @Test
+    @DisplayName("Crear un juego por fomulario")
     void createJuegoForm() {
         String view = controller.formCreate(model);
 
@@ -76,7 +113,7 @@ public class JuegoControllerUTest {
     }
 
     @Test
-    @DisplayName("Formulario para actualizar un juego si este existe")
+    @DisplayName("Actualizar un juego que exista")
     void updateJuegoFormIfExists() {
         Juego juego = Juego.builder().id(1L).desarrolladora(Desarrolladora.builder().build()).build();
         when(repository.findById(1L)).thenReturn(Optional.of(juego));
@@ -89,7 +126,7 @@ public class JuegoControllerUTest {
     }
 
     @Test
-    @DisplayName("Formulario para actualizar un juego si este no existe")
+    @DisplayName("Actualizar un juego que no exista")
     void updateJuegoFormIfNotExists() {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
@@ -98,5 +135,15 @@ public class JuegoControllerUTest {
         assertEquals("juego-form", view);
         verify(repository).findById(1L);
         verify(model, never()).addAttribute(anyString(), any());
+    }
+
+    @Test
+    @DisplayName("Borrar un usuario")
+    void borrarPorId() {
+
+        String view = controller.deleteJuego(1L);
+
+        assertEquals("redirect:/juegos", view);
+        verify(repository).deleteById(1L);
     }
 }
